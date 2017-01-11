@@ -13,9 +13,11 @@ public @Data class Task {
     private float estimate;
     private Date startDate;
     private Date finishDate;
-    private boolean isSterted;
+    private boolean isStarted;
     private boolean isFinished;
+    private Sprint sprint;
     private Set<User> users;
+    private Set<Task> tasks;
 
     @Override
     public String toString() {
@@ -26,7 +28,7 @@ public @Data class Task {
                 "| estimate=" + estimate +
                 "| startDate=" + startDate +
                 "| finishDate=" + finishDate +
-                "| isSterted=" + isSterted +
+                "| isSterted=" + isStarted +
                 "| isFinished=" + isFinished +
                 '}';
     }

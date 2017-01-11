@@ -12,8 +12,8 @@ public @Data class Sprint {
     private String description;
     private Date startDate;
     private Date finishDate;
-    private Sprint dependetOn;
-    private boolean isSterted;
+    private Sprint dependedOn;
+    private boolean isStarted;
     private boolean isFinished;
     private Set<Task> tasks;
 
@@ -25,7 +25,7 @@ public @Data class Sprint {
                 "| description='" + description + '\'' +
                 "| startDate=" + startDate +
                 "| finishDate=" + finishDate +
-                "| isSterted=" + isSterted +
+                "| isSterted=" + isStarted +
                 "| isFinished=" + isFinished +
                 '}';
     }
