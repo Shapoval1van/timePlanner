@@ -67,4 +67,12 @@ public class CompanyDaoTest {
         Company actualCompany = companyDao.getCompanyById(1);
         assertEquals(company.getName(), actualCompany.getName());
     }
+
+    @Test
+    @Transactional()
+    @Rollback()
+    public void getCompanyWithDetailsTest(){
+        Company company = companyDao.getCompanyWithDetails(1);
+        assertEquals(2, company.getProjects().size());
+    }
 }

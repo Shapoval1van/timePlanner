@@ -80,7 +80,7 @@ public class UserDaoTest {
     }
 
     @Test
-    @Transactional
+    @Transactional()
     @Rollback()
     public void updateUserTest(){
         User user = userDao.getUserById(1);
@@ -89,4 +89,11 @@ public class UserDaoTest {
         User userActual = userDao.getUserById(1);
         assertEquals(user.getFirstName(), userActual.getFirstName());
     }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void findUsersForCompanyTest(){
+        assertEquals(3,userDao.getAllUsersForCompany(1).size());
+    }
+
 }

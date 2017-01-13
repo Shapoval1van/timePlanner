@@ -3,7 +3,6 @@ package com.timePlanner.dao.extractors;
 
 import com.timePlanner.dao.mappers.CompanyMapper;
 import com.timePlanner.dao.mappers.TaskMapper;
-import com.timePlanner.dto.Company;
 import com.timePlanner.dto.Role;
 import com.timePlanner.dto.Task;
 import com.timePlanner.dto.User;
@@ -37,8 +36,9 @@ public class UserExtractor implements ResultSetExtractor<List<User>> {
                 user.setRole(Role.values()[resultSet.getInt("roleid")-1]);
                 user.setBirthDate(resultSet.getDate("birth_date"));
                 user.setSex(resultSet.getInt("sex"));
-                Company company = companyMapper.mapRow(resultSet,0);
-                user.setCompany(company);
+                if(resultSet.getInt("companyId")!=0){
+                    user.setCompany(companyMapper.mapRow(resultSet,0));
+                }
                 userMap.put(userId, user);
             }
             if(resultSet.getInt("taskId")!=0){

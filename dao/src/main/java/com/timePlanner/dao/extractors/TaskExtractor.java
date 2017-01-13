@@ -4,7 +4,6 @@ package com.timePlanner.dao.extractors;
 import com.timePlanner.dao.mappers.SprintMapper;
 import com.timePlanner.dao.mappers.TaskMapper;
 import com.timePlanner.dao.mappers.UserMapper;
-import com.timePlanner.dto.Sprint;
 import com.timePlanner.dto.Task;
 import com.timePlanner.dto.User;
 import org.springframework.dao.DataAccessException;
@@ -31,8 +30,9 @@ public class TaskExtractor implements ResultSetExtractor<List<Task>> {
                 dependedTask = new HashSet();
                 users = new HashSet<>();
                 task =  taskMapper.mapRow(resultSet, 0);
-                Sprint sprint = sprintMapper.mapRow(resultSet, 0);
-                task.setSprint(sprint);
+                if(resultSet.getInt("sprintId")!=0){
+                    task.setSprint(sprintMapper.mapRow(resultSet, 0));
+                }
                 taskMap.put(taskId,task);
             }
             if(resultSet.getInt("userId") != 0){

@@ -1,4 +1,4 @@
 package com.timePlanner.dto;
 
 
-public enum Role {ADMIN,PROJECT_MANAGER,EMPLOYEE, CUSTOMER}
+public enum Role {ADMIN,PM,EMPLOYEE, CUSTOMER}

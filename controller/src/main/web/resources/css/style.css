@@ -1,3 +1,51 @@
-.nav-right{
-    float: right;
+.nav-left {
+    float: left;
+}
+
+.top-nav {
+    padding: 0 15px;
+}
+
+@media (min-width: 768px) {
+    #wrapper {
+        padding-right: 0;
+        padding-left: 225px
+    }
+
+    .side-nav {
+        right: 0;
+    }
+}
+
+@media (min-width: 992px) {
+    .user-media .media-body {
+        display: block;
+        float: left;
+        margin-left: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .user-media .media-body {
+        display: none;
+    }
+
+    .media, .media-body {
+        overflow: hidden;
+        zoom: 1;
+    }
+}
+
+@media (min-width: 992px) {
+    .user-media .media-body h5.media-heading {
+        font-size: 18px;
+        padding-top: 8px;
+        margin-bottom: 11px;
+        color: #050505;
+        font-weight: bolder;
+    }
+
+    .media-heading {
+        margin: 0 0 5px;
+    }
 }

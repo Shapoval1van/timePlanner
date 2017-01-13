@@ -12,4 +12,5 @@ public interface UserDao {
     public User getUserWithDetailsById(int id);
     public List<User> getAllUsers();
     public List<User> getALlUsersWithDetails();
+    public List<User> getAllUsersForCompany(int companyId);
 }

@@ -34,10 +34,9 @@ public class UserDaoImpl implements UserDao, InitializingBean {
             "            is_started \"taskIsStarted\", is_finished \"taskIsFinished\",\n" +
             "   c.id \"companyId\", c.name \"companyName\", c.date_creation, c.description \"companyDescription\"" +
             " FROM users as u\n" +
-            "   JOIN user_task as ut ON u.id = ut.user_id\n" +
-            "   JOIN task as t ON ut.task_id = t.id\n" +
-            "   JOIN company as c ON c.id = u.company_id\n" +
-            " WHERE u.id = ?;";
+            "  FULL OUTER JOIN company AS c ON c.id = u.company_id\n" +
+            "  LEFT JOIN user_task AS ut ON u.id = ut.user_id\n" +
+            "  LEFT JOIN task AS t ON ut.task_id = t.id where u.id=?;";
     private final String FIND_ALL_WITH_DETAILS ="SELECT " +
             "   u.id \"userId\", f_name, l_name, password, roleId, email,phone, birth_date, sex,\n" +
             "   t.id \"taskId\", t.name \"taskName\", t.description \"taskDescription\", " +
@@ -50,6 +49,8 @@ public class UserDaoImpl implements UserDao, InitializingBean {
             "   LEFT JOIN task AS t ON ut.task_id = t.id;\n";
     private final String SAVE_USER = "INSERT INTO users VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);";
     private final String UPDATE_USER = "UPDATE users SET f_name=?, l_name=?, password=?, roleid=?, company_id=?, email=?, phone=?, birth_date=?, sex=? WHERE id = ?;";
+    private final String FIND_USERS_FOR_COMPANY = "SELECT id \"userId\", f_name, l_name, password, email, phone,roleid, birth_date, sex FROM users WHERE company_id = ?;";
+
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -77,6 +78,11 @@ public class UserDaoImpl implements UserDao, InitializingBean {
     @Override
     public List<User> getALlUsersWithDetails(){
         return jdbcTemplate.query(FIND_ALL_WITH_DETAILS, new UserExtractor());
+    }
+
+    @Override
+    public List<User> getAllUsersForCompany(int companyId) {
+        return jdbcTemplate.query(FIND_USERS_FOR_COMPANY, new Object[]{companyId},new UserMapper());
     }
 
     @Override

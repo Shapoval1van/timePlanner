@@ -9,4 +9,5 @@ public interface CompanyDao {
     public void saveCompany(Company company);
     public void updateCompany(Company company);
     public List<Company> getAllCompany();
+    public Company getCompanyWithDetails(int id);
 }

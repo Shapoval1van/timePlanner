@@ -17,7 +17,6 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -42,7 +41,7 @@
                     <a href="#">Contact</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav  nav-right" >
+            <ul class="nav navbar-nav  navbar-right top-nav" >
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -58,7 +57,6 @@
                 </li>
             </ul>
         </div>
-    </div>
 </nav>
 <jsp:invoke fragment="bodyLayout"/>
 <footer>
