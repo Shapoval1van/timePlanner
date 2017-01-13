@@ -13,6 +13,7 @@ public @Data class Sprint {
     private Date startDate;
     private Date finishDate;
     private Sprint dependedOn;
+    private Date planedFinishDate;
     private boolean isStarted;
     private boolean isFinished;
     private Set<Task> tasks;

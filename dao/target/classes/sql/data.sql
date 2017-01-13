@@ -3,6 +3,11 @@ INSERT INTO roles VALUES (DEFAULT, 'Admin'),
   (DEFAULT, 'Employee'),
   (DEFAULT, 'Customer');
 
+INSERT INTO priority VALUES (DEFAULT, 'Low'),
+  (DEFAULT, 'Medium'),
+  (DEFAULT, 'High'),
+  (DEFAULT, 'Critical');
+
 
 INSERT INTO company (id, name, description) VALUES (DEFAULT,'The Death Star','top secret'),
   (DEFAULT,'Google','google');
@@ -18,18 +23,18 @@ INSERT INTO users VALUES
   (DEFAULT, 'Fedir','Fedir', 'user1', 4,null, 'Fedir@gmai.com','0345342123','1945-06-30',1);
 
 INSERT INTO project VALUES
-  (DEFAULT, 'destroy','destroy peaceful planet', 1, current_date,'2018-06-30', DEFAULT),
-  (DEFAULT, 'Project','Project',2,  '1995-06-30','2017-06-30', TRUE),
-  (DEFAULT, 'some','i dont know', 1, current_date,'2018-06-30', DEFAULT);
+  (DEFAULT, 'destroy','destroy peaceful planet', 1, current_date, NULL, '2018-06-30', DEFAULT),
+  (DEFAULT, 'Project','Project',2,  '1995-06-30',NULL,'2017-06-30', TRUE),
+  (DEFAULT, 'some','i dont know', 1, current_date,NULL ,'2018-06-30', DEFAULT);
 
 INSERT INTO customer VALUES
   (DEFAULT, 'Petro Company', NULL ,6,1),
   (DEFAULT, 'Fedir Company', NULL ,7,2);
 
 INSERT INTO sprint VALUES
-  (DEFAULT,'start',1,null,'1995-06-30','2017-06-30', null, TRUE , FALSE ),
-  (DEFAULT,'next',1,null,'2017-06-30','2017-11-30', 1, FALSE , FALSE ),
-  (DEFAULT,'start',2,null,'2017-06-30','2017-11-30', null, FALSE , FALSE );
+  (DEFAULT,'start',1,null,'1995-06-30',NULL,'2017-06-30', null, TRUE , FALSE ),
+  (DEFAULT,'next',1,null,'2017-06-30',NULL,'2017-11-30', 1, FALSE , FALSE ),
+  (DEFAULT,'start',2,null,'2017-06-30',NULL,'2017-11-30', null, FALSE , FALSE );
 
 INSERT INTO  task(id, name, sprint_id,description, estimate) VALUES
   (DEFAULT,'first Task',1,null,2),

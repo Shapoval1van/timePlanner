@@ -13,9 +13,11 @@ public @Data class Project {
     private String description;
     private Company company;
     private Set<Customer> customers;
+    private boolean isStarted;
     private boolean isFinished;
     private Date startDate;
     private Date finishDate;
+    private Date planFinishDate;
     private List<Sprint> sprints;
 
     @Override

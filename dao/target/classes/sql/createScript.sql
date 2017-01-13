@@ -23,8 +23,10 @@ CREATE TABLE IF NOT EXISTS project(
   name VARCHAR(45) NOT NULL,
   description TEXT,
   company_id INTEGER NOT NULL,
-  start_date DATE NOT NULL,
-  finish_date DATE NOT NULL,
+  start_date DATE,
+  finish_date DATE,
+  plan_finish_date DATE,
+  is_started BOOLEAN DEFAULT FALSE,
   is_finished BOOLEAN DEFAULT FALSE
 );
 
@@ -37,6 +39,7 @@ CREATE TABLE IF NOT EXISTS sprint (
   description TEXT,
   start_date DATE,
   finish_date DATE,
+  plan_finish_date DATE,
   dependent_on INTEGER,
   is_started BOOLEAN DEFAULT FALSE,
   is_finished BOOLEAN DEFAULT FALSE
@@ -52,7 +55,9 @@ CREATE TABLE IF NOT EXISTS task(
   finish_date DATE,
   is_started BOOLEAN DEFAULT FALSE,
   is_finished BOOLEAN DEFAULT FALSE,
+  plan_finish_date DATE,
   description TEXT,
+  priority INTEGER,
   estimate FLOAT
 );
 
@@ -89,6 +94,12 @@ CREATE TABLE IF NOT EXISTS user_task(
   task_id INTEGER
 );
 
+DROP TABLE IF EXISTS  priority CASCADE;
+CREATE TABLE IF NOT EXISTS priority(
+  id INTEGER PRIMARY KEY,
+  priority VARCHAR(20)
+);
+
 ALTER TABLE customer ADD CONSTRAINT userId_fk FOREIGN KEY (user_id) REFERENCES users;
 ALTER TABLE customer ADD CONSTRAINT projectId_fk FOREIGN KEY (project_id) REFERENCES project;
 
@@ -99,6 +110,7 @@ ALTER TABLE sprint ADD CONSTRAINT projectId_fk FOREIGN KEY (projectId) REFERENCE
 ALTER TABLE sprint ADD CONSTRAINT dependedOn_fk FOREIGN KEY (dependent_on) REFERENCES sprint;
 
 ALTER TABLE task ADD CONSTRAINT sprint_id_fk FOREIGN KEY (sprint_id) REFERENCES sprint;
+ALTER TABLE task ADD CONSTRAINT priority FOREIGN KEY (priority) REFERENCES priority;
 
 
 ALTER TABLE task_dependency ADD CONSTRAINT Id1_fk FOREIGN KEY (task_id) REFERENCES task;

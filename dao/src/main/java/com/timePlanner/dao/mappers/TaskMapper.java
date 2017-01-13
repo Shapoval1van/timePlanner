@@ -1,6 +1,7 @@
 package com.timePlanner.dao.mappers;
 
 
+import com.timePlanner.dto.Priority;
 import com.timePlanner.dto.Task;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -17,6 +18,10 @@ public class TaskMapper  implements RowMapper<Task> {
         task.setEstimate(resultSet.getFloat("estimate"));
         task.setStartDate(resultSet.getDate("taskSDate"));
         task.setFinishDate(resultSet.getDate("taskFDate"));
+        task.setPlanFinishDate(resultSet.getDate("taskPFinish"));
+        if(resultSet.getInt("priority")!=0){
+            task.setPriority(Priority.values()[resultSet.getInt("priority")-1]);
+        }
         task.setStarted(resultSet.getBoolean("taskIsStarted"));
         task.setFinished(resultSet.getBoolean("taskIsFinished"));
         return task;

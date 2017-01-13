@@ -27,17 +27,20 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
 
     private final String FIND_BY_ID = "SELECT" +
             " id \"taskId\", name \"taskName\", estimate, start_date \"taskSDate\", finish_date \"taskFDate\" ," +
-            " is_started \"taskIsStarted\",description \"taskDescription\", is_finished \"taskIsFinished\" FROM task WHERE id = ?;";
+            " is_started \"taskIsStarted\",description \"taskDescription\", is_finished \"taskIsFinished\"," +
+            " plan_finish_date \"taskPFinish\", priority FROM task WHERE id = ?;";
     private final String FIND_ALL = "SELECT" +
             " id \"taskId\", name \"taskName\", estimate, start_date \"taskSDate\", finish_date \"taskFDate\" ," +
-            " is_started \"taskIsStarted\",description \"taskDescription\", is_finished \"taskIsFinished\" FROM task;";
-    private final String SAVE_TASK = "INSERT INTO task VALUES (DEFAULT,?,?,?,?,?,?,?,?);";
+            " is_started \"taskIsStarted\",description \"taskDescription\", is_finished \"taskIsFinished\"," +
+            " plan_finish_date \"taskPFinish\", priority FROM task;";
+    private final String SAVE_TASK = "INSERT INTO task VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?);";
     private final String FIND_ALL_WITH_DETAILS = "SELECT" +
             "  t.id \"taskId\", t.name \"taskName\",t.description \"taskDescription\", t.estimate,t.start_date \"taskSDate\",\n" +
-            "      t.finish_date \"taskFDate\",t.is_started \"taskIsStarted\",t.is_finished \"taskIsFinished\",\n" +
+            "      t.finish_date \"taskFDate\",t.is_started \"taskIsStarted\",t.is_finished \"taskIsFinished\"," +
+            "      t.plan_finish_date \"taskPFinish\", t.priority,\n" +
             "  u.id \"userId\",  f_name,  l_name,  password, roleId,  email,  phone,  birth_date,  sex,\n" +
             "  s.id \"sprintId\",s.name \"sprintName\",s.description \"sprintDescription\",s.start_date \"sprintSDate\",\n" +
-            "      s.finish_date \"sprintFDate\",s.is_started \"sprintIsStarted\",s.is_finished \"sprintIsFinished\",\n" +
+            "      s.finish_date \"sprintFDate\",s.is_started \"sprintIsStarted\",s.is_finished \"sprintIsFinished\",s.plan_finish_date \"sprintPFinish\",\n" +
             "  t_depended.id \"taskIdDepended\",t_depended.name \"taskNameDepended\",t_depended.estimate \"estimateDepended\",t_depended.start_date \"taskSDateDepended\",\n" +
             "      t_depended.finish_date \"taskFDateDepended\",t_depended.is_started  \"taskIsStartedDepended\",t_depended.is_finished \"taskIsFinishedDepended\"\n" +
             "FROM task AS t\n" +
@@ -48,10 +51,11 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
             "  LEFT JOIN task AS t_depended ON td.depended_task_id = t_depended.id;";
     private final String FIND_BY_ID_WITH_DETAILS = "SELECT" +
             "  t.id \"taskId\", t.name \"taskName\",t.description \"taskDescription\", t.estimate,t.start_date \"taskSDate\",\n" +
-            "      t.finish_date \"taskFDate\",t.is_started \"taskIsStarted\",t.is_finished \"taskIsFinished\",\n" +
+            "      t.finish_date \"taskFDate\",t.is_started \"taskIsStarted\",t.is_finished \"taskIsFinished\"," +
+            "      t.plan_finish_date \"taskPFinish\", t.priority,\n" +
             "  u.id \"userId\",  f_name,  l_name,  password, roleId,  email,  phone,  birth_date,  sex,\n" +
             "  s.id \"sprintId\",s.name \"sprintName\",s.description \"sprintDescription\",s.start_date \"sprintSDate\",\n" +
-            "      s.finish_date \"sprintFDate\",s.is_started \"sprintIsStarted\",s.is_finished \"sprintIsFinished\",\n" +
+            "      s.finish_date \"sprintFDate\",s.is_started \"sprintIsStarted\",s.is_finished \"sprintIsFinished\", s.plan_finish_date \"sprintPFinish\",\n" +
             "  t_depended.id \"taskIdDepended\",t_depended.name \"taskNameDepended\",t_depended.estimate \"estimateDepended\",t_depended.start_date \"taskSDateDepended\",\n" +
             "      t_depended.finish_date \"taskFDateDepended\",t_depended.is_started  \"taskIsStartedDepended\",t_depended.is_finished \"taskIsFinishedDepended\"\n" +
             "FROM task AS t\n" +
@@ -61,7 +65,8 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
             "  LEFT JOIN task_dependency AS td ON t.id = td.task_id\n" +
             "  LEFT JOIN task AS t_depended ON td.depended_task_id = t_depended.id " +
             "WHERE t.id = ?;";
-    private final String UPDATE_TASK = "UPDATE task SET name=?, sprint_id=?, start_date=? , finish_date=?, is_started=?, is_finished=?, description=?, estimate=? WHERE id = ?;";
+    private final String UPDATE_TASK = "UPDATE task SET name=?, sprint_id=?, start_date=? , finish_date=?, " +
+            "is_started=?, is_finished=?, plan_finish_date=?, description=?, priority=?,  estimate=?WHERE id = ?;";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -125,6 +130,8 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
             Integer sprintId = task.getSprint()!= null ? task.getSprint().getId(): null;
             Long sDate = task.getStartDate()!=null ? task.getStartDate().getTime() : null;
             Long fDate = task.getFinishDate()!=null ? task.getFinishDate().getTime() : null;
+            Long planFinishDate = task.getPlanFinishDate()!=null?task.getPlanFinishDate().getTime():null;
+            Integer priority = task.getPriority()!= null ? task.getPriority().ordinal()+1: null;
             int i = 1;
             preparedStatement.setString(i++,task.getName());
             if(sprintId!=null){
@@ -144,7 +151,17 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
             }
             preparedStatement.setBoolean(i++, task.isStarted());
             preparedStatement.setBoolean(i++, task.isFinished());
+            if(planFinishDate!=null){
+                preparedStatement.setDate(i++, new Date(planFinishDate));
+            }else {
+                preparedStatement.setNull(i++, Types.DATE);
+            }
             preparedStatement.setString(i++, task.getDescription());
+            if(priority!=null){
+                preparedStatement.setInt(i++, priority);
+            }else{
+                preparedStatement.setNull(i++, Types.INTEGER);
+            }
             preparedStatement.setDouble(i++, task.getEstimate());
             if(typeStatement == 1) {
                 preparedStatement.setInt(i++, task.getId());

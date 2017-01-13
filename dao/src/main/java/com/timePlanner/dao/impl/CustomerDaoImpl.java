@@ -21,8 +21,7 @@ public class CustomerDaoImpl implements CustomerDao, InitializingBean {
     private final String FIND_BY_COMPANY_ID = "SELECT c.id \"customerId\", c.company_name \"customerCompanyName\", c.description \"customerDescription\",\n" +
             "  u.id \"userId\", f_name, l_name, password, roleId, email, phone, birth_date, sex,\n" +
             "  p.id \"projectId\", p.name \"projectName\", p.description \"projectDescription\", p.start_date \"projectSDate\"," +
-            "   p.finish_date \"proje" +
-            "ctFDate\", p.is_finished \"projectIsFinished\"\n" +
+            "   p.finish_date \"projectFDate\", p.is_finished \"projectIsFinished\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\"\n" +
             "from customer as c\n" +
             "  JOIN users AS u ON c.user_id = u.id\n" +
             "  JOIN project AS p ON p.id = c.project_id\n" +

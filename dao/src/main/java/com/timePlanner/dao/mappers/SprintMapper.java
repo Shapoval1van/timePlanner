@@ -17,6 +17,7 @@ public class SprintMapper implements RowMapper<Sprint>{
         sprint.setDescription(resultSet.getString("sprintDescription"));
         sprint.setStartDate(resultSet.getDate("sprintSDate"));
         sprint.setFinishDate(resultSet.getDate("sprintFDate"));
+        sprint.setPlanedFinishDate(resultSet.getDate("sprintPFinish"));
         sprint.setStarted(resultSet.getBoolean("sprintIsStarted"));
         sprint.setFinished(resultSet.getBoolean("sprintIsFinished"));
         return sprint;

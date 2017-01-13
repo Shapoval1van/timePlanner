@@ -13,8 +13,10 @@ public @Data class Task {
     private float estimate;
     private Date startDate;
     private Date finishDate;
+    private Date planFinishDate;
     private boolean isStarted;
     private boolean isFinished;
+    private Priority priority;
     private Sprint sprint;
     private Set<User> users;
     private Set<Task> tasks;

@@ -25,7 +25,7 @@ public class CompanyDaoImpl  implements CompanyDao, InitializingBean {
     private final String UPDATE_COMPANY = "UPDATE company SET name=?, date_creation=?, description=? WHERE  id=?";
     private final String FIND_WITH_DETAILS ="SELECT " +
             "       c.id \"companyId\", c.name \"companyName\", c.description \"companyDescription\", c.date_creation,\n" +
-            "       p.id \"projectId\", p.description \"projectDescription\", p.name \"projectName\", " +
+            "       p.id \"projectId\", p.description \"projectDescription\", p.name \"projectName\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\", " +
             "           p.start_date \"projectSDate\",p.finish_date \"projectFDate\", p.is_finished \"projectIsFinished\"\n" +
             "   FROM company AS c LEFT JOIN project AS p ON c.id = p.company_id WHERE c.id = ?;";
     private JdbcTemplate jdbcTemplate;

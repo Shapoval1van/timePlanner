@@ -20,18 +20,18 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
     private static final Logger LOGGER = LogManager.getLogger(ProjectDaoImpl.class);
 
     private final String FIND_BY_ID = "SELECT id  \"projectId\", name  \"projectName\", description  \"projectDescription\", start_date  \"projectSDate\",\n" +
-            "              finish_date  \"projectFDate\", is_finished  \"projectIsFinished\"\n" +
-            "            from project\n" +
+            "              finish_date  \"projectFDate\",plan_finish_date \"projectPFinish\", is_started  \"projectIsStarted\", is_finished  \"projectIsFinished\"\n" +
+            "            FROM project\n" +
             "            WHERE id = ?;";
     private final String FIND_ALL = "SELECT id  \"projectId\", name  \"projectName\", description  \"projectDescription\", start_date  \"projectSDate\",\n" +
-            "              finish_date  \"projectFDate\", is_finished  \"projectIsFinished\"\n" +
-            "            from project;";
+            "              finish_date  \"projectFDate\",plan_finish_date \"projectPFinish\", is_started  \"projectIsStarted\", is_finished  \"projectIsFinished\",\n" +
+            "            plan_finish_date  \"projectPFinish\" FROM project\n;";
     private final String FIND_WITH_DETAILS = "SELECT p.id  \"projectId\", p.name  \"projectName\", p.description  \"projectDescription\", p.start_date  \"projectSDate\",\n" +
-            "              p.finish_date  \"projectFDate\", p.is_finished  \"projectIsFinished\",\n" +
+            "              p.finish_date  \"projectFDate\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\", p.is_finished  \"projectIsFinished\",\n" +
             "     cu.id \"customerId\", cu.company_name \"customerCompanyName\",cu.description \"customerDescription\",\n" +
             "     c.id  \"companyId\", c.name  \"companyName\", c.date_creation, c.description  \"companyDescription\",\n" +
             "    s.id \"sprintId\", s.name \"sprintName\", s.description \"sprintDescription\",s.start_date \"sprintSDate\", s.finish_date \"sprintFDate\",\n" +
-            "            s.is_started \"sprintIsStarted\", s.is_finished \"sprintIsFinished\"\n" +
+            "            s.is_started \"sprintIsStarted\", s.is_finished \"sprintIsFinished\", s.plan_finish_date \"sprintPFinish\"\n" +
             "            FROM project AS p\n" +
             "              FULL OUTER JOIN company AS c ON c.id = p.company_id\n" +
             "              LEFT JOIN customer AS cu ON cu.project_id = p.id\n" +

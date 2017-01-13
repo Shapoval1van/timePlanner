@@ -31,7 +31,7 @@ public class UserDaoImpl implements UserDao, InitializingBean {
             "   u.id \"userId\", f_name, l_name, password, roleId, email,phone, birth_date, sex,\n" +
             "   t.id \"taskId\", t.name \"taskName\", t.description \"taskDescription\", " +
             "           estimate, start_date \"taskSDate\", finish_date \"taskFDate\"," +
-            "            is_started \"taskIsStarted\", is_finished \"taskIsFinished\",\n" +
+            "            is_started \"taskIsStarted\", is_finished \"taskIsFinished\", t.plan_finish_date \"taskPFinish\", t.priority,\n" +
             "   c.id \"companyId\", c.name \"companyName\", c.date_creation, c.description \"companyDescription\"" +
             " FROM users as u\n" +
             "  FULL OUTER JOIN company AS c ON c.id = u.company_id\n" +
@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao, InitializingBean {
             "   u.id \"userId\", f_name, l_name, password, roleId, email,phone, birth_date, sex,\n" +
             "   t.id \"taskId\", t.name \"taskName\", t.description \"taskDescription\", " +
             "           estimate, start_date \"taskSDate\", finish_date \"taskFDate\"," +
-            "            is_started \"taskIsStarted\", is_finished \"taskIsFinished\",\n" +
+            "            is_started \"taskIsStarted\", is_finished \"taskIsFinished\", t.plan_finish_date \"taskPFinish\", t.priority,\n" +
             "   c.id \"companyId\", c.name \"companyName\", c.date_creation, c.description \"companyDescription\"" +
             " FROM users as u\n" +
             "   FULL OUTER JOIN company AS c ON c.id = u.company_id\n"+
