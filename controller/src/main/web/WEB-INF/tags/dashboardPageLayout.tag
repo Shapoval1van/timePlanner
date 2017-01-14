@@ -1,12 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@tag description="Page Template" pageEncoding="UTF-8" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib uri="http://example.com/functions" prefix="f" %>
-<%@attribute name="title" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%@attribute name="title" %>
 <%@attribute name="bodyDashboardLayout" fragment="true" %>
 
-<div>
+<html>
 <csrf disabled="true"/>
 <title>title</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"/>
@@ -18,9 +16,6 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/font-awesome/css/font-awesome.min.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/morris/raphael.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/morris/morris.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/morris/morris-data.js"></script>
 </head>
 <div id="wrapper">
 
@@ -51,10 +46,11 @@
             </ul>
             <ul class="nav navbar-nav  navbar-right top-nav" >
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <spring:message code="locate"/><span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
+                        <li><a href="?lang=en">ENG</a></li>
+                        <li><a href="?lang=ru">RU</a></li>
                     </ul>
                 </li>
                 <li>
