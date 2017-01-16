@@ -26,7 +26,7 @@ public @Data class Sprint {
                 "| description='" + description + '\'' +
                 "| startDate=" + startDate +
                 "| finishDate=" + finishDate +
-                "| isSterted=" + isStarted +
+                "| isStarted=" + isStarted +
                 "| isFinished=" + isFinished +
                 '}';
     }

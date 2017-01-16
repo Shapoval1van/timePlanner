@@ -43,12 +43,12 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
             "      s.finish_date \"sprintFDate\",s.is_started \"sprintIsStarted\",s.is_finished \"sprintIsFinished\",s.plan_finish_date \"sprintPFinish\",\n" +
             "  t_depended.id \"taskIdDepended\",t_depended.name \"taskNameDepended\",t_depended.estimate \"estimateDepended\",t_depended.start_date \"taskSDateDepended\",\n" +
             "      t_depended.finish_date \"taskFDateDepended\",t_depended.is_started  \"taskIsStartedDepended\",t_depended.is_finished \"taskIsFinishedDepended\"\n" +
-            "FROM task AS t\n" +
-            "  JOIN sprint AS s ON s.id = t.sprint_id\n" +
-            "  LEFT JOIN user_task AS ut ON t.id = ut.task_id\n" +
-            "  LEFT JOIN users AS u ON ut.user_id = u.id\n" +
-            "  LEFT JOIN task_dependency AS td ON t.id = td.task_id\n" +
-            "  LEFT JOIN task AS t_depended ON td.depended_task_id = t_depended.id;";
+            "   FROM task AS t\n" +
+            "       JOIN sprint AS s ON s.id = t.sprint_id\n" +
+            "       LEFT JOIN user_task AS ut ON t.id = ut.task_id\n" +
+            "       LEFT JOIN users AS u ON ut.user_id = u.id\n" +
+            "       LEFT JOIN task_dependency AS td ON t.id = td.task_id\n" +
+            "       LEFT JOIN task AS t_depended ON td.depended_task_id = t_depended.id;";
     private final String FIND_BY_ID_WITH_DETAILS = "SELECT" +
             "  t.id \"taskId\", t.name \"taskName\",t.description \"taskDescription\", t.estimate,t.start_date \"taskSDate\",\n" +
             "      t.finish_date \"taskFDate\",t.is_started \"taskIsStarted\",t.is_finished \"taskIsFinished\"," +

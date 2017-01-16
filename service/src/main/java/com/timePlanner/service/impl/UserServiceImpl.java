@@ -3,8 +3,12 @@ package com.timePlanner.service.impl;
 
 import com.timePlanner.dao.UserDao;
 import com.timePlanner.dto.User;
+import com.timePlanner.service.EmptyResultException;
 import com.timePlanner.service.UserService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +16,27 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+    private static final Logger LOGGER = LogManager.getLogger(UserService.class);
     @Autowired
     private UserDao userDao;
 
     @Transactional(readOnly = true)
-    public User getUserById(int id) {
-        return userDao.getUserById(id);
+    public User getUserById(int id) throws EmptyResultException {
+        try {
+            return userDao.getUserById(id);
+        }catch (EmptyResultDataAccessException up){
+            LOGGER.info("User with id " + id + "not found");
+            throw  new EmptyResultException(up);
+        }
+    }
+
+    public User getUserByEmail(String email) throws EmptyResultException {
+        try {
+            return userDao.getUserByEmail(email);
+        }catch (EmptyResultDataAccessException up){
+            LOGGER.info("User with email " + email + "not found");
+            throw  new EmptyResultException(up);
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -49,5 +67,10 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<User> getAllUsersForCompany(int companyId) {
         return userDao.getAllUsersForCompany(companyId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getEmployeesForProject(int projectId) {
+        return userDao.getEmployeesForProject(projectId);
     }
 }

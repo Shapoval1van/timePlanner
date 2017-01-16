@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(DaoConfig.class)
+@Import({DaoConfig.class, SecurityConfig.class})
 @ComponentScan(basePackages = "com.timePlanner.service")
 public class RootConfig {
 }

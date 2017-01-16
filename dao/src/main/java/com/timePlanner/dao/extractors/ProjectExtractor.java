@@ -1,9 +1,6 @@
 package com.timePlanner.dao.extractors;
 
-import com.timePlanner.dao.mappers.CompanyMapper;
-import com.timePlanner.dao.mappers.CustomerMapper;
-import com.timePlanner.dao.mappers.ProjectMapper;
-import com.timePlanner.dao.mappers.SprintMapper;
+import com.timePlanner.dao.mappers.*;
 import com.timePlanner.dto.Customer;
 import com.timePlanner.dto.Project;
 import com.timePlanner.dto.Sprint;
@@ -20,6 +17,7 @@ public class ProjectExtractor implements ResultSetExtractor<List<Project>> {
         Map<Integer, Project> projectMap = new HashMap<>();
         SprintMapper sprintMapper = new SprintMapper();
         CompanyMapper companyMapper = new CompanyMapper();
+        UserMapper userMapper = new UserMapper();
         CustomerMapper customerMapper = new CustomerMapper();
         ProjectMapper projectMapper = new ProjectMapper();
         List<Sprint> sprints = new ArrayList<>();
@@ -31,6 +29,7 @@ public class ProjectExtractor implements ResultSetExtractor<List<Project>> {
                 sprints = new ArrayList<>();
                 project = projectMapper.mapRow(resultSet, 0);
                 project.setCompany(companyMapper.mapRow(resultSet,0));
+                project.setProjectManager(userMapper.mapRow(resultSet,0));
                 projectMap.put(projectId,project);
             }
             if(resultSet.getInt("sprintId")!=0){

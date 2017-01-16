@@ -6,6 +6,7 @@ import com.timePlanner.dto.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,6 +30,9 @@ public class UserDaoTest {
     @Transactional(readOnly = true)
     public void getUserByIdTest(){
         User user = userDao.getUserById(1);
+        String password = user.getPassword();
+        boolean result = (new BCryptPasswordEncoder()).matches("user1",password);
+        assertTrue(result);
         assertEquals(1, user.getId());
         assertEquals(Role.ADMIN, user.getRole());
     }
@@ -51,12 +56,21 @@ public class UserDaoTest {
 
     @Test
     @Transactional(readOnly = true)
-    public void getAllUsersWithDetails(){
+    public void getAllUsersWithDetailsTest(){
         List<User> users = userDao.getALlUsersWithDetails();
         assertEquals(7, users.size());
         assertEquals("The Death Star", users.get(0).getCompany().getName());
         assertEquals("The Death Star", users.get(1).getCompany().getName());
         assertEquals("first Task", users.get(1).getTasks().iterator().next().getName());
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void getEmployeesForProject(){
+        List<User> users = userDao.getEmployeesForProject(1);
+        assertEquals(2, users.size());
+        assertEquals("Nerzul", users.get(1).getFirstName());
+        assertEquals(2, users.get(0).getTasks().size());
     }
 
     @Test

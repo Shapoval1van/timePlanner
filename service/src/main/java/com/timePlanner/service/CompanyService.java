@@ -5,7 +5,7 @@ import com.timePlanner.dto.Company;
 import java.util.List;
 
 public interface CompanyService {
-    public Company getCompanyById(int id);
+    public Company getCompanyById(int id) throws EmptyResultException;
     public void saveCompany(Company company);
     public void updateCompany(Company company);
     public List<Company> getAllCompany();

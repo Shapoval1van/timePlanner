@@ -26,6 +26,7 @@ public class UserDaoImpl implements UserDao, InitializingBean {
     private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 
     private final String FIND_BY_ID = "SELECT id \"userId\", f_name, l_name, password, email, phone,roleid, birth_date, sex FROM users WHERE id = ?;";
+    private final String FIND_BY_EMAIL = "SELECT id \"userId\", f_name, l_name, password, email, phone,roleid, birth_date, sex FROM users WHERE email = ?;";
     private final String FIND_ALL = "SELECT id \"userId\", f_name, l_name, password, email, phone,roleid, birth_date, sex FROM users;";
     private final String FIND_USER_WITH_DETAILS_BY_ID ="SELECT " +
             "   u.id \"userId\", f_name, l_name, password, roleId, email,phone, birth_date, sex,\n" +
@@ -50,6 +51,17 @@ public class UserDaoImpl implements UserDao, InitializingBean {
     private final String SAVE_USER = "INSERT INTO users VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);";
     private final String UPDATE_USER = "UPDATE users SET f_name=?, l_name=?, password=?, roleid=?, company_id=?, email=?, phone=?, birth_date=?, sex=? WHERE id = ?;";
     private final String FIND_USERS_FOR_COMPANY = "SELECT id \"userId\", f_name, l_name, password, email, phone,roleid, birth_date, sex FROM users WHERE company_id = ?;";
+    private final String FIND_EMPLOYEES_FOR_PROJECT = "SELECT\n" +
+            "  u.id \"userId\", f_name, l_name, password, roleId, email, phone, birth_date, sex,\n" +
+            "  t.id \"taskId\", t.name \"taskName\", t.description \"taskDescription\", estimate, t.start_date \"taskSDate\", t.finish_date \"taskFDate\",\n" +
+            "    t.is_started \"taskIsStarted\", t.is_finished \"taskIsFinished\", t.plan_finish_date \"taskPFinish\", t.priority,\n" +
+            "  c.id \"companyId\", c.name \"companyName\", c.date_creation, c.description \"companyDescription\"\n" +
+            "FROM users AS u\n" +
+            "  JOIN company AS C ON C.id = u.company_id\n" +
+            "  JOIN user_task AS ut ON ut.user_id = u.id\n" +
+            "  JOIN task AS t ON t.id = ut.task_id\n" +
+            "  JOIN sprint AS S ON t.sprint_id = s.id\n" +
+            "WHERE s.projectid = ?;";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -62,6 +74,11 @@ public class UserDaoImpl implements UserDao, InitializingBean {
     @Override
     public User getUserById(int id) {
         return jdbcTemplate.queryForObject(FIND_BY_ID,new Object[]{id}, new UserMapper());
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return jdbcTemplate.queryForObject(FIND_BY_EMAIL, new Object[]{email}, new UserMapper());
     }
 
     @Override
@@ -83,6 +100,11 @@ public class UserDaoImpl implements UserDao, InitializingBean {
     @Override
     public List<User> getAllUsersForCompany(int companyId) {
         return jdbcTemplate.query(FIND_USERS_FOR_COMPANY, new Object[]{companyId},new UserMapper());
+    }
+
+    @Override
+    public List<User> getEmployeesForProject(int projectId) {
+        return jdbcTemplate.query(FIND_EMPLOYEES_FOR_PROJECT, new Object[]{projectId},new UserExtractor());
     }
 
     @Override

@@ -14,12 +14,12 @@
               <!-- Page Heading -->
               <div class="row">
                   <h1 class="page-header">
-                          ${company.getName()}
+                          ${user.getCompany().getName()}
                       <small>Dashboard</small>
                   </h1>
                   <ol class="breadcrumb">
                       <li class="active">
-                          <i class="fa fa-user" aria-hidden="true"></i> ${userName}
+                          <i class="fa fa-user" aria-hidden="true"></i> ${user.getFirstName()} ${user.getLastName()}
                       </li>
                   </ol>
               </div>
@@ -35,8 +35,8 @@
                                       <i class="fa fa-comments fa-5x"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
-                                      <div class="huge">${projectCount}</div>
-                                      <div>Created Project</div>
+                                      <div class="huge">${sprintCount}</div>
+                                      <div>Created Sprints</div>
                                   </div>
                               </div>
                           </div>
@@ -58,8 +58,8 @@
                                       <i class="fa fa-address-card fa-5x"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
-                                      <div class="huge">${currentWorkersCount}</div>
-                                      <div>Current workers</div>
+                                      <div class="huge">${taskCount}</div>
+                                      <div>Current task</div>
                                   </div>
                               </div>
                           </div>
@@ -81,8 +81,8 @@
                                       <i class="fa fa-shopping-cart fa-5x"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
-                                      <div class="huge">${currentCustomersCount}</div>
-                                      <div>Current Customers</div>
+                                      <div class="huge">${employeeCount}</div>
+                                      <div>Current employees</div>
                                   </div>
                               </div>
                           </div>
@@ -103,8 +103,8 @@
                                       <i class="fa fa-support fa-5x"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
-                                      <div class="huge">${finishProjectsCount}</div>
-                                      <div>Finished projects</div>
+                                      <div class="huge">${finishTaskCount}</div>
+                                      <div>Finished tasks</div>
                                   </div>
                               </div>
                           </div>
@@ -123,12 +123,16 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Company About</h3>
+                          <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Project About</h3>
                       </div>
                       <div class="panel-body">
-                              Company description: ${company.getDescription()}
-                              <br>
-                              Company date creation: ${company.getDateCreation()}
+                          Project name: ${project.getName()}
+                          <br>
+                          Project description: ${project.getDescription()}
+                          <br>
+                          Started date: ${project.getStartDate()}
+                          <br>
+                          Planed finish date: ${project.getPlanFinishDate()}
                       </div>
                   </div>
               </div>
@@ -137,11 +141,11 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Project</h3>
+                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Sprints</h3>
                       </div>
                       <div class="panel-body">
                               <c:choose>
-                                <c:when test="${projects != null}">
+                                <c:when test="${sprints != null}">
                                  <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
@@ -150,23 +154,28 @@
                                              <th>Description</th>
                                              <th>Start</th>
                                              <th>Finish</th>
+                                             <th>Depended sprint name</th>
                                          </tr>
                                          </thead>
                                          <tbody>
-                                         <c:forEach items="${projects}" var="project">
+                                         <c:forEach items="${sprints}" var="sprint">
                                                 <tr>
-                                                    <td>${project.getName()}</td>
-                                                    <td>${project.getDescription()}</td>
-                                                    <td>${project.getStartDate()}</td>
-                                                    <td>${project.getFinishDate()}</td>
+                                                    <td>${sprint.getName()}</td>
+                                                    <td>${sprint.getDescription()}</td>
+                                                    <td>${sprint.getStartDate()}</td>
+                                                    <td>${sprint.getPlanedFinishDate()}</td>
+                                                    <td><c:if test="${sprint.getDependedOn() != null}">
+                                                           <c:out value="${sprint.getDependedOn().getName()}"/><p>
+                                                        </c:if>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
                                          </tbody>
                                      </table>
                                  </div>
                                 </c:when>
-                                <c:when test="${projects == null}">
-                                    Sorry you don't have any projects
+                                <c:when test="${sprints == null}">
+                                    Sorry you don't have any sprints
                                 </c:when>
                              </c:choose>
                           <div class="text-right">
@@ -185,20 +194,33 @@
                       <div class="panel-body">
                           <div class="list-group">
                               <c:choose>
-                              <c:when test="${currentWorkers != null}">
-                              <c:forEach items="${currentWorkers}" var="workers">
-                                               <a href="#" class="list-group-item">
-                                                   <span class="badge">${workers.getRole()}</span>
-                                                   <i class="fa fa-fw fa-calendar"></i>
-                                                   ${workers.getFirstName()} ${workers.getLastName()}
-                                               </a>
-                                        </c:forEach>
+                              <c:when test="${currentEmployees != null}">
+                                      <div class="table-responsive">
+                                          <table class="table table-bordered table-hover table-striped">
+                                              <thead>
+                                              <tr>
+                                                  <th>Name</th>
+                                                  <th>Email</th>
+                                                  <th>Phone</th>
+                                              </tr>
+                                              </thead>
+                                              <tbody>
+                                              <c:forEach items="${currentEmployees }" var="employee">
+                                                    <tr>
+                                                        <td>${employee.getFirstName()} ${employee.getLastName()}</td>
+                                                        <td>${employee.getEmail()}</td>
+                                                        <td>${employee.getPhone()}</td>
+                                                    </tr>
+                                                </c:forEach>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                              </c:when>
+                              <c:when test="${currentWorkers == null}">
+                                        Sorry you don't have any workers
+                              </c:when>
+                              </c:choose>
                           </div>
-                          </c:when>
-                          <c:when test="${currentWorkers == null}">
-                                    Sorry you don't have any workers
-                                </c:when>
-                          </c:choose>
                       </div>
                       <div class="text-right">
                           <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
@@ -210,36 +232,34 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Project</h3>
+                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Task</h3>
                       </div>
                       <div class="panel-body">
                               <c:choose>
-                                <c:when test="${currentCustomers != null}">
+                                <c:when test="${tasks != null}">
                                  <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
                                          <tr>
                                              <th>Name</th>
-                                             <th>Company</th>
-                                             <th>Email</th>
-                                             <th>Phone</th>
+                                             <th>Estimate</th>
+                                             <th>Priority</th>
                                          </tr>
                                          </thead>
                                          <tbody>
-                                         <c:forEach items="${currentCustomers}" var="customers">
+                                         <c:forEach items="${tasks}" var="task">
                                                 <tr>
-                                                    <td>${customers.getUser().getFirstName()} ${customers.getUser().getLastName()}</td>
-                                                    <td>${customers.getCompanyName()}</td>
-                                                    <td>${customers.getUser().getEmail()}</td>
-                                                    <td>${customers.getUser().getPhone()}</td>
+                                                    <td>${task.getName()}</td>
+                                                    <td>${task.getEstimate()}</td>
+                                                    <td><span id = "priority">${task.getPriority()}</span></td>
                                                 </tr>
                                             </c:forEach>
                                          </tbody>
                                      </table>
                                  </div>
                                 </c:when>
-                                <c:when test="${currentCustomers == null}">
-                                    Sorry you don't have any projects
+                                <c:when test="${tasks == null}">
+                                    Sorry you don't have any task
                                 </c:when>
                              </c:choose>
                           <div class="text-right">
@@ -256,7 +276,6 @@
           <!-- /.row -->
 
       </div>
-
 
 
     </jsp:attribute>

@@ -2,6 +2,10 @@
     float: left;
 }
 
+.ctn-padding{
+    padding-top: 20px;
+}
+
 .top-nav {
     padding: 0 15px;
 }
