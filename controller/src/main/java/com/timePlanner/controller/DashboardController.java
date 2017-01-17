@@ -46,6 +46,7 @@ public class DashboardController {
         model.addAttribute("currentWorkersCount",currentWorkers!=null ? currentWorkers.size():0);
         model.addAttribute("currentCustomersCount",currentCustomer!=null ? currentCustomer.size():0);
         model.addAttribute("finishProjectsCount",finishProjects!=null ? finishProjects.size():0);
+        model.addAttribute("company", company);
         model.addAttribute("projects", company.getProjects());
         model.addAttribute("currentWorkers",currentWorkers);
         model.addAttribute("currentCustomers", currentCustomer);

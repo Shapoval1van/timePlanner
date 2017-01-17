@@ -38,7 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .usernameParameter("j_username")
                     .passwordParameter("j_password")
                     .defaultSuccessUrl("/success")
-                    .failureUrl("/login?error");
+                    .failureUrl("/login?error")
+                .and()
+                    .logout()
+                    .logoutUrl("/j_spring_security_logout")
+                    .logoutSuccessUrl("/");
         http.csrf().disable();
     }
 

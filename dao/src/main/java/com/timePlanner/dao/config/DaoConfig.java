@@ -44,7 +44,7 @@ public class DaoConfig {
         BasicDataSource dataSource = new BasicDataSource();
         Properties dbConfig = getDbConfig();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/timePlanner");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/timePlannerDev");
         dataSource.setUsername(dbConfig.getProperty("username"));
         dataSource.setPassword(dbConfig.getProperty("password"));
         dataSource.setInitialSize(20);

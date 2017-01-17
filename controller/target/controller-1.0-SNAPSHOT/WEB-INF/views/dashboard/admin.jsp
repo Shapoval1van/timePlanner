@@ -36,13 +36,13 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${projectCount}</div>
-                                      <div>Created Project</div>
+                                      <div><spring:message code="dashboard.createdProj"/></div>
                                   </div>
                               </div>
                           </div>
                           <a href="#">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -59,13 +59,13 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${currentWorkersCount}</div>
-                                      <div>Current workers</div>
+                                      <div><spring:message code="dashboard.currentWorkers"/></div>
                                   </div>
                               </div>
                           </div>
                           <a href="#">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -82,13 +82,13 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${currentCustomersCount}</div>
-                                      <div>Current Customers</div>
+                                      <div><spring:message code="dashboard.curretCustomers"/></div>
                                   </div>
                               </div>
                           </div>
                           <a href="#">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -104,13 +104,13 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${finishProjectsCount}</div>
-                                      <div>Finished projects</div>
+                                      <div><spring:message code="dashboard.finishedProject"/></div>
                                   </div>
                               </div>
                           </div>
                           <a href="#">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -123,12 +123,12 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Company About</h3>
+                          <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i><spring:message code="dashboard.companyAbout"/></h3>
                       </div>
                       <div class="panel-body">
-                              Company description: ${company.getDescription()}
+                              <spring:message code="dashboard.companyDescription"/>: ${company.getDescription()}
                               <br>
-                              Company date creation: ${company.getDateCreation()}
+                              <spring:message code="dashboard.companyDateCreation"/> : ${company.getDateCreation()}
                       </div>
                   </div>
               </div>
@@ -137,7 +137,7 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Project</h3>
+                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.project"/></h3>
                       </div>
                       <div class="panel-body">
                               <c:choose>
@@ -146,10 +146,10 @@
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
                                          <tr>
-                                             <th>Name</th>
-                                             <th>Description</th>
-                                             <th>Start</th>
-                                             <th>Finish</th>
+                                             <th><spring:message code="dashboard.name"/></th>
+                                             <th><spring:message code="dashboard.description"/></th>
+                                             <th><spring:message code="dashboard.startDate"/></th>
+                                             <th><spring:message code="dashboard.finishDate"/></th>
                                          </tr>
                                          </thead>
                                          <tbody>
@@ -166,11 +166,11 @@
                                  </div>
                                 </c:when>
                                 <c:when test="${projects == null}">
-                                    Sorry you don't have any projects
+                                    <spring:message code="dashboard.projectEmpty"/>
                                 </c:when>
                              </c:choose>
                           <div class="text-right">
-                              <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                              <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
                           </div>
                       </div>
                   </div>
@@ -180,7 +180,7 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Workers</h3>
+                          <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><spring:message code="dashboard.workers"/></h3>
                       </div>
                       <div class="panel-body">
                           <div class="list-group">
@@ -196,12 +196,12 @@
                           </div>
                           </c:when>
                           <c:when test="${currentWorkers == null}">
-                                    Sorry you don't have any workers
+                                    <spring:message code="dashboard.workersEmpty"/>
                                 </c:when>
                           </c:choose>
                       </div>
                       <div class="text-right">
-                          <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
+                          <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
                       </div>
                   </div>
               </div>
@@ -210,7 +210,7 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Project</h3>
+                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.customers"/></h3>
                       </div>
                       <div class="panel-body">
                               <c:choose>
@@ -219,10 +219,10 @@
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
                                          <tr>
-                                             <th>Name</th>
-                                             <th>Company</th>
-                                             <th>Email</th>
-                                             <th>Phone</th>
+                                             <th><spring:message code="dashboard.name"/></th>
+                                             <th><spring:message code="dashboard.company"/></th>
+                                             <th><spring:message code="dashboard.email"/></th>
+                                             <th><spring:message code="dashboard.phone"/></th>
                                          </tr>
                                          </thead>
                                          <tbody>
@@ -239,11 +239,11 @@
                                  </div>
                                 </c:when>
                                 <c:when test="${currentCustomers == null}">
-                                    Sorry you don't have any projects
+                                    <spring:message code="dashboard.customersEmpty"/>
                                 </c:when>
                              </c:choose>
                           <div class="text-right">
-                              <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                              <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
                           </div>
                       </div>
                   </div>
@@ -256,8 +256,6 @@
           <!-- /.row -->
 
       </div>
-
-
 
     </jsp:attribute>
 </t:dashboardPageLayout>

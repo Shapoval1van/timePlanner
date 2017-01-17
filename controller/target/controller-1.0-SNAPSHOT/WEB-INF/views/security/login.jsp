@@ -23,30 +23,37 @@
                                         <div class="col-xs-12 col-sm-12 col-md-12 ">
                                             <br>
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span
-                                                        class="glyphicon glyphicon-user"></span></span>
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+                                                </span>
                                                 <input type="text" name="j_username" class="form-control input-lg"
                                                        placeholder="username" required autofocus/>
                                             </div>
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span
-                                                        class="glyphicon glyphicon-lock"></span></span>
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-lock fa-2x" aria-hidden="true"></i>
+                                                </span>
                                                 <input type="password" name="j_password" class="form-control input-lg"
                                                        placeholder="password" required/>
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <a href="/#">
-                                                <hr class="colorgraph">
-                                                <div class="row">
-                                                        <%--it's a kind of magic--%>
-                                                    <input type="hidden" name="${_csrf.parameterName}"
-                                                           value="${_csrf.token}"/>
-                                                    <div class="col-xs-offset-3 col-sm-offset-3  col-md-offset-3 col-xs-6 col-sm-6 col-md-6">
-                                                        <input type="submit" value="button"
-                                                               class="btn btn-primary btn-block btn-lg btn-success">
-                                                    </div>
+                                            <a href="/registration">Re</a>
+                                            <c:if test="${error == true}">
+
+                                                <c:out value="by"/>
+                                            </c:if>
+                                            <hr class="colorgraph">
+                                            <div class="row">
+                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                       value="${_csrf.token}"/>
+                                                <div class="col-xs-offset-3 col-sm-offset-3  col-md-offset-3 col-xs-6 col-sm-6 col-md-6">
+                                                    <%--<spring:message code="login.button" var="button"/>--%>
+                                                    <input type="submit" value="butt"
+                                                           class="btn btn-primary btn-block btn-lg btn-success">
                                                 </div>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
