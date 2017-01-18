@@ -17,6 +17,7 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/font-awesome/css/font-awesome.min.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/scripts.js"></script>
 </head>
 <div id="wrapper">
 

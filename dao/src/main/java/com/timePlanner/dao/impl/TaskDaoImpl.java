@@ -4,6 +4,7 @@ package com.timePlanner.dao.impl;
 import com.timePlanner.dao.TaskDao;
 import com.timePlanner.dao.extractors.TaskExtractor;
 import com.timePlanner.dao.mappers.TaskMapper;
+import com.timePlanner.dto.Priority;
 import com.timePlanner.dto.Task;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -67,6 +68,7 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
             "WHERE t.id = ?;";
     private final String UPDATE_TASK = "UPDATE task SET name=?, sprint_id=?, start_date=? , finish_date=?, " +
             "is_started=?, is_finished=?, plan_finish_date=?, description=?, priority=?,  estimate=?WHERE id = ?;";
+    private final String UPDATE_TASK_PRIORITY = "UPDATE task SET priority=? WHERE id = ?;";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -91,6 +93,11 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
     public void updateTask(Task task) {
         final int UPDATE_STATEMENT = 1;
         jdbcTemplate.update(UPDATE_TASK, new TaskPreparedStatementSetter(task, UPDATE_STATEMENT));
+    }
+
+    @Override
+    public void updateTaskPriority(int taskId, Priority priority) {
+        jdbcTemplate.update(UPDATE_TASK_PRIORITY, priority.ordinal()+1, taskId);
     }
 
     @Override

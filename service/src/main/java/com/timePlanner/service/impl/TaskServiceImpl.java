@@ -2,8 +2,13 @@ package com.timePlanner.service.impl;
 
 
 import com.timePlanner.dao.TaskDao;
+import com.timePlanner.dto.Project;
+import com.timePlanner.dto.Sprint;
 import com.timePlanner.dto.Task;
+import com.timePlanner.dto.User;
 import com.timePlanner.service.EmptyResultException;
+import com.timePlanner.service.ProjectService;
+import com.timePlanner.service.SprintService;
 import com.timePlanner.service.TaskService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -12,12 +17,19 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 
 @Service
 public class TaskServiceImpl implements TaskService {
     private static final Logger LOGGER = LogManager.getLogger(TaskServiceImpl.class);
+
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private SprintService sprintService;
+
     @Autowired
     private TaskDao taskDao;
 
@@ -54,5 +66,18 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public List<Task> getALlTasksWithDetails() {
         return taskDao.getALlTasksWithDetails();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateTaskPriority(Task task) {
+        taskDao.updateTaskPriority(task.getId(), task.getPriority());
+    }
+
+    public Set<Task> findTaskForPM(User user) {
+        Set<Task> tasks = Collections.synchronizedSet(new TreeSet<>(Comparator.comparing(Task::getId)));
+        Project project = projectService.getProjectsForProjectManager(user.getId()).get(0);
+        List<Sprint> sprints = sprintService.getSprintsForProject(project.getId()) ;// sorted quickly
+        sprints.parallelStream().filter(s->s.getTasks()!= null).forEach(s -> tasks.addAll(s.getTasks()));
+        return tasks;
     }
 }

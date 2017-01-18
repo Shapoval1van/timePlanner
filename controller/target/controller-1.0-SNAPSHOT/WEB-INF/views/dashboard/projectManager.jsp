@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
@@ -251,7 +252,36 @@
                                                 <tr>
                                                     <td>${task.getName()}</td>
                                                     <td>${task.getEstimate()}</td>
-                                                    <td><span id = "priority">${task.getPriority()}</span></td>
+                                                    <td>
+                                                        <select class="input-sm  priority">
+                                                            <c:choose>
+                                                                <c:when test="${(task.getPriority().ordinal()+1)==1}">
+                                                                    <option selected data-value='{"id": ${task.getId()},"priority": 0}' label="LOW"></option>
+                                                                    <option class="btn-info" data-value='{"id": ${task.getId()},"priority": 1}' label="MEDIUM"></option>
+                                                                    <option class="btn-warning" data-value='{"id": ${task.getId()},"priority": 2}' label="HIGH"></option>
+                                                                    <option class="btn-danger" data-value='{"id": ${task.getId()},"priority": 3}' label="CRITICAL"></option>
+                                                                </c:when>
+                                                                <c:when test="${(task.getPriority().ordinal()+1)==2}">
+                                                                    <option data-value='{"id": ${task.getId()},"priority": 0}' label="LOW"></option>
+                                                                    <option selected class="btn-info" data-value='{"id": ${task.getId()},"priority": 1}' label="MEDIUM"></option>
+                                                                    <option class="btn-warning" data-value='{"id": ${task.getId()},"priority": 2}' label="HIGH"></option>
+                                                                    <option class="btn-danger" data-value='{"id": ${task.getId()},"priority": 3}' label="CRITICAL"></option>
+                                                                </c:when>
+                                                                <c:when test="${(task.getPriority().ordinal()+1)==3}">
+                                                                    <option data-value='{"id": ${task.getId()},"priority": 0}' label="LOW"></option>
+                                                                    <option class="btn-info" data-value='{"id": ${task.getId()},"priority": 1}' label="MEDIUM"></option>
+                                                                    <option selected class="btn-warning" data-value='{"id": ${task.getId()},"priority": 2}' label="HIGH"></option>
+                                                                    <option class="btn-danger" data-value='{"id": ${task.getId()},"priority": 3}' label="CRITICAL"></option>
+                                                                </c:when>
+                                                                <c:when test="${(task.getPriority().ordinal()+1)==4}">
+                                                                    <option data-value='{"id": ${task.getId()},"priority": 0}' label="LOW"></option>
+                                                                    <option class="btn-info" data-value='{"id": ${task.getId()},"priority": 1}' label="MEDIUM"></option>
+                                                                    <option class="btn-warning" data-value='{"id": ${task.getId()},"priority": 2}' label="HIGH"></option>
+                                                                    <option selected class="btn-danger" data-value='{"id": ${task.getId()},"priority": 3}' label="CRITICAL"></option>
+                                                                </c:when>
+                                                            </c:choose>
+                                                        </select>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
                                          </tbody>
@@ -271,12 +301,64 @@
               <!-- /.row -->
           </div>
           <!-- /.row -->
-
       </div>
           <!-- /.row -->
 
       </div>
+    <script type="text/javascript">
+            $('select').on('change',function(){
+            var val1 = $(this).find(':selected').attr('label');
+                var data = $(this).find(':selected').data("value");
+                console.log(data);
+                $.ajax({
+                    url: '/set-priority',
+                    data:JSON.stringify(data),
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    mimeType: 'application/json'
+                });
+            switch (val1){
+                case 'LOW':
+                    $(this).removeClass('btn-info btn-warning btn-danger');
+                    break;
+                case 'MEDIUM':
+                    $(this).removeClass('btn-info btn-warning btn-danger').addClass('btn-info');
+                    break;
+                case 'HIGH':
+                    $(this).removeClass('btn-info btn-warning btn-danger').addClass('btn-warning');
+                    break;
+                case 'CRITICAL':
+                    $(this).removeClass('btn-info btn-warning btn-danger').addClass('btn-danger');
+                    break;
+                default:
+                    break;
+            }
+        });
 
+
+        var mass = Array.from($(".priority option:selected"));
+        mass.forEach(function(item, i, mass){
+            console.log(item);
+            var val  = $(item).attr('label');
+            console.log(val == 'LOW');
+            switch (val){
+                case 'LOW':
+                    break;
+                case 'MEDIUM':
+                    $(item).parent().addClass('btn-info');
+                    break;
+                case 'HIGH':
+                    $(item).parent().addClass('btn-warning');
+                    break;
+                case 'CRITICAL':
+                    $(item).parent().addClass('btn-error');
+                    break;
+                default:
+                    break;
+            }
+        });
+    </script>
 
     </jsp:attribute>
 </t:dashboardPageLayout>

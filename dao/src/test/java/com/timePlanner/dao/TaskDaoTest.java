@@ -1,6 +1,7 @@
 package com.timePlanner.dao;
 
 import com.timePlanner.dao.config.DaoTestConfig;
+import com.timePlanner.dto.Priority;
 import com.timePlanner.dto.Sprint;
 import com.timePlanner.dto.Task;
 import org.junit.Test;
@@ -32,6 +33,18 @@ public class TaskDaoTest {
         assertEquals("first Task", task.getName());
         assertNull(task.getSprint());
         assertEquals(new Double(2), new Double(task.getEstimate()));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void updateTaskPriorityTest() throws Exception {
+        Task task = taskDao.getTaskById(1);
+        assertEquals(Priority.LOW, task.getPriority());
+        task.setPriority(Priority.CRITICAL);
+        taskDao.updateTaskPriority(task.getId(), task.getPriority());
+        task = taskDao.getTaskById(1);
+        assertEquals(Priority.CRITICAL, task.getPriority());
     }
 
     @Test

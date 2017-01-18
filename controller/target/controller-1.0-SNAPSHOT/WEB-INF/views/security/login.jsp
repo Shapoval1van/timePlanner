@@ -13,8 +13,7 @@
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">
-                                PB</h3>
+                            <h3 class="panel-title">Time planner</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -29,6 +28,7 @@
                                                 <input type="text" name="j_username" class="form-control input-lg"
                                                        placeholder="username" required autofocus/>
                                             </div>
+                                            <br/>
                                             <div class="input-group">
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-lock fa-2x" aria-hidden="true"></i>
@@ -39,10 +39,10 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12">
                                             <a href="/registration">Re</a>
-                                            <c:if test="${error == true}">
+                                            <%--<c:if test="${error == true}">--%>
 
-                                                <c:out value="by"/>
-                                            </c:if>
+                                                <%--<c:out value="by"/>--%>
+                                            <%--</c:if>--%>
                                             <hr class="colorgraph">
                                             <div class="row">
                                                 <input type="hidden" name="${_csrf.parameterName}"

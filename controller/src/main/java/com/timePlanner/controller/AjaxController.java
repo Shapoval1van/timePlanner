@@ -1,0 +1,64 @@
+package com.timePlanner.controller;
+
+import com.timePlanner.dto.Message;
+import com.timePlanner.dto.MessageType;
+import com.timePlanner.dto.Task;
+import com.timePlanner.dto.User;
+import com.timePlanner.service.EmptyResultException;
+import com.timePlanner.service.TaskService;
+import com.timePlanner.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
+import java.util.Set;
+import java.util.TreeSet;
+
+@RestController
+public class AjaxController {
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private UserService userService;
+
+    @PreAuthorize("hasRole('PM')")
+    @RequestMapping(path = "/set-priority", method = RequestMethod.POST)
+    public ResponseEntity<?> setPriority(@RequestBody Task task, Principal principal){
+        Set<Task> tasksForUser = new TreeSet<>();
+        boolean containsFlag = false;
+        try {
+            User  user = userService.getUserByEmail(principal.getName());
+            tasksForUser = taskService.findTaskForPM(user);
+        } catch (EmptyResultException e) {
+            e.printStackTrace();
+        }
+        for(Task i: tasksForUser){
+            if(i.getId()==task.getId()){
+               containsFlag = true;
+            }
+        }
+        if(containsFlag == true){
+            if(task.getId() == 0){
+                return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR),HttpStatus.BAD_REQUEST);
+            }else if(task.getPriority() == null){
+                return new ResponseEntity<>(new Message("priority must be not empty", MessageType.ERROR),HttpStatus.BAD_REQUEST);
+            }
+            try{
+                taskService.updateTaskPriority(task);
+                return new ResponseEntity<String>(HttpStatus.OK);
+            }catch (Exception e){
+                return new ResponseEntity<>(new Message("Internal server problem", MessageType.ERROR),HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else {
+            return new ResponseEntity<>(new Message("this user haven't access to this task", MessageType.ERROR),HttpStatus.FORBIDDEN);
+        }
+    }
+}
