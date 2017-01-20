@@ -2,16 +2,20 @@ package com.timePlanner.service.impl;
 
 
 import com.timePlanner.dao.UserDao;
+import com.timePlanner.dto.Company;
 import com.timePlanner.dto.User;
+import com.timePlanner.service.CompanyService;
 import com.timePlanner.service.EmptyResultException;
 import com.timePlanner.service.UserService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,6 +23,12 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserService.class);
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public User getUserById(int id) throws EmptyResultException {
@@ -41,6 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(rollbackFor = Exception.class)
     public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
     }
 
@@ -52,6 +63,16 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User getUserWithDetailsById(int id) {
         return userDao.getUserWithDetailsById(id);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void createUserAdmin(User user) {
+        Company company = user.getCompany();
+        company.setDateCreation(new Date(System.currentTimeMillis()));
+        int companyId = companyService.saveCompany(company);
+        company.setId(companyId);
+        user.setCompany(company);
+        saveUser(user);
     }
 
     @Transactional(readOnly = true)

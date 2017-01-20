@@ -20,12 +20,10 @@ public class UserExtractor implements ResultSetExtractor<List<User>> {
         CompanyMapper companyMapper = new CompanyMapper();
         TaskMapper taskMapper = new TaskMapper();
         User user = null;
-        Set<Task> tasks = new HashSet<>();
         while(resultSet.next()){
             int userId = resultSet.getInt("userId");
             user = userMap.get(userId);
             if(user == null){
-                tasks = new HashSet<>();
                 user = new User();
                 user.setId(userId);
                 user.setFirstName(resultSet.getString("f_name"));
@@ -42,8 +40,15 @@ public class UserExtractor implements ResultSetExtractor<List<User>> {
                 userMap.put(userId, user);
             }
             if(resultSet.getInt("taskId")!=0){
+                Set<Task> tasks;
                 Task task = taskMapper.mapRow(resultSet, 0);
-                tasks.add(task);
+                tasks = user.getTasks();
+                if(tasks!=null){
+                    tasks.add(task);
+                }else {
+                    tasks = new HashSet<>();
+                    tasks.add(task);
+                }
                 user.setTasks(tasks);
             }
         }

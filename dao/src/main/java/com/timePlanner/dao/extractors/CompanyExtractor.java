@@ -20,18 +20,23 @@ public class CompanyExtractor implements ResultSetExtractor<List<Company>>{
         Map<Integer, Company> companyMap = new HashMap<>();
         ProjectMapper projectMapper = new ProjectMapper();
         CompanyMapper companyMapper = new CompanyMapper();
-        Set<Project> projectSet = new HashSet<>();
         while (resultSet.next()){
             int companyId = resultSet.getInt("companyId");
             Company company = companyMap.get(companyId);
             if(company == null){
-                projectSet = new HashSet<>();
                 company = companyMapper.mapRow(resultSet, 0);
                 companyMap.put(companyId , company);
             }
             if(resultSet.getInt("projectId")!=0){
+                Set<Project> projectSet = new HashSet<>();
                 Project project = projectMapper.mapRow(resultSet, 0);
-                projectSet.add(project);
+                projectSet = company.getProjects();
+                if(projectSet!=null){
+                    projectSet.add(project);
+                }else {
+                    projectSet = new HashSet<>();
+                    projectSet.add(project);
+                }
                 company.setProjects(projectSet);
             }
         }

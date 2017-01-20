@@ -32,9 +32,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void saveCompany(Company company) {
-        companyDao.saveCompany(company);
-        //todo add create user cos company cant be without user;
+    public int saveCompany(Company company) {
+        return  companyDao.saveCompany(company);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -50,5 +49,15 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(readOnly = true)
     public Company getCompanyWithDetails(int id) {
         return companyDao.getCompanyWithDetails(id);
+    }
+
+    @Override
+    public Company getCompanyByName(String name) throws EmptyResultException {
+        try{
+            return companyDao.getCompanyByName(name);
+        }catch (EmptyResultDataAccessException up){
+            LOGGER.info("Company with id " + name + "not found");
+            throw new EmptyResultException(up);
+        }
     }
 }

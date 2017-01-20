@@ -21,14 +21,12 @@ public class TaskExtractor implements ResultSetExtractor<List<Task>> {
         TaskMapper taskMapper = new TaskMapper();
         SprintMapper sprintMapper = new SprintMapper();
         UserMapper userMapper = new UserMapper();
-        Set<User> users = new HashSet();
         Set<Task> dependedTask = new HashSet();
         while(resultSet.next()){
             int taskId = resultSet.getInt("taskId");
             Task task = taskMap.get(taskId);
             if(task == null){
                 dependedTask = new HashSet();
-                users = new HashSet<>();
                 task =  taskMapper.mapRow(resultSet, 0);
                 if(resultSet.getInt("sprintId")!=0){
                     task.setSprint(sprintMapper.mapRow(resultSet, 0));
@@ -36,8 +34,15 @@ public class TaskExtractor implements ResultSetExtractor<List<Task>> {
                 taskMap.put(taskId,task);
             }
             if(resultSet.getInt("userId") != 0){
+                Set<User> users;
                 User user = userMapper.mapRow(resultSet, 0);
-                users.add(user);
+                users = task.getUsers();
+                if(users!=null){
+                    users.add(user);
+                }else {
+                    users = new HashSet<>();
+                    users.add(user);
+                }
                 task.setUsers(users);
             }
             if(resultSet.getInt("taskIdDepended")!=0){

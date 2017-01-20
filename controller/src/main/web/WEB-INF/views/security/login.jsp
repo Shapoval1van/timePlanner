@@ -25,31 +25,33 @@
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                                                 </span>
+                                                <spring:message code="dashboard.email" var="email"/>
                                                 <input type="text" name="j_username" class="form-control input-lg"
-                                                       placeholder="username" required autofocus/>
+                                                       placeholder="${email}" required autofocus/>
                                             </div>
                                             <br/>
                                             <div class="input-group">
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-lock fa-2x" aria-hidden="true"></i>
                                                 </span>
+                                                <spring:message code="login.password" var="password"/>
                                                 <input type="password" name="j_password" class="form-control input-lg"
-                                                       placeholder="password" required/>
+                                                       placeholder="${password}" required/>
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <a href="/registration">Re</a>
-                                            <%--<c:if test="${error == true}">--%>
-
-                                                <%--<c:out value="by"/>--%>
-                                            <%--</c:if>--%>
+                                            <a href="/registration"><spring:message code="login.registration"/></a>
+                                            <c:if test="${param.error !=null}">
+                                                <spring:message code="login.badCredential" var="badCred"/>
+                                                <c:out value="${badCred}"/>
+                                            </c:if>
                                             <hr class="colorgraph">
                                             <div class="row">
                                                 <input type="hidden" name="${_csrf.parameterName}"
                                                        value="${_csrf.token}"/>
                                                 <div class="col-xs-offset-3 col-sm-offset-3  col-md-offset-3 col-xs-6 col-sm-6 col-md-6">
-                                                    <%--<spring:message code="login.button" var="button"/>--%>
-                                                    <input type="submit" value="butt"
+                                                    <spring:message code="login.login" var="button"/>
+                                                    <input type="submit" value="${button}"
                                                            class="btn btn-primary btn-block btn-lg btn-success">
                                                 </div>
                                             </div>

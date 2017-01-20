@@ -32,6 +32,7 @@ public class SprintDaoTest {
         assertEquals("start", sprints.get(0).getName());
         assertEquals("next", sprints.get(1).getName());
         assertEquals("start", sprints.get(1).getDependedOn().getName());
+        assertEquals(3,sprints.get(0).getTasks().size());
         assertEquals(1, sprintDao.getSprintsForProject(2).size());
     }
 

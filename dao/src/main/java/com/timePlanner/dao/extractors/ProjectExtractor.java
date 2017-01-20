@@ -20,25 +20,37 @@ public class ProjectExtractor implements ResultSetExtractor<List<Project>> {
         UserMapper userMapper = new UserMapper();
         CustomerMapper customerMapper = new CustomerMapper();
         ProjectMapper projectMapper = new ProjectMapper();
-        List<Sprint> sprints = new ArrayList<>();
-        Set<Customer> customers = new HashSet<>();
         while (resultSet.next()){
             int projectId = resultSet.getInt("projectId");
             Project project = projectMap.get(projectId);
             if(project == null){
-                sprints = new ArrayList<>();
                 project = projectMapper.mapRow(resultSet, 0);
                 project.setCompany(companyMapper.mapRow(resultSet,0));
                 project.setProjectManager(userMapper.mapRow(resultSet,0));
                 projectMap.put(projectId,project);
             }
             if(resultSet.getInt("sprintId")!=0){
+                List<Sprint> sprints;
                 Sprint sprint = sprintMapper.mapRow(resultSet, 0);
-                sprints.add(sprint);
+                sprints = project.getSprints();
+                if(sprints!=null){
+                    sprints.add(sprint);
+                }else {
+                    sprints = new ArrayList<>();
+                    sprints.add(sprint);
+                }
                 project.setSprints(sprints);
             }if(resultSet.getInt("customerId")!=0){
+                Set<Customer> customers;
                 Customer customer = customerMapper.mapRow(resultSet, 0);
-                customers.add(customer);
+                customers = project.getCustomers();
+                if(customers!=null){
+                    customers.add(customer);
+                }else {
+                    customers = new HashSet<>();
+                    customers.add(customer);
+                }
+
                 project.setCustomers(customers);
             }
         }

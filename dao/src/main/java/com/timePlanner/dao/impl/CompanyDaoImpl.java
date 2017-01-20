@@ -11,8 +11,12 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -32,6 +36,9 @@ public class CompanyDaoImpl  implements CompanyDao, InitializingBean {
             "       p.id \"projectId\", p.description \"projectDescription\", p.name \"projectName\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\", " +
             "           p.start_date \"projectSDate\",p.finish_date \"projectFDate\", p.is_finished \"projectIsFinished\"\n" +
             "       FROM company AS c LEFT JOIN project AS p ON c.id = p.company_id WHERE c.id = ?;";
+    private final String FIND_BY_NAME = "SELECT " +
+            "id \"companyId\", name \"companyName\", date_creation, description \"companyDescription\" " +
+            "FROM company WHERE name  = ?";
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -44,8 +51,24 @@ public class CompanyDaoImpl  implements CompanyDao, InitializingBean {
     }
 
     @Override
-    public void saveCompany(Company company) {
-        jdbcTemplate.update(SAVE_COMPANY, company.getName(), company.getDateCreation(), company.getDescription());
+    public Company getCompanyByName(String name) {
+        return jdbcTemplate.queryForObject(FIND_BY_NAME, new Object[]{name}, new CompanyMapper());
+    }
+
+    @Override
+    public int saveCompany(Company company) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rows = jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement preparedStatement = connection.prepareStatement(SAVE_COMPANY, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1,company.getName());
+                preparedStatement.setDate(2,new Date(company.getDateCreation().getTime()));
+                preparedStatement.setString(3, company.getDescription());
+                return preparedStatement;
+            }
+        }, keyHolder);
+        return rows>0?((Integer) keyHolder.getKeys().get("id")):0;
     }
 
     @Override

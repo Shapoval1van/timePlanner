@@ -352,7 +352,7 @@
                     $(item).parent().addClass('btn-warning');
                     break;
                 case 'CRITICAL':
-                    $(item).parent().addClass('btn-error');
+                    $(item).parent().addClass('btn-danger');
                     break;
                 default:
                     break;

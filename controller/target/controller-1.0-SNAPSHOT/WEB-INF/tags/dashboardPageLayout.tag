@@ -31,7 +31,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Time planner</a>
+            <a class="navbar-brand" href="/">Time planner</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -52,9 +52,11 @@
                         <li><a href="?lang=ru">RU</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#"><spring:message code="nav.singUp"/></a>
-                </li>
+                <sec:authorize access="isAnonymous()">
+                    <li>
+                        <a href="/registration"><spring:message code="nav.singUp"/></a>
+                    </li>
+                </sec:authorize>
                 <li>
                     <sec:authorize access="isAnonymous()">
                         <a href="/login"><spring:message code="nav.login"/></a>

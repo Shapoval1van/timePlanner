@@ -19,12 +19,10 @@ public class SprintExtractor implements ResultSetExtractor<List<Sprint>> {
         SprintMapper sprintMapper = new SprintMapper();
         ProjectMapper projectMapper = new ProjectMapper();
         TaskMapper taskMapper = new TaskMapper();
-        Set<Task> tasks = new HashSet<>();
         while (resultSet.next()) {
             int sprintId = resultSet.getInt("sprintId");
             Sprint sprint = sprintMap.get(sprintId);
             if (sprint == null) {
-                tasks = new HashSet<>();
                 sprint = sprintMapper.mapRow(resultSet, 0);
                 sprint.setProject(projectMapper.mapRow(resultSet,0));
                 if(resultSet.getInt("sprintIdPrev")!=0){
@@ -43,8 +41,14 @@ public class SprintExtractor implements ResultSetExtractor<List<Sprint>> {
             }
             if (resultSet.getInt("taskId") != 0) {
                 Task task = taskMapper.mapRow(resultSet, 0);
-                tasks.add(task);
-                sprint.setTasks(tasks);
+                Set<Task> taskTemp = sprint.getTasks();
+                if(taskTemp!=null){
+                    taskTemp.add(task);
+                }else {
+                    taskTemp = new HashSet<>();
+                    taskTemp.add(task);
+                }
+                sprint.setTasks(taskTemp);
             }
         }
         return new ArrayList<>(sprintMap.values());
