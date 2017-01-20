@@ -70,22 +70,33 @@
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div>
                 <ul class="nav navbar-nav side-nav navbar-left">
-                    <li class="active">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i>
-                            Dashboard
-                        </a>
+                    <li>
+                        <c:choose>
+                            <c:when test="${userRole.ordinal() == 0}">
+                                <a href="/dashboard-adm"><i class="fa fa-fw fa-dashboard"></i>
+                                    Dashboard
+                                </a>
+                            </c:when>
+                            <c:when test="${userRole.ordinal() == 1}">
+                                <a href="/dashboard-pm"><i class="fa fa-fw fa-dashboard"></i>
+                                    Dashboard
+                                </a>
+                            </c:when>
+                        </c:choose>
                     </li>
                     <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i>
-                            <c:choose>
-                                <c:when test="${userRole.ordinal() == 0}">
+                        <c:choose>
+                            <c:when test="${userRole.ordinal() == 0}">
+                                <a href="/create-project"><i class="fa fa-fw fa-bar-chart-o"></i>
                                     <spring:message code="dashboard.createProj"/>
-                                </c:when>
-                                <c:when test="${userRole.ordinal() == 1}">
+                                </a>
+                            </c:when>
+                            <c:when test="${userRole.ordinal() == 1}">
+                                <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i>
                                     <spring:message code="dashboard.creteSprint"/>
-                                </c:when>
-                            </c:choose>
-                        </a>
+                                </a>
+                            </c:when>
+                        </c:choose>
                     </li>
                     <li>
                         <a href="tables.html"><i class="fa fa-fw fa-table"></i> Add PM</a>

@@ -62,6 +62,16 @@ public class UserDaoImpl implements UserDao, InitializingBean {
             "  JOIN task AS t ON t.id = ut.task_id\n" +
             "  JOIN sprint AS S ON t.sprint_id = s.id\n" +
             "WHERE s.projectid = ?;";
+    private final String FIND_USER_WITH_DETAILS_BY_EMAIL ="SELECT " +
+            "   u.id \"userId\", f_name, l_name, password, roleId, email,phone, birth_date, sex,\n" +
+            "   t.id \"taskId\", t.name \"taskName\", t.description \"taskDescription\", " +
+            "           estimate, start_date \"taskSDate\", finish_date \"taskFDate\"," +
+            "            is_started \"taskIsStarted\", is_finished \"taskIsFinished\", t.plan_finish_date \"taskPFinish\", t.priority,\n" +
+            "   c.id \"companyId\", c.name \"companyName\", c.date_creation, c.description \"companyDescription\"" +
+            " FROM users as u\n" +
+            "  FULL OUTER JOIN company AS c ON c.id = u.company_id\n" +
+            "  LEFT JOIN user_task AS ut ON u.id = ut.user_id\n" +
+            "  LEFT JOIN task AS t ON ut.task_id = t.id where u.email=?;";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -89,6 +99,11 @@ public class UserDaoImpl implements UserDao, InitializingBean {
     @Override
     public User getUserWithDetailsById(int id){
         return jdbcTemplate.query(FIND_USER_WITH_DETAILS_BY_ID, new Object[]{id}, new UserExtractor()).get(0);
+    }
+
+    @Override
+    public User getUserWithDetailsByEmail(String email) {
+        return jdbcTemplate.query(FIND_USER_WITH_DETAILS_BY_EMAIL, new Object[]{email}, new UserExtractor()).get(0);
     }
 
 

@@ -2,18 +2,21 @@ package com.timePlanner.controller;
 
 import com.timePlanner.dto.*;
 import com.timePlanner.service.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
 public class DashboardController {
-
+    private static final Logger LOGGER = LogManager.getLogger(DashboardController.class);
     @Autowired
     private UserService userService;
 
@@ -31,9 +34,9 @@ public class DashboardController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/dashboard-adm")
-    public String dashboardAdmin(Model model){
+    public String dashboardAdmin(Model model, Principal principal){
         Set<Project> finishProjects = null;
-        User user = userService.getUserWithDetailsById(1);
+        User user = userService.getUserWithDetailsByEmail(principal.getName());
         Company company =  companyService.getCompanyWithDetails(user.getCompany().getId());
         List<User> currentWorkers = userService.getAllUsersForCompany(company.getId());
         List<Customer> currentCustomer = customerService.getCustomersWithDetailsByCompanyId(company.getId());
@@ -76,7 +79,6 @@ public class DashboardController {
         model.addAttribute("sprints",sprints);
         model.addAttribute("tasks", tasks);
         model.addAttribute("currentEmployees", currentEmployees);
-
         return "/dashboard/projectManager";
     }
 }

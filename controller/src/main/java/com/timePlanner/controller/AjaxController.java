@@ -43,7 +43,7 @@ public class AjaxController {
             User  user = userService.getUserByEmail(principal.getName());
             tasksForUser = taskService.findTaskForPM(user);
         } catch (EmptyResultException e) {
-            LOGGER.info("request from address:"+remoteAddr+"\n User with email: " +principal.getName() + " not found");
+            LOGGER.info("request from address:"+remoteAddr+"\n User with email: " +principal.getName() + " not found",e);
         }
         for(Task i: tasksForUser){
             if(i.getId()==task.getId()){
@@ -62,7 +62,7 @@ public class AjaxController {
                 taskService.updateTaskPriority(task);
                 return new ResponseEntity<String>(HttpStatus.OK);
             }catch (Exception e){
-                LOGGER.info("request from address:"+remoteAddr+"\ncant update user");
+                LOGGER.info("request from address:"+remoteAddr+"\ncant update user",e);
                 return new ResponseEntity<>(new Message("Internal server problem", MessageType.ERROR),HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }else {

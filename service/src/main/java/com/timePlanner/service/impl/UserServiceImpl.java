@@ -65,6 +65,11 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserWithDetailsById(id);
     }
 
+    @Override
+    public User getUserWithDetailsByEmail(String email) {
+        return userDao.getUserWithDetailsByEmail(email);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void createUserAdmin(User user) {
         Company company = user.getCompany();

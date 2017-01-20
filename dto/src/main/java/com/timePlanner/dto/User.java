@@ -32,4 +32,8 @@ public @Data class User {
                 "| sex=" + sex +
                 '}';
     }
+
+    public String getFullName(){
+        return firstName + " " +lastName;
+    }
 }

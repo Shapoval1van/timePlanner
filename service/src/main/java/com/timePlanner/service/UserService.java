@@ -10,6 +10,7 @@ public interface UserService {
     public void saveUser(User user);
     public void updateUser(User user);
     public User getUserWithDetailsById(int id);
+    public User getUserWithDetailsByEmail(String email);
     public void createUserAdmin(User user);
     public List<User> getAllUsers();
     public List<User> getALlUsersWithDetails();

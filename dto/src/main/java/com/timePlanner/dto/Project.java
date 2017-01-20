@@ -30,6 +30,7 @@ public @Data class Project {
                 "| isFinished=" + isFinished +
                 "| startDate=" + startDate +
                 "| finishDate=" + finishDate +
+                "| planFinishDate" + planFinishDate +
                 '}';
     }
 }
