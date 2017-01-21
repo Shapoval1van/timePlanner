@@ -1,5 +1,7 @@
 package com.timePlanner.controller.config;
 
+import com.timePlanner.controller.validator.TypeForm;
+import com.timePlanner.controller.validator.UserFormValidator;
 import com.timePlanner.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -74,5 +76,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean(name = "adminFormValidator")
+    public UserFormValidator adminFormValidator(){
+        return  new UserFormValidator(TypeForm.ADMIN);
+    }
+
+    @Bean(name = "workerFormValidator")
+    public UserFormValidator workerFormValidator(){
+        return  new UserFormValidator(TypeForm.WORKER);
     }
 }

@@ -99,7 +99,18 @@
                         </c:choose>
                     </li>
                     <li>
-                        <a href="tables.html"><i class="fa fa-fw fa-table"></i> Add PM</a>
+                        <c:choose>
+                            <c:when test="${userRole.ordinal() == 0}">
+                                <a href="/create-worker"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                    <spring:message code = "createWorker.createWorker"/>
+                                </a>
+                            </c:when>
+                            <c:when test="${userRole.ordinal() == 1}">
+                                <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                    <spring:message code="dashboard.creteSprint"/>
+                                </a>
+                            </c:when>
+                        </c:choose>
                     </li>
                     <li>
                         <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Add employee</a>

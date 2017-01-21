@@ -1,6 +1,6 @@
 package com.timePlanner.controller;
 
-import com.timePlanner.controller.validator.UserAdminValidator;
+import com.timePlanner.controller.validator.UserFormValidator;
 import com.timePlanner.dto.Role;
 import com.timePlanner.dto.User;
 import com.timePlanner.dto.UserForm;
@@ -8,6 +8,7 @@ import com.timePlanner.service.UserService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,10 +34,11 @@ import java.util.Date;
 public class SecurityController {
     //all var thread safe
     private static final Logger LOGGER = LogManager.getLogger(SecurityController.class);
-    String remoteAddr;
+    private String remoteAddr;
 
     @Autowired
-    public UserAdminValidator userAdminValidator;
+    @Qualifier(value = "adminFormValidator")
+    public UserFormValidator adminFormValidator;
 
     @Autowired
     public UserDetailsService userDetailsService;
@@ -76,7 +78,7 @@ public class SecurityController {
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
     public String registrationPost(@ModelAttribute("adminForm") UserForm userForm, BindingResult result, HttpServletRequest request) {
         remoteAddr = request.getRemoteAddr();
-        userAdminValidator.validate(userForm, result);
+        adminFormValidator.validate(userForm, result);
         if (result.hasErrors()) {
             return "/security/registration";
         }
