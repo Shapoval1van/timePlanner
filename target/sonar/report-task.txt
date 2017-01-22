@@ -1,5 +1,0 @@
-projectKey=timePlanner:com.timePlanner
-serverUrl=http://localhost:9000
-dashboardUrl=http://localhost:9000/dashboard/index/timePlanner:com.timePlanner
-ceTaskId=AVm9gbtfiXO_K4oW0ytF
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AVm9gbtfiXO_K4oW0ytF

@@ -86,7 +86,8 @@ public class SprintDaoImpl implements SprintDao , InitializingBean{
 
     @Override
     public Sprint getSprintWithDetails(int id) {
-        return jdbcTemplate.query(FIND_WITH_DETAILS, new Object[]{id}, new SprintExtractor()).get(0);
+        List<Sprint> sprints = jdbcTemplate.query(FIND_WITH_DETAILS, new Object[]{id}, new SprintExtractor());
+        return sprints.size() == 0?null:sprints.get(0);
     }
 
     @Override

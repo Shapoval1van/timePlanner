@@ -102,7 +102,8 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
 
     @Override
     public Task getTaskWithDetailsById(int id) {
-        return jdbcTemplate.query(FIND_BY_ID_WITH_DETAILS,new Object[]{id},new TaskExtractor()).get(0);
+        List<Task> tasks = jdbcTemplate.query(FIND_BY_ID_WITH_DETAILS,new Object[]{id},new TaskExtractor());
+        return tasks.size()==0?null:tasks.get(0);
     }
 
     @Override

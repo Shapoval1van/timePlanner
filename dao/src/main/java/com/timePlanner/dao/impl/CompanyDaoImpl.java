@@ -65,7 +65,7 @@ public class CompanyDaoImpl  implements CompanyDao, InitializingBean {
     @Override
     public Company getCompanyByUserEmail(String email) {
         List<Company> companies = jdbcTemplate.query(FIND_WITH_BY_USER_EMAIL, new Object[]{email}, new CompanyExtractor());
-        return companies==null?null:companies.get(0);
+        return companies.size()==0?null:companies.get(0);
     }
 
     @Override
@@ -96,7 +96,8 @@ public class CompanyDaoImpl  implements CompanyDao, InitializingBean {
 
     @Override
     public Company getCompanyWithDetails(int id) {
-        return jdbcTemplate.query(FIND_WITH_DETAILS, new Object[]{id}, new CompanyExtractor()).get(0);
+        List<Company> companies = jdbcTemplate.query(FIND_WITH_DETAILS, new Object[]{id}, new CompanyExtractor());
+        return companies.size()==0?null:companies.get(0);
     }
 
     @Override

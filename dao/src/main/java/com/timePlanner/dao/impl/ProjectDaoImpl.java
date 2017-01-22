@@ -92,7 +92,8 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
 
     @Override
     public Project getProjectWithDetails(int id) {
-        return jdbcTemplate.query(FIND_WITH_DETAILS, new Object[]{id}, new ProjectExtractor()).get(0);
+        List<Project> projects = jdbcTemplate.query(FIND_WITH_DETAILS, new Object[]{id}, new ProjectExtractor());
+        return projects.size() == 0?null:projects.get(0);
     }
 
     @Override

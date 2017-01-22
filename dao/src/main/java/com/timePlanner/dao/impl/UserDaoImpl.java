@@ -98,12 +98,14 @@ public class UserDaoImpl implements UserDao, InitializingBean {
 
     @Override
     public User getUserWithDetailsById(int id){
-        return jdbcTemplate.query(FIND_USER_WITH_DETAILS_BY_ID, new Object[]{id}, new UserExtractor()).get(0);
+        List<User> users = jdbcTemplate.query(FIND_USER_WITH_DETAILS_BY_ID, new Object[]{id}, new UserExtractor());
+        return users.size() == 0?null:users.get(0);
     }
 
     @Override
     public User getUserWithDetailsByEmail(String email) {
-        return jdbcTemplate.query(FIND_USER_WITH_DETAILS_BY_EMAIL, new Object[]{email}, new UserExtractor()).get(0);
+        List<User> users = jdbcTemplate.query(FIND_USER_WITH_DETAILS_BY_EMAIL, new Object[]{email}, new UserExtractor());
+        return users.size() == 0?null:users.get(0);
     }
 
 
