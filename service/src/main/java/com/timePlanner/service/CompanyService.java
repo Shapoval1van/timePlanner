@@ -10,5 +10,6 @@ public interface CompanyService {
     public void updateCompany(Company company);
     public List<Company> getAllCompany();
     public Company getCompanyWithDetails(int id);
+    public Company getCompanyByUserEmail(String email);
     public Company getCompanyByName(String name) throws EmptyResultException;
 }

@@ -5,6 +5,7 @@ import com.timePlanner.dao.UserDao;
 import com.timePlanner.dto.Company;
 import com.timePlanner.dto.User;
 import com.timePlanner.service.CompanyService;
+import com.timePlanner.service.CustomerService;
 import com.timePlanner.service.EmptyResultException;
 import com.timePlanner.service.UserService;
 import org.apache.log4j.LogManager;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Transactional(readOnly = true)
     public User getUserById(int id) throws EmptyResultException {
@@ -66,6 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getUserWithDetailsByEmail(String email) {
         return userDao.getUserWithDetailsByEmail(email);
     }
@@ -79,7 +84,6 @@ public class UserServiceImpl implements UserService {
         user.setCompany(company);
         saveUser(user);
     }
-
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userDao.getAllUsers();

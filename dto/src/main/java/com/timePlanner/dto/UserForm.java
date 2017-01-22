@@ -8,6 +8,23 @@ public class UserForm  extends  User{
     private String confirmPassword;
     private Message message;
 
+    public UserForm(){
+
+    }
+
+    public UserForm(User user){
+        super.birthDate = user.birthDate;
+        super.firstName = user.firstName;
+        super.email = user.email;
+        super.lastName = user.lastName;
+        super.company = user.company;
+        super.password = user.password;
+        super.phone = user.phone;
+        super.role = user.role;
+        super.sex = user.sex;
+        super.tasks = user.tasks;
+    }
+
     public void formCorrected(){
         if(super.firstName!=null){
             super.firstName = super.firstName.trim();

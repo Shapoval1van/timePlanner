@@ -52,6 +52,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public Company getCompanyByUserEmail(String email) {
+        return  companyDao.getCompanyByUserEmail(email);
+    }
+
+    @Override
     public Company getCompanyByName(String name) throws EmptyResultException {
         try{
             return companyDao.getCompanyByName(name);

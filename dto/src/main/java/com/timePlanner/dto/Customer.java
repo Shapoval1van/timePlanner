@@ -3,11 +3,11 @@ package com.timePlanner.dto;
 import lombok.Data;
 
 public @Data class Customer {
-    private int id;
-    private String companyName;
-    private String description;
-    private Project project;
-    private User user;
+    protected int id;
+    protected String companyName;
+    protected String description;
+    protected Project project;
+    protected User user;
 
     @Override
     public String toString() {

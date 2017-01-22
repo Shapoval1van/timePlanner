@@ -113,7 +113,18 @@
                         </c:choose>
                     </li>
                     <li>
-                        <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Add employee</a>
+                        <c:choose>
+                            <c:when test="${userRole.ordinal() == 0}">
+                                <a href="/create-customer"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                    <spring:message code = "dashboard.createCustomer"/>
+                                </a>
+                            </c:when>
+                            <c:when test="${userRole.ordinal() == 1}">
+                                <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                    <spring:message code="dashboard.creteSprint"/>
+                                </a>
+                            </c:when>
+                        </c:choose>
                     </li>
                     <li>
                         <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Add customer</a>

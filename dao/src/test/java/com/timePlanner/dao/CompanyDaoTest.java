@@ -75,4 +75,13 @@ public class CompanyDaoTest {
         Company company = companyDao.getCompanyWithDetails(1);
         assertEquals(2, company.getProjects().size());
     }
+
+
+    @Test
+    @Transactional(readOnly = true)
+    public void  getCompanyByUserEmailTest(){
+        Company company = companyDao.getCompanyByUserEmail("djedaiLohi@gmai.com");
+        assertEquals(1,company.getId());
+        assertEquals("The Death Star",company.getName());
+    }
 }

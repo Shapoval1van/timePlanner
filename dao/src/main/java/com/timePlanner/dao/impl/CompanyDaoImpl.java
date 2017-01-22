@@ -39,6 +39,13 @@ public class CompanyDaoImpl  implements CompanyDao, InitializingBean {
     private final String FIND_BY_NAME = "SELECT " +
             "id \"companyId\", name \"companyName\", date_creation, description \"companyDescription\" " +
             "FROM company WHERE name  = ?";
+    private final String FIND_WITH_BY_USER_EMAIL ="SELECT " +
+            "       c.id \"companyId\", c.name \"companyName\", c.description \"companyDescription\", c.date_creation,\n" +
+            "       p.id \"projectId\", p.description \"projectDescription\", p.name \"projectName\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\", " +
+            "           p.start_date \"projectSDate\",p.finish_date \"projectFDate\", p.is_finished \"projectIsFinished\"\n" +
+            "       FROM company AS c " +
+            "       LEFT JOIN project AS p ON c.id = p.company_id " +
+            "       JOIN users AS u ON u.company_id = c.id WHERE u.email = ?;";
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -53,6 +60,12 @@ public class CompanyDaoImpl  implements CompanyDao, InitializingBean {
     @Override
     public Company getCompanyByName(String name) {
         return jdbcTemplate.queryForObject(FIND_BY_NAME, new Object[]{name}, new CompanyMapper());
+    }
+
+    @Override
+    public Company getCompanyByUserEmail(String email) {
+        List<Company> companies = jdbcTemplate.query(FIND_WITH_BY_USER_EMAIL, new Object[]{email}, new CompanyExtractor());
+        return companies==null?null:companies.get(0);
     }
 
     @Override
