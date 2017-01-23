@@ -52,9 +52,11 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
             "       p.id  \"projectId\", p.name  \"projectName\", p.description  \"projectDescription\", p.start_date  \"projectSDate\",\n" +
             "           p.finish_date  \"projectFDate\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\", p.is_finished  \"projectIsFinished\" \n" +
             "       FROM project AS p" +
-            "       WHERE p.project_manager_id = ?";
+            "       WHERE p.project_manager_id = ? ORDER BY  id";
     private final String SAVE_USER = "INSERT INTO project VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);";
     private final String UPDATE_USER = "UPDATE project SET name=?, description=?, company_id=?, start_date=?, finish_date=?, plan_finish_date=?, project_manager_id=?, is_started=?, is_finished=? WHERE id = ?;";
+    private final String SET_STARTED = "UPDATE project SET start_date=?, is_started = TRUE WHERE id = ?;";
+    private final String SET_FINISHED = "UPDATE project SET finish_date=?, is_finished = TRUE WHERE id = ?;";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -71,6 +73,18 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
     @Override
     public List<Project> getProjectsForProjectManager(int userId) {
         return jdbcTemplate.query(FIND_PROJECTS_FOR_PM, new Object[]{userId}, new ProjectMapper());
+    }
+
+    @Override
+    public void setProjectStarted(int projectId) {
+        Long date = System.currentTimeMillis();
+        jdbcTemplate.update(SET_STARTED, new Date(date), projectId);
+    }
+
+    @Override
+    public void setProjectFinished(int projectId) {
+        Long date = System.currentTimeMillis();
+        jdbcTemplate.update(SET_FINISHED, new Date(date), projectId);
     }
 
     @Override

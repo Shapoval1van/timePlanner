@@ -1,6 +1,7 @@
 package com.timePlanner.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,7 +15,9 @@ public @Data class Project {
     private Company company;
     private Set<Customer> customers;
     private User projectManager;
+    @JsonProperty
     private boolean isStarted;
+    @JsonProperty
     private boolean isFinished;
     private Date startDate;
     private Date finishDate;
@@ -32,5 +35,16 @@ public @Data class Project {
                 "| finishDate=" + finishDate +
                 "| planFinishDate" + planFinishDate +
                 '}';
+    }
+
+    public  ProjectStatus getProjectStatus(){
+        if(!this.isStarted && !this.isFinished){
+            return ProjectStatus.CREATED;
+        }else if(this.isStarted && !this.isFinished){
+            return ProjectStatus.STARTED;
+        }else if(this.isStarted && this.isFinished){
+            return ProjectStatus.FINISHED;
+        }
+        return null;
     }
 }

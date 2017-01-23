@@ -1,10 +1,8 @@
 package com.timePlanner.controller;
 
-import com.timePlanner.dto.Message;
-import com.timePlanner.dto.MessageType;
-import com.timePlanner.dto.Task;
-import com.timePlanner.dto.User;
+import com.timePlanner.dto.*;
 import com.timePlanner.service.EmptyResultException;
+import com.timePlanner.service.ProjectService;
 import com.timePlanner.service.TaskService;
 import com.timePlanner.service.UserService;
 import org.apache.log4j.LogManager;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -33,6 +32,9 @@ public class AjaxController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProjectService projectService;
+
     @PreAuthorize("hasRole('PM')")
     @RequestMapping(path = "/set-priority", method = RequestMethod.POST)
     public ResponseEntity<?> setPriority(@RequestBody Task task, Principal principal, HttpServletRequest request){
@@ -44,6 +46,7 @@ public class AjaxController {
             tasksForUser = taskService.findTaskForPM(user);
         } catch (EmptyResultException e) {
             LOGGER.info("request from address:"+remoteAddr+"\n User with email: " +principal.getName() + " not found",e);
+            return new ResponseEntity<>(new Message("user not found", MessageType.ERROR),HttpStatus.BAD_REQUEST);
         }
         for(Task i: tasksForUser){
             if(i.getId()==task.getId()){
@@ -67,6 +70,46 @@ public class AjaxController {
             }
         }else {
             return new ResponseEntity<>(new Message("this user haven't access to this task", MessageType.ERROR),HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PreAuthorize("hasRole('PM')")
+    @RequestMapping(path = "/update-project-status", method = RequestMethod.POST)
+    public ResponseEntity<?> setStatus(@RequestBody Project project, Principal principal, HttpServletRequest request){
+        String remoteAddr = request.getRemoteAddr();
+        User user;
+        boolean containsFlag = false;
+        try {
+            user = userService.getUserByEmail(principal.getName());
+        } catch (EmptyResultException e) {
+            LOGGER.info("request from address:"+remoteAddr+"\n User with email: " +principal.getName() + " not found",e);
+            return new ResponseEntity<>(new Message("user not found", MessageType.ERROR),HttpStatus.BAD_REQUEST);
+        }
+        List<Project> projectList = projectService.getProjectsForProjectManager(user.getId());
+        for(Project i: projectList){
+            if(i.getId()==project.getId()){
+                containsFlag = true;
+            }
+        }
+        if(containsFlag){
+            if(project.getId() == 0){
+                LOGGER.info("request from address:"+remoteAddr+"\n request for update  project state with empty id");
+                return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR),HttpStatus.BAD_REQUEST);
+            }
+            try{
+                ProjectStatus projectStatus = project.getProjectStatus();
+                if(projectStatus == ProjectStatus.CREATED){
+                    projectService.setProjectStarted(project.getId());
+                }else if(projectStatus == ProjectStatus.STARTED){
+                    projectService.setProjectFinished(project.getId());
+                }
+                return new ResponseEntity<String>(HttpStatus.OK);
+            }catch (Exception e){
+                LOGGER.info("request from address:"+remoteAddr+"\n cant update project",e);
+                return new ResponseEntity<>(new Message("Internal server problem", MessageType.ERROR),HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else {
+            return new ResponseEntity<>(new Message("this user haven't access to this project", MessageType.ERROR),HttpStatus.FORBIDDEN);
         }
     }
 }

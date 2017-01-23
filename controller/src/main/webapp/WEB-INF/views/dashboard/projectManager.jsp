@@ -11,21 +11,41 @@
       <div id="page-wrapper">
 
           <div class="container-fluid">
-
               <!-- Page Heading -->
               <div class="row">
                   <h1 class="page-header">
                           ${user.getCompany().getName()}
                       <small>Dashboard</small>
                   </h1>
-                  <ol class="breadcrumb">
-                      <li class="active">
-                          <i class="fa fa-user" aria-hidden="true"></i> ${user.getFirstName()} ${user.getLastName()}
-                      </li>
-                  </ol>
               </div>
               <!-- /.row -->
+              <c:choose>
+                  <c:when test="${projectStatus.ordinal()==0}">
+                      <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
+                              class="btn btn-success btn-space">
+                          Start project
+                      </button>
+                  </c:when>
+                  <c:when test="${projectStatus.ordinal()==1}">
+                      <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
+                              class="btn btn-danger btn-space">
+                          Finish project
+                      </button>
+                  </c:when>
+                  <c:when test="${projectStatus.ordinal()==2}">
+                      <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
+                              class="btn btn-info btn-space" disabled>
+                          Finished
+                      </button>
+                  </c:when>
+              </c:choose>
 
+
+              <ol class="breadcrumb">
+                  <li class="active">
+                      <i class="fa fa-user" aria-hidden="true"></i> ${user.getFirstName()} ${user.getLastName()}
+                  </li>
+              </ol>
               <div class="row">
                       <%--progect created--%>
                   <div class="col-lg-3 col-md-6">
@@ -37,13 +57,13 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${sprintCount}</div>
-                                      <div>Created Sprints</div>
+                                      <div><spring:message code="dashboard.createdSprints"/></div>
                                   </div>
                               </div>
                           </div>
                           <a href="#">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -60,13 +80,13 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${taskCount}</div>
-                                      <div>Current task</div>
+                                      <div><spring:message code="dashboard.tasks"/></div>
                                   </div>
                               </div>
                           </div>
                           <a href="#">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -83,13 +103,13 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${employeeCount}</div>
-                                      <div>Current employees</div>
+                                      <div><spring:message code="dashboard.employees"/></div>
                                   </div>
                               </div>
                           </div>
                           <a href="#">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -105,7 +125,7 @@
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${finishTaskCount}</div>
-                                      <div>Finished tasks</div>
+                                      <div><spring:message code="dashboard.finTastks"/></div>
                                   </div>
                               </div>
                           </div>
@@ -124,16 +144,16 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Project About</h3>
+                          <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i><spring:message code="dashboard.projectAbout"/></h3>
                       </div>
                       <div class="panel-body">
-                          Project name: ${project.getName()}
+                          <spring:message code="dashboard.projectName"/>: ${project.getName()}
                           <br>
-                          Project description: ${project.getDescription()}
+                          <spring:message code="dashboard.projectDescription"/>: ${project.getDescription()}
                           <br>
-                          Started date: ${project.getStartDate()}
+                          <spring:message code="dashboard.startDate"/>: ${project.getStartDate()}
                           <br>
-                          Planed finish date: ${project.getPlanFinishDate()}
+                          <spring:message code="createProj.planFinishDate"/>: ${project.getPlanFinishDate()}
                       </div>
                   </div>
               </div>
@@ -142,7 +162,7 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Sprints</h3>
+                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.sprints"/></h3>
                       </div>
                       <div class="panel-body">
                               <c:choose>
@@ -151,11 +171,11 @@
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
                                          <tr>
-                                             <th>Name</th>
-                                             <th>Description</th>
-                                             <th>Start</th>
-                                             <th>Finish</th>
-                                             <th>Depended sprint name</th>
+                                             <th><spring:message code="dashboard.name"/></th>
+                                             <th><spring:message code="dashboard.description"/></th>
+                                             <th><spring:message code="dashboard.startDate"/></th>
+                                             <th><spring:message code="dashboard.finishDate"/></th>
+                                             <th><spring:message code="dashboard.dependetSprints"/></th>
                                          </tr>
                                          </thead>
                                          <tbody>
@@ -190,7 +210,7 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Workers</h3>
+                          <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><spring:message code="dashboard.workers"/></h3>
                       </div>
                       <div class="panel-body">
                           <div class="list-group">
@@ -200,9 +220,9 @@
                                           <table class="table table-bordered table-hover table-striped">
                                               <thead>
                                               <tr>
-                                                  <th>Name</th>
+                                                  <th><spring:message code="dashboard.name"/></th>
                                                   <th>Email</th>
-                                                  <th>Phone</th>
+                                                  <th><spring:message code="dashboard.phone"/></th>
                                               </tr>
                                               </thead>
                                               <tbody>
@@ -233,7 +253,7 @@
               <div class="row">
                   <div class="panel panel-default">
                       <div class="panel-heading">
-                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Task</h3>
+                          <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.tasks"/></h3>
                       </div>
                       <div class="panel-body">
                               <c:choose>
@@ -242,9 +262,9 @@
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
                                          <tr>
-                                             <th>Name</th>
-                                             <th>Estimate</th>
-                                             <th>Priority</th>
+                                             <th><spring:message code="dashboard.name"/></th>
+                                             <th><spring:message code="dashboard.estimate"/></th>
+                                             <th><spring:message code="dashboard.priority"/></th>
                                          </tr>
                                          </thead>
                                          <tbody>
@@ -305,60 +325,6 @@
           <!-- /.row -->
 
       </div>
-    <script type="text/javascript">
-            $('select').on('change',function(){
-            var val1 = $(this).find(':selected').attr('label');
-                var data = $(this).find(':selected').data("value");
-                console.log(data);
-                $.ajax({
-                    url: '/set-priority',
-                    data:JSON.stringify(data),
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    mimeType: 'application/json'
-                });
-            switch (val1){
-                case 'LOW':
-                    $(this).removeClass('btn-info btn-warning btn-danger');
-                    break;
-                case 'MEDIUM':
-                    $(this).removeClass('btn-info btn-warning btn-danger').addClass('btn-info');
-                    break;
-                case 'HIGH':
-                    $(this).removeClass('btn-info btn-warning btn-danger').addClass('btn-warning');
-                    break;
-                case 'CRITICAL':
-                    $(this).removeClass('btn-info btn-warning btn-danger').addClass('btn-danger');
-                    break;
-                default:
-                    break;
-            }
-        });
-
-
-        var mass = Array.from($(".priority option:selected"));
-        mass.forEach(function(item, i, mass){
-            console.log(item);
-            var val  = $(item).attr('label');
-            console.log(val == 'LOW');
-            switch (val){
-                case 'LOW':
-                    break;
-                case 'MEDIUM':
-                    $(item).parent().addClass('btn-info');
-                    break;
-                case 'HIGH':
-                    $(item).parent().addClass('btn-warning');
-                    break;
-                case 'CRITICAL':
-                    $(item).parent().addClass('btn-danger');
-                    break;
-                default:
-                    break;
-            }
-        });
-    </script>
-
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pm-dashboard.js"></script>
     </jsp:attribute>
 </t:dashboardPageLayout>

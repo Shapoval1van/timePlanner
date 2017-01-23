@@ -54,4 +54,14 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Project> getProjectsForProjectManager(int userId) {
         return projectDao.getProjectsForProjectManager(userId);
     }
+
+    @Override
+    public void setProjectFinished(int projectId) {
+        projectDao.setProjectFinished(projectId);
+    }
+
+    @Override
+    public void setProjectStarted(int projectId) {
+        projectDao.setProjectStarted(projectId);
+    }
 }

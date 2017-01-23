@@ -1,6 +1,7 @@
 package com.timePlanner.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,7 +15,9 @@ public @Data class Task {
     private Date startDate;
     private Date finishDate;
     private Date planFinishDate;
+    @JsonProperty
     private boolean isStarted;
+    @JsonProperty
     private boolean isFinished;
     private Priority priority;
     private Sprint sprint;

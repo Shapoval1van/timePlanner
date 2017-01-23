@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.*;
@@ -53,32 +54,49 @@ public class DashboardController {
         model.addAttribute("projects", company.getProjects());
         model.addAttribute("currentWorkers",currentWorkers);
         model.addAttribute("currentCustomers", currentCustomer);
-        //TODO add tree set
         return "/dashboard/admin";
     }
 
     @PreAuthorize("hasRole('PM')")
     @RequestMapping("/dashboard-pm")
-    public String dashboardProjectManager(Model model){
-        User user = userService.getUserWithDetailsById(3);
+    public String dashboardProjectManager(Model model, Principal principal, @RequestParam(value = "id", required=false) Integer id){
+        User user = userService.getUserWithDetailsByEmail(principal.getName());
+        List<Project> projectList = projectService.getProjectsForProjectManager(user.getId());
         Set<Task> tasks = Collections.synchronizedSet(new TreeSet<>(Comparator.comparing(Task::getId)));
-        Project project = projectService.getProjectsForProjectManager(user.getId()).get(0);
-        List<Sprint> sprints = sprintService.getSprintsForProject(project.getId()) ;// sorted quickly
-        List<User> currentEmployees = userService.getEmployeesForProject(project.getId());
-        sprints.parallelStream().filter(s->s.getTasks()!= null).forEach(s -> tasks.addAll(s.getTasks()));
-        Collections.sort(sprints, Comparator.comparing(Sprint::getId));
-        Collections.sort(currentEmployees, Comparator.comparing(User::getId));
-        //for default sent for user pages wish first project in list
-        model.addAttribute("sprintCount",sprints.size());
-        model.addAttribute("taskCount", tasks.size());
-        model.addAttribute("employeeCount", currentEmployees.size());
-        model.addAttribute("finishTaskCount",tasks.stream().filter(Task::isFinished).collect(Collectors.toList()).size());
-        model.addAttribute("project", project);
-        model.addAttribute("userRole", user.getRole());
-        model.addAttribute("user", user);
-        model.addAttribute("sprints",sprints);
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("currentEmployees", currentEmployees);
-        return "/dashboard/projectManager";
+        if(projectList.size()==0){
+            return "/dashboard/projectNotFound";
+        }else {
+            Project project;
+            if(id == null){
+                //for default sent for user pages wish first project in list
+                project = projectList.get(0);
+            }else{
+                project = projectList.stream().filter(project1 -> project1.getId()==id).findFirst().orElse(null);
+                if (project==null){
+                    //if project with id not found that mean user dont have  acsecc to this project
+                    return "redirect:/dashboard-pm";
+                }
+            }
+            List<Sprint> sprints = sprintService.getSprintsForProject(project.getId()) ;// sorted quickly
+            List<User> currentEmployees = userService.getEmployeesForProject(project.getId());
+            sprints.parallelStream().filter(s->s.getTasks()!= null).forEach(s -> tasks.addAll(s.getTasks()));
+            Collections.sort(sprints, Comparator.comparing(Sprint::getId));
+            Collections.sort(currentEmployees, Comparator.comparing(User::getId));
+
+            model.addAttribute("projectStatus", project.getProjectStatus());
+            model.addAttribute("projectFinished", project.isFinished());
+            model.addAttribute("projectStarted", project.isStarted());
+            model.addAttribute("sprintCount",sprints.size());
+            model.addAttribute("taskCount", tasks.size());
+            model.addAttribute("employeeCount", currentEmployees.size());
+            model.addAttribute("finishTaskCount",tasks.stream().filter(Task::isFinished).collect(Collectors.toList()).size());
+            model.addAttribute("project", project);
+            model.addAttribute("userRole", user.getRole());
+            model.addAttribute("user", user);
+            model.addAttribute("sprints",sprints);
+            model.addAttribute("tasks", tasks);
+            model.addAttribute("currentEmployees", currentEmployees);
+            return "/dashboard/projectManager";
+        }
     }
-}
+    }

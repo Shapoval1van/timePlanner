@@ -11,4 +11,6 @@ public interface ProjectService {
     public List<Project> getAllProject();
     public Project getProjectWithDetails(int id);
     public List<Project> getProjectsForProjectManager(int userId);
+    public void setProjectFinished(int projectId);
+    public void setProjectStarted(int projectId);
 }
