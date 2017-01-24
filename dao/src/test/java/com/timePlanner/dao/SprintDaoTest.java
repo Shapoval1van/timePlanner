@@ -6,6 +6,7 @@ import com.timePlanner.dto.Sprint;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -27,13 +28,13 @@ public class SprintDaoTest {
     @Test
     @Transactional(readOnly = true)
     public void getSprintsForProjectTest() throws Exception {
-        List<Sprint> sprints = sprintDao.getSprintsForProject(1);
+        List<Sprint> sprints = sprintDao.getSprintsForProjectWithDetails(1);
         assertEquals(2, sprints.size());
         assertEquals("start", sprints.get(0).getName());
         assertEquals("next", sprints.get(1).getName());
         assertEquals("start", sprints.get(1).getDependedOn().getName());
         assertEquals(3,sprints.get(0).getTasks().size());
-        assertEquals(1, sprintDao.getSprintsForProject(2).size());
+        assertEquals(1, sprintDao.getSprintsForProjectWithDetails(2).size());
     }
 
     @Test
@@ -63,5 +64,34 @@ public class SprintDaoTest {
         assertEquals(1, sprint.getTasks().size());
     }
 
+    @Test
+    @Transactional()
+    @Rollback()
+    public void saveSprintTest() throws Exception {
+        Sprint sprint = sprintDao.getSprintWithDetails(2);
+        sprint.setName("test");
+        sprint.setDescription("no desc");
+        sprint.setFinished(true);
+        sprintDao.saveSprint(sprint);
+        List<Sprint> sprintList = sprintDao.getAllSprint();
+        Sprint actualSprint = sprintList.get(sprintList.size()-1);
+        assertEquals(sprint.getName(),actualSprint.getName());
+        assertEquals(sprint.getDescription(), actualSprint.getDescription());
+        assertEquals(sprint.isFinished(),actualSprint.isFinished());
+    }
 
+    @Test
+    @Transactional()
+    @Rollback()
+    public void updateSprintTest() throws Exception {
+        Sprint sprint = sprintDao.getSprintWithDetails(2);
+        sprint.setName("test");
+        sprint.setDescription("no desc");
+        sprint.setFinished(true);
+        sprintDao.updateSprint(sprint);
+        Sprint actualSprint = sprintDao.getSprintWithDetails(2);
+        assertEquals(sprint.getName(),actualSprint.getName());
+        assertEquals(sprint.getDescription(), actualSprint.getDescription());
+        assertEquals(sprint.isFinished(),actualSprint.isFinished());
+    }
 }

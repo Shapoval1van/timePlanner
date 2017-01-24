@@ -19,28 +19,38 @@
                   </h1>
               </div>
               <!-- /.row -->
-              <c:choose>
-                  <c:when test="${projectStatus.ordinal()==0}">
-                      <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
-                              class="btn btn-success btn-space">
-                          Start project
-                      </button>
-                  </c:when>
-                  <c:when test="${projectStatus.ordinal()==1}">
-                      <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
-                              class="btn btn-danger btn-space">
-                          Finish project
-                      </button>
-                  </c:when>
-                  <c:when test="${projectStatus.ordinal()==2}">
-                      <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
-                              class="btn btn-info btn-space" disabled>
-                          Finished
-                      </button>
-                  </c:when>
-              </c:choose>
-
-
+              <diw class = "row">
+                  <div class = "col-lg-6">
+                      <c:choose>
+                      <c:when test="${projectStatus.ordinal()==0}">
+                          <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
+                                  class="btn btn-success btn-space">
+                              Start project
+                          </button>
+                      </c:when>
+                      <c:when test="${projectStatus.ordinal()==1}">
+                          <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
+                                  class="btn btn-danger btn-space">
+                              Finish project
+                          </button>
+                      </c:when>
+                      <c:when test="${projectStatus.ordinal()==2}">
+                          <button id="status-btn" data-id="${project.getId()}" data-started="${project.isStarted()}" data-finished="${project.isFinished()}"
+                                  class="btn btn-info btn-space" disabled>
+                              Finished
+                          </button>
+                      </c:when>
+                  </c:choose>
+                  </div>
+                  <div class="col-lg-6">
+                      <select id="project-selector" class ="input-sm project-select">
+                          <option><spring:message code="dashboard.selectProject"/></option>
+                      <c:forEach items="${projectList}" var="project">
+                          <option value="${project.getId()}">${project.getName()}</option>
+                      </c:forEach>
+                      </select>
+                  </div>
+              </diw>
               <ol class="breadcrumb">
                   <li class="active">
                       <i class="fa fa-user" aria-hidden="true"></i> ${user.getFirstName()} ${user.getLastName()}
@@ -273,7 +283,7 @@
                                                     <td>${task.getName()}</td>
                                                     <td>${task.getEstimate()}</td>
                                                     <td>
-                                                        <select class="input-sm  priority">
+                                                        <select class="input-sm priority priority-selector">
                                                             <c:choose>
                                                                 <c:when test="${(task.getPriority().ordinal()+1)==1}">
                                                                     <option selected data-value='{"id": ${task.getId()},"priority": 0}' label="LOW"></option>

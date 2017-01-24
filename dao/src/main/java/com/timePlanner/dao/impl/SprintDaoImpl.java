@@ -10,9 +10,14 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 @Repository
@@ -57,8 +62,10 @@ public class SprintDaoImpl implements SprintDao , InitializingBean{
             "       LEFT JOIN sprint AS s_previous ON s.dependent_on = s_previous.id\n" +
             "       LEFT JOIN task AS t ON t.sprint_id = s.id\n" +
             "       JOIN project AS p ON s.projectid = p.id" +
-            "  WHERE p.id = ? ;";
-
+            "  WHERE p.id = ?  ORDER BY s.id;";
+    private final  String SAVE_SPRINT = "INSERT INTO sprint VALUES(DEFAULT ,?,?,?,?,?,?,?,?,?);";
+    private final String UPDATE_SPRINT = "UPDATE sprint SET name=?, projectid=?, description=?,start_date=?, finish_date=?, " +
+            "plan_finish_date=?, dependent_on=?,is_started=?,is_finished=? WHERE id = ?;";
     @Autowired
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -71,12 +78,14 @@ public class SprintDaoImpl implements SprintDao , InitializingBean{
 
     @Override
     public void saveSprint(Sprint sprint) {
-
+        final int SAVE_STATEMENT = 0;
+        jdbcTemplate.update(SAVE_SPRINT, new SprintPreparedStatementSetter(sprint, SAVE_STATEMENT));
     }
 
     @Override
     public void updateSprint(Sprint sprint) {
-
+        final int UPDATE_STATEMENT = 1;
+        jdbcTemplate.update(UPDATE_SPRINT, new SprintPreparedStatementSetter(sprint, UPDATE_STATEMENT));
     }
 
     @Override
@@ -91,7 +100,7 @@ public class SprintDaoImpl implements SprintDao , InitializingBean{
     }
 
     @Override
-    public List<Sprint> getSprintsForProject(int projectId) {
+    public List<Sprint> getSprintsForProjectWithDetails(int projectId) {
         return jdbcTemplate.query(FIND_SPRINTS_WITH_DETAILS_FOR_PROJECT, new Object[]{projectId}, new SprintExtractor());
     }
 
@@ -100,6 +109,57 @@ public class SprintDaoImpl implements SprintDao , InitializingBean{
         if(jdbcTemplate == null){
             LOGGER.error("Must set jdbcTemplate");
             throw new BeanCreationException("Must set jdbcTemplate");
+        }
+    }
+
+    private final static class SprintPreparedStatementSetter implements PreparedStatementSetter {
+        private Sprint sprint;
+        private int typeStatement;
+        SprintPreparedStatementSetter(Sprint sprint, int typeStatement) {
+            this.sprint = sprint;
+            this.typeStatement = typeStatement;
+        }
+
+        @Override
+        public void setValues(PreparedStatement preparedStatement) throws SQLException {
+            Integer projectId = sprint.getProject()!=null?sprint.getProject().getId():null;
+            Integer dependedSprintId = sprint.getDependedOn()!=null?sprint.getDependedOn().getId():null;
+            Long startDate = sprint.getStartDate() != null ? sprint.getStartDate().getTime() : null;
+            Long finishDate = sprint.getFinishDate() != null ? sprint.getFinishDate().getTime() : null;
+            Long planFinishDate = sprint.getPlanedFinishDate() != null ? sprint.getPlanedFinishDate().getTime() : null;
+            int i = 1;
+            preparedStatement.setString(i++, sprint.getName());
+            if(projectId==null){
+                preparedStatement.setNull(i++, Types.INTEGER);
+            }else{
+                preparedStatement.setInt(i++, projectId);
+            }
+            preparedStatement.setString(i++, sprint.getDescription());
+            if (startDate == null) {
+                preparedStatement.setNull(i++, Types.DATE);
+            } else {
+                preparedStatement.setDate(i++, new Date(startDate));
+            }
+            if (finishDate == null) {
+                preparedStatement.setNull(i++, Types.DATE);
+            } else {
+                preparedStatement.setDate(i++, new Date(finishDate));
+            }
+            if (planFinishDate == null) {
+                preparedStatement.setNull(i++, Types.DATE);
+            } else {
+                preparedStatement.setDate(i++, new Date(planFinishDate));
+            }
+            if(dependedSprintId==null){
+                preparedStatement.setNull(i++, Types.INTEGER);
+            }else {
+                preparedStatement.setInt(i++,dependedSprintId);
+            }
+            preparedStatement.setBoolean(i++, sprint.isStarted());
+            preparedStatement.setBoolean(i++, sprint.isFinished());
+            if(typeStatement == 1) {
+                preparedStatement.setInt(i++, sprint.getId());
+            }
         }
     }
 }

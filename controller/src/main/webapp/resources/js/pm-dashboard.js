@@ -1,4 +1,4 @@
-$('select').on('change',function(){
+$('.priority-selector').on('change',function(){
     var val1 = $(this).find(':selected').attr('label');
     var data = $(this).find(':selected').data("value");
     console.log(data);
@@ -76,4 +76,9 @@ $('#status-btn').click(function () {
         $('#status-btn').attr('disabled', 'disabled');
         $('#status-btn').text('Finished')
     }
+});
+
+$('.project-select').on('change',function(){
+    var projectId1 = $(this).find(':selected').val();
+    window.location.href = '/dashboard-pm?id='+projectId1;
 });

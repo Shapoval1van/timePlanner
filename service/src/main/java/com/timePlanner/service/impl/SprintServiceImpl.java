@@ -29,11 +29,11 @@ public class SprintServiceImpl implements SprintService {
     }
 
     public void saveSprint(Sprint sprint) {
-
+        sprintDao.saveSprint(sprint);
     }
 
     public void updateSprint(Sprint sprint) {
-
+        sprintDao.updateSprint(sprint);
     }
 
     public List<Sprint> getAllSprint() {
@@ -44,7 +44,7 @@ public class SprintServiceImpl implements SprintService {
         return sprintDao.getSprintWithDetails(id);
     }
 
-    public List<Sprint> getSprintsForProject(int projectId) {
-        return sprintDao.getSprintsForProject(projectId);
+    public List<Sprint> getSprintsForProjectWithDetails(int projectId) {
+        return sprintDao.getSprintsForProjectWithDetails(projectId);
     }
 }

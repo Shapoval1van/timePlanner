@@ -11,5 +11,5 @@ public interface SprintDao {
     public void updateSprint(Sprint sprint);
     public List<Sprint> getAllSprint();
     public Sprint getSprintWithDetails(int id);
-    public List<Sprint> getSprintsForProject(int projectId);
+    public List<Sprint> getSprintsForProjectWithDetails(int projectId);
 }

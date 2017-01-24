@@ -58,6 +58,4 @@ public class DaoConfig {
         transactionManager.setDataSource(dataSource());
         return transactionManager;
     }
-
-
 }

@@ -53,8 +53,8 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
             "           p.finish_date  \"projectFDate\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\", p.is_finished  \"projectIsFinished\" \n" +
             "       FROM project AS p" +
             "       WHERE p.project_manager_id = ? ORDER BY  id";
-    private final String SAVE_USER = "INSERT INTO project VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);";
-    private final String UPDATE_USER = "UPDATE project SET name=?, description=?, company_id=?, start_date=?, finish_date=?, plan_finish_date=?, project_manager_id=?, is_started=?, is_finished=? WHERE id = ?;";
+    private final String SAVE_PROJECT = "INSERT INTO project VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);";
+    private final String UPDATE_PROJECT= "UPDATE project SET name=?, description=?, company_id=?, start_date=?, finish_date=?, plan_finish_date=?, project_manager_id=?, is_started=?, is_finished=? WHERE id = ?;";
     private final String SET_STARTED = "UPDATE project SET start_date=?, is_started = TRUE WHERE id = ?;";
     private final String SET_FINISHED = "UPDATE project SET finish_date=?, is_finished = TRUE WHERE id = ?;";
 
@@ -90,13 +90,13 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
     @Override
     public void saveProject(Project project) {
         final int SAVE_STATEMENT = 0;
-        jdbcTemplate.update(SAVE_USER, new ProjectDaoImpl.ProjectPreparedStatementSetter(project, SAVE_STATEMENT));
+        jdbcTemplate.update(SAVE_PROJECT, new ProjectDaoImpl.ProjectPreparedStatementSetter(project, SAVE_STATEMENT));
     }
 
     @Override
     public void updateProject(Project project) {
         final int UPDATE_STATEMENT = 1;
-        jdbcTemplate.update(UPDATE_USER, new ProjectDaoImpl.ProjectPreparedStatementSetter(project, UPDATE_STATEMENT));
+        jdbcTemplate.update(UPDATE_PROJECT, new ProjectDaoImpl.ProjectPreparedStatementSetter(project, UPDATE_STATEMENT));
     }
 
     @Override

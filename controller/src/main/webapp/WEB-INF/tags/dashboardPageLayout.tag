@@ -87,12 +87,12 @@
                     <li>
                         <c:choose>
                             <c:when test="${userRole.ordinal() == 0}">
-                                <a href="/create-project"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                <a href="/create-project"><i class="fa fa-fw fa-product-hunt" aria-hidden="true"></i>
                                     <spring:message code="dashboard.createProj"/>
                                 </a>
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                <a href="/create-sprint/for-${currentProjectId}id"><i class="fa fa-fw fa-clipboard" aria-hidden="true"></i>
                                     <spring:message code="dashboard.creteSprint"/>
                                 </a>
                             </c:when>
@@ -101,13 +101,13 @@
                     <li>
                         <c:choose>
                             <c:when test="${userRole.ordinal() == 0}">
-                                <a href="/create-worker"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                <a href="/create-worker"><i class="fa fa-fw fa-male" aria-hidden="true"></i>
                                     <spring:message code = "createWorker.createWorker"/>
                                 </a>
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i>
-                                    <spring:message code="dashboard.creteSprint"/>
+                                <a href="/create-task"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
+                                    <spring:message code="dashboard.createTask"/>
                                 </a>
                             </c:when>
                         </c:choose>

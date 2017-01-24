@@ -76,7 +76,7 @@ public class TaskServiceImpl implements TaskService {
     public Set<Task> findTaskForPM(User user) {
         Set<Task> tasks = Collections.synchronizedSet(new TreeSet<>(Comparator.comparing(Task::getId)));
         Project project = projectService.getProjectsForProjectManager(user.getId()).get(0);
-        List<Sprint> sprints = sprintService.getSprintsForProject(project.getId()) ;// sorted quickly
+        List<Sprint> sprints = sprintService.getSprintsForProjectWithDetails(project.getId()) ;// sorted quickly
         sprints.parallelStream().filter(s->s.getTasks()!= null).forEach(s -> tasks.addAll(s.getTasks()));
         return tasks;
     }

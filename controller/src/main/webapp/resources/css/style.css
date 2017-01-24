@@ -67,4 +67,18 @@
 
 .btn-space {
     margin-bottom: 5px;
+    float: left;
+}
+
+.project-select{
+    float: right;
+}
+
+.font-bold {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.font-primary {
+    font-size: large;
 }
