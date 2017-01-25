@@ -6,8 +6,11 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
+import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +20,20 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.timePlanner.dao")
 public class DaoConfig {
     private static final Logger LOGGER = LogManager.getLogger(DaoConfig.class);
+    @Resource
+    private Environment environment;
 
     private Properties getDbConfig(){
         Properties dbConfig = new Properties();
-        try (InputStream fis = getClass().getClassLoader().getResourceAsStream("db_config.properties")) {
+        String configFileName;
+        String profiles[] = environment.getActiveProfiles();
+        String activeProfile = profiles[0];
+        if("dev".equals(activeProfile)) {
+            configFileName = "db_config.properties";
+        }else {
+            configFileName = "db_amazon_config.properties";
+        }
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream(configFileName)) {
             if (fis == null) {
                 throw new FileNotFoundException();
             } else {
@@ -38,18 +51,32 @@ public class DaoConfig {
         }
     }
 
-
+    @Profile("dev")
     @Bean(name = "dataSource")
-    public BasicDataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+    public BasicDataSource localDataSource(){
         Properties dbConfig = getDbConfig();
+        BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/timePlannerDev");
         dataSource.setUsername(dbConfig.getProperty("username"));
         dataSource.setPassword(dbConfig.getProperty("password"));
         dataSource.setInitialSize(20);
         dataSource.setMaxActive(100);
-        return dataSource;
+        return  dataSource;
+    }
+
+    @Profile("prod")
+    @Bean(name = "dataSource")
+    public BasicDataSource dataSource(){
+        Properties dbConfig = getDbConfig();
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://timeplanner.csaqgsfea9tq.us-west-2.rds.amazonaws.com:5432/timePlanner");
+        dataSource.setUsername(dbConfig.getProperty("username"));
+        dataSource.setPassword(dbConfig.getProperty("password"));
+        dataSource.setInitialSize(20);
+        dataSource.setMaxActive(100);
+        return  dataSource;
     }
 
     @Bean(name = "transactionManager")
