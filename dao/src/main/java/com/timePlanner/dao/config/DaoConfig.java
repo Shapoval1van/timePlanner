@@ -14,8 +14,6 @@ import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 @Configuration
@@ -28,17 +26,14 @@ public class DaoConfig {
     private Properties getDbConfig(){
         Properties dbConfig = new Properties();
         String configFileName;
-        List<String> activeProfiles = Arrays.asList(environment.getActiveProfiles());
-        String activeProfile = activeProfiles.stream()
-                .filter(x->x.equals("dev"))
-                .findFirst()
-                .orElse(null);
-        if("local".equals(activeProfile)) {
+        String profiles[] = environment.getActiveProfiles();
+        String activeProfile = profiles[0];
+        if("dev".equals(activeProfile)) {
             configFileName = "db_config.properties";
         }else {
-            configFileName = "db_config_amazon.properties";
+            configFileName = "db_heroku_config.properties";
         }
-        try (InputStream fis = getClass().getClassLoader().getResourceAsStream("db_config.properties")) {
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream(configFileName)) {
             if (fis == null) {
                 throw new FileNotFoundException();
             } else {
@@ -56,9 +51,8 @@ public class DaoConfig {
         }
     }
 
-
-    @Bean(name = "dataSource")
     @Profile("dev")
+    @Bean(name = "dataSource")
     public BasicDataSource localDataSource(){
         Properties dbConfig = getDbConfig();
         BasicDataSource dataSource = new BasicDataSource();
@@ -71,13 +65,13 @@ public class DaoConfig {
         return  dataSource;
     }
 
-    @Bean(name = "dataSource")
     @Profile("prod")
+    @Bean(name = "dataSource")
     public BasicDataSource dataSource(){
         Properties dbConfig = getDbConfig();
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://timeplanner.csaqgsfea9tq.us-west-2.rds.amazonaws.com:5432/timePlanner");
+        dataSource.setUrl("dbc:postgresql://ec2-54-247-189-141.eu-west-1.compute.amazonaws.com:5432/d6h7pc1fg6ssvb?sslmode=require&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory");
         dataSource.setUsername(dbConfig.getProperty("username"));
         dataSource.setPassword(dbConfig.getProperty("password"));
         dataSource.setInitialSize(20);

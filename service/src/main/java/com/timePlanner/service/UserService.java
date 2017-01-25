@@ -16,4 +16,5 @@ public interface UserService {
     public List<User> getALlUsersWithDetails();
     public List<User> getAllUsersForCompany(int companyId);
     public List<User> getEmployeesForProject(int projectId);
+    public boolean checkAccessUserToProject(String email, int projectId);
 }

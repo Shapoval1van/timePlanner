@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 @RestController
 public class AjaxController {
@@ -36,21 +34,8 @@ public class AjaxController {
     @RequestMapping(path = "/set-priority", method = RequestMethod.POST)
     public ResponseEntity<?> setPriority(@RequestBody Task task, Principal principal, HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
-        Set<Task> tasksForUser = new TreeSet<>();
         boolean containsFlag = false;
-        try {
-            User  user = userService.getUserByEmail(principal.getName());
-            tasksForUser = taskService.findTaskForPM(user);
-        } catch (EmptyResultException e) {
-            LOGGER.info("request from address:"+remoteAddr+"\n User with email: " +principal.getName() + " not found",e);
-            return new ResponseEntity<>(new Message("user not found", MessageType.ERROR),HttpStatus.BAD_REQUEST);
-        }
-        for(Task i: tasksForUser){
-            if(i.getId()==task.getId()){
-               containsFlag = true;
-            }
-        }
-        if(containsFlag){
+        if(checkAccessUserToTask(principal.getName(),task.getId())){
             if(task.getId() == 0){
                 LOGGER.info("request from address:"+remoteAddr+"\n request for update priority with empty id");
                 return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR),HttpStatus.BAD_REQUEST);
@@ -74,21 +59,7 @@ public class AjaxController {
     @RequestMapping(path = "/update-project-status", method = RequestMethod.POST)
     public ResponseEntity<?> setStatus(@RequestBody Project project, Principal principal, HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
-        User user;
-        boolean containsFlag = false;
-        try {
-            user = userService.getUserByEmail(principal.getName());
-        } catch (EmptyResultException e) {
-            LOGGER.info("request from address:"+remoteAddr+"\n User with email: " +principal.getName() + " not found",e);
-            return new ResponseEntity<>(new Message("user not found", MessageType.ERROR),HttpStatus.BAD_REQUEST);
-        }
-        List<Project> projectList = projectService.getProjectsForProjectManager(user.getId());
-        for(Project i: projectList){
-            if(i.getId()==project.getId()){
-                containsFlag = true;
-            }
-        }
-        if(containsFlag){
+        if(userService.checkAccessUserToProject(principal.getName(),project.getId())){
             if(project.getId() == 0){
                 LOGGER.info("request from address:"+remoteAddr+"\n request for update  project state with empty id");
                 return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR),HttpStatus.BAD_REQUEST);
@@ -117,4 +88,21 @@ public class AjaxController {
         Set<Task> taskSet = sprint.getTasks();
         return new ResponseEntity<>(taskSet, HttpStatus.OK);
     }
+
+    private boolean checkAccessUserToTask(String email,int taskId){
+        boolean containsFlag = false;
+        try {
+            User user = userService.getUserByEmail(email);
+            Set<Task> tasksForUser = taskService.findTaskForPM(user);
+            for (Task i : tasksForUser) {
+                if (i.getId() == taskId) {
+                    containsFlag = true;
+                }
+            }
+        } catch (EmptyResultException e) {
+            LOGGER.info("User with email: " + email + " not found", e);
+        }
+        return containsFlag;
+    }
+
 }

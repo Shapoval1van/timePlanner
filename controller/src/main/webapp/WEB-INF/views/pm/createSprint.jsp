@@ -38,17 +38,11 @@
                                 </span>
                             </div>
 
-                            <div class="form-group">
-                                <label for="description"><spring:message code="dashboard.priority"/>:</label>
-                                <spring:message code="dashboard.description" var="description"/>
-                                <form:textarea id="description" path="description" rows="6"  cssClass="form-control input-lg" placeholder="${description}" tabindex="2"/>
-                            </div>
                             <form:hidden path="project.id" value ="${currentProjectId}"/>
 
                             <c:if test="${previousSpring!=null}">
                                 <form:hidden path="dependedOn.id" value="${previousSpring.getId()}"/>
                             </c:if>
-
 
                             <div class="form-group">
                                 <spring:message code="createProj.create" var = "create"/>

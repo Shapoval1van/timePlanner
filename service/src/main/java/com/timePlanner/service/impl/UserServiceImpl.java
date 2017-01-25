@@ -2,12 +2,8 @@ package com.timePlanner.service.impl;
 
 
 import com.timePlanner.dao.UserDao;
-import com.timePlanner.dto.Company;
-import com.timePlanner.dto.User;
-import com.timePlanner.service.CompanyService;
-import com.timePlanner.service.CustomerService;
-import com.timePlanner.service.EmptyResultException;
-import com.timePlanner.service.UserService;
+import com.timePlanner.dto.*;
+import com.timePlanner.service.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,22 +30,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private ProjectService projectService;
+
     @Transactional(readOnly = true)
     public User getUserById(int id) throws EmptyResultException {
         try {
             return userDao.getUserById(id);
-        }catch (EmptyResultDataAccessException up){
+        } catch (EmptyResultDataAccessException up) {
             LOGGER.info("User with id " + id + "not found");
-            throw  new EmptyResultException(up);
+            throw new EmptyResultException(up);
         }
     }
 
     public User getUserByEmail(String email) throws EmptyResultException {
         try {
             return userDao.getUserByEmail(email);
-        }catch (EmptyResultDataAccessException up){
+        } catch (EmptyResultDataAccessException up) {
             LOGGER.info("User with email " + email + "not found");
-            throw  new EmptyResultException(up);
+            throw new EmptyResultException(up);
         }
     }
 
@@ -84,6 +83,7 @@ public class UserServiceImpl implements UserService {
         user.setCompany(company);
         saveUser(user);
     }
+
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
@@ -102,5 +102,22 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<User> getEmployeesForProject(int projectId) {
         return userDao.getEmployeesForProject(projectId);
+    }
+
+    @Override
+    public boolean checkAccessUserToProject(String email, int projectId) {
+        boolean containsFlag = false;
+        try {
+            User user = getUserByEmail(email);
+            List<Project> projectList = projectService.getProjectsForProjectManager(user.getId());
+            for (Project i : projectList) {
+                if (i.getId() == projectId) {
+                    containsFlag = true;
+                }
+            }
+        } catch (EmptyResultException e) {
+            LOGGER.info("User with email: " + email + " not found", e);
+        }
+        return containsFlag;
     }
 }

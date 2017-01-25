@@ -10,7 +10,7 @@
 <t:pageLayout title="${reg}">
     <jsp:attribute name="bodyLayout">
          <div class="alert alert-info">
-             <h1>Sorry you don't have any project. Wait when admin appoint project for you:)</h1>
+             <h1><spring:message code="projectEmpty"/></h1>
          </div>
     </jsp:attribute>
 </t:pageLayout>

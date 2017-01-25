@@ -45,8 +45,7 @@
                                                cssClass="form-control input-lg"  required="required" placeholder="${phone}" tabindex="4" />
                                </div>
                                <div class="form-group">
-                                   <spring:message code="registration.phone" var="phone"/>
-                                   <form:select cssClass="form-control input-lg" path="project.id">
+                                   <form:select id="project-selector" cssClass="form-control input-lg" path="project.id">
                                     <form:options items="${projects}" itemValue="id" itemLabel="name"/>
                                 </form:select>
                                </div>
@@ -111,6 +110,14 @@
                 $('#error-message').css({"display":"none"});
             }else {
                 $('#error-message').css({"display":"block"});
+            }
+
+            if ($('#project-selector option').length != 0) {
+                $('.alert').css({"display": "none"});
+                $('#submit').css({"display": "block"});
+            } else {
+                $('.alert').css({"display": "block"});
+                $('#submit').css({"display": "none"});
             }
         </script>
     </jsp:attribute>
