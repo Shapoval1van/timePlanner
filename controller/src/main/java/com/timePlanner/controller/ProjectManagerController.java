@@ -115,7 +115,7 @@ public class ProjectManagerController {
     public String createTaskPost(@ModelAttribute("taskForm") Task task, ModelMap model, Principal principal, HttpServletRequest request) {
         if(task.getSprint()==null){
             return "redirect:/dashboard-pm";
-        }else {gti
+        }else {
             Sprint sprint = sprintService.getSprintWithDetails(task.getSprint().getId());
             taskService.saveTask(task);
             return "redirect:/dashboard-pm?id="+sprint.getProject().getId();
