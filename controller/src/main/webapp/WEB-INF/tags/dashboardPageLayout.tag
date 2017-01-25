@@ -15,7 +15,9 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/sb-admin.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/plugins/morris.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.min.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/select2.full.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 
 </head>
@@ -106,7 +108,7 @@
                                 </a>
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="/create-task"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
+                                <a href="/create-task/for-${currentProjectId}id""><i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
                                     <spring:message code="dashboard.createTask"/>
                                 </a>
                             </c:when>

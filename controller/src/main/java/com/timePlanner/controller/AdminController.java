@@ -114,7 +114,7 @@ public class AdminController {
             return "redirect:/dashboard-adm";
         } catch (MessagingException e) {
             LOGGER.info("Request to creating worker from " + remoteAddr +" was failed, because\n" +
-                    "Message sending with credential to address" + user.getEmail() + "was not successful");
+                    "Message sending with credential to address" + user.getEmail() + "was not successful", e);
             result.rejectValue("message", "createWorker.errorMailSending");
             model.addAttribute("userRole", Role.ADMIN);
             return "/admin/createWorker";
@@ -164,7 +164,7 @@ public class AdminController {
             return "redirect:/dashboard-adm";
         } catch (MessagingException e) {
             LOGGER.info("Request to creating worker from " + remoteAddr +" was failed, because\n" +
-                    "Message sending with credential to address" + user.getEmail() + "was not successful");
+                    "Message sending with credential to address" + user.getEmail() + "was not successful",e);
             result.rejectValue("message", "createWorker.errorMailSending");
             model.addAttribute("userRole", Role.ADMIN);
             return "/admin/createCustomer";

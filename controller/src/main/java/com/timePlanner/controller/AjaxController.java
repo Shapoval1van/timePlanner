@@ -1,20 +1,14 @@
 package com.timePlanner.controller;
 
 import com.timePlanner.dto.*;
-import com.timePlanner.service.EmptyResultException;
-import com.timePlanner.service.ProjectService;
-import com.timePlanner.service.TaskService;
-import com.timePlanner.service.UserService;
+import com.timePlanner.service.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -34,6 +28,9 @@ public class AjaxController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private SprintService sprintService;
 
     @PreAuthorize("hasRole('PM')")
     @RequestMapping(path = "/set-priority", method = RequestMethod.POST)
@@ -111,5 +108,13 @@ public class AjaxController {
         }else {
             return new ResponseEntity<>(new Message("this user haven't access to this project", MessageType.ERROR),HttpStatus.FORBIDDEN);
         }
+    }
+
+    @PreAuthorize("hasRole('PM')")
+    @RequestMapping(path = "/task-for-sprint-{id}id", method = RequestMethod.GET)
+    public  ResponseEntity<?>  createTaskPost(@PathVariable int id, Principal principal, HttpServletRequest request) {
+        Sprint sprint = sprintService.getSprintWithDetails(id);
+        Set<Task> taskSet = sprint.getTasks();
+        return new ResponseEntity<>(taskSet, HttpStatus.OK);
     }
 }

@@ -15,5 +15,8 @@
         <module>controller</module>
     </modules>
 
+    <properties>
+        <sonar.exclusions>**/*.js</sonar.exclusions>
+    </properties>
 
 </project>

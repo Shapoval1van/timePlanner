@@ -33,7 +33,7 @@ public @Data class Task {
                 "| estimate=" + estimate +
                 "| startDate=" + startDate +
                 "| finishDate=" + finishDate +
-                "| isSterted=" + isStarted +
+                "| isStarted=" + isStarted +
                 "| isFinished=" + isFinished +
                 '}';
     }

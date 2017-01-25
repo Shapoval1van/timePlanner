@@ -5,6 +5,8 @@ import com.timePlanner.dto.UserForm;
 import com.timePlanner.service.CompanyService;
 import com.timePlanner.service.EmptyResultException;
 import com.timePlanner.service.UserService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -13,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserFormValidator implements Validator {
+    private static final Logger LOGGER = LogManager.getLogger(UserFormValidator.class);
 
     private TypeForm type;
 
@@ -43,12 +46,10 @@ public class UserFormValidator implements Validator {
                 errors.rejectValue("message", "error.lastNameWrong");
             } else if ("".equals(user.getEmail())) {
                 errors.rejectValue("message", "error.email");
-            } else if ("".equals(user.getPhone())) {
+            } else if ("".equals(user.getPhone()) || !phoneValid(user.getPhone())) {
                 errors.rejectValue("message", "error.phone");
             } else if ("".equals(user.getCompany().getName())) {
                 errors.rejectValue("message", "error.company");
-            } else if (!phoneValid(user.getPhone())) {
-                errors.rejectValue("message", "error.phone");
             } else if (!user.getConfirmPassword().equals(user.getPassword())) {
                 errors.rejectValue("message", "error.passwordDontConfirm");
             } else if (user.getPassword().length() < 6) {
@@ -65,11 +66,9 @@ public class UserFormValidator implements Validator {
                 errors.rejectValue("message", "error.lastNameWrong");
             } else if ("".equals(user.getEmail())) {
                 errors.rejectValue("message", "error.email");
-            } else if ("".equals(user.getPhone())) {
+            } else if ("".equals(user.getPhone())||!phoneValid(user.getPhone())) {
                 errors.rejectValue("message", "error.phone");
-            } else if (!phoneValid(user.getPhone())) {
-                errors.rejectValue("message", "error.phone");
-            }else if (emailExist(user.getEmail())) {
+            } else if (emailExist(user.getEmail())) {
                 errors.rejectValue("message", "error.emailExist");
             }
         }
@@ -87,6 +86,7 @@ public class UserFormValidator implements Validator {
             userService.getUserByEmail(email);
             return true;
         } catch (EmptyResultException e) {
+            LOGGER.info(e);
             return  false;
         }
     }
@@ -96,6 +96,7 @@ public class UserFormValidator implements Validator {
             companyService.getCompanyByName(companyName);
             return true;
         }catch(EmptyResultException e){
+            LOGGER.info(e);
             return  false;
         }
     }

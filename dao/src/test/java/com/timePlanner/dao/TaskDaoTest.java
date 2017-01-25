@@ -13,14 +13,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DaoTestConfig.class , loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = DaoTestConfig.class, loader = AnnotationConfigContextLoader.class)
 public class TaskDaoTest {
 
     @Autowired
@@ -28,7 +28,7 @@ public class TaskDaoTest {
 
     @Test
     @Transactional(readOnly = true)
-    public void getTaskByIdTest(){
+    public void getTaskByIdTest() {
         Task task = taskDao.getTaskById(1);
         assertEquals("first Task", task.getName());
         assertNull(task.getSprint());
@@ -49,7 +49,7 @@ public class TaskDaoTest {
 
     @Test
     @Transactional(readOnly = true)
-    public void getAllTaskTest(){
+    public void getAllTaskTest() {
         List<Task> tasks = taskDao.getAllTasks();
         assertEquals(4, tasks.size());
         assertNull(tasks.get(0).getSprint());
@@ -58,18 +58,18 @@ public class TaskDaoTest {
 
     @Test
     @Transactional(readOnly = true)
-    public void getAllTaskWishDetailsTest(){
+    public void getAllTaskWishDetailsTest() {
         List<Task> tasks = taskDao.getALlTasksWithDetails();
         assertEquals(4, tasks.size());
         assertNotNull(tasks.get(0).getSprint());
-        assertEquals(2,tasks.get(0).getUsers().size());
-        assertEquals(1,tasks.get(1).getUsers().size());
+        assertEquals(2, tasks.get(0).getUsers().size());
+        assertEquals(1, tasks.get(1).getUsers().size());
         assertEquals(2, tasks.get(2).getTasks().size());
     }
 
     @Test
     @Transactional(readOnly = true)
-    public void getByIdWishDetailsTest(){
+    public void getByIdWishDetailsTest() {
         Task task = taskDao.getTaskWithDetailsById(1);
         assertEquals("first Task", task.getName());
         assertNotNull(task.getSprint());
@@ -79,25 +79,33 @@ public class TaskDaoTest {
     @Test
     @Transactional
     @Rollback()
-    public void saveTaskTest(){
+    public void saveTaskTest() {
+        Set<Task> taskSet = new HashSet<>();
+        for (int i = 1; i <= 3; i++) {
+            Task task = new Task();
+            task.setId(i);
+            taskSet.add(task);
+        }
         Task task = new Task();
         task.setName("test");
         task.setDescription("desc");
         Sprint sprint = new Sprint();
         sprint.setId(1);
         task.setSprint(sprint);
+        task.setTasks(taskSet);
         taskDao.saveTask(task);
         List<Task> tasks = taskDao.getALlTasksWithDetails();
-        Task actualTask = tasks.get(tasks.size()-1);
-        assertEquals(task.getName(),actualTask.getName());
-        assertEquals(task.getSprint().getId(),actualTask.getSprint().getId());
+        Task actualTask = tasks.get(tasks.size() - 1);
+        assertEquals(task.getName(), actualTask.getName());
+        assertEquals(task.getSprint().getId(), actualTask.getSprint().getId());
+        assertEquals(task.getTasks().size(), actualTask.getTasks().size());
     }
 
 
     @Test
     @Transactional
     @Rollback()
-    public void updateTaskTest(){
+    public void updateTaskTest() {
         Task task = new Task();
         task.setId(1);
         task.setName("test");
@@ -107,7 +115,7 @@ public class TaskDaoTest {
         task.setSprint(sprint);
         taskDao.updateTask(task);
         Task actualTask = taskDao.getTaskWithDetailsById(1);
-        assertEquals(task.getName(),actualTask.getName());
-        assertEquals(task.getSprint().getId(),actualTask.getSprint().getId());
+        assertEquals(task.getName(), actualTask.getName());
+        assertEquals(task.getSprint().getId(), actualTask.getSprint().getId());
     }
 }
