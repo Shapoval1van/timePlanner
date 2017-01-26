@@ -56,6 +56,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Project getProjectForTask(int taskId) {
+        return projectDao.getProjectForTask(taskId);
+    }
+
+    @Override
     public void setProjectFinished(int projectId) {
         projectDao.setProjectFinished(projectId);
     }

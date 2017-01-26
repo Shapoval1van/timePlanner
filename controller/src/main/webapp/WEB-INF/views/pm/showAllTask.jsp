@@ -22,27 +22,21 @@
                         <div class="panel-body">
                             <p>
                                 <span class="font-bold"><spring:message code="createSprint.sprintName"/></span>:${task.getSprint().getName()}
-                                <button class="btn btn-success"  data-project="${currentProjectId}" data-id="${task.getId()}" style="float: right"><i class="fa fa-check" aria-hidden="true"></i></button>
                             </p>
                             <p>
                                 <span class="font-bold"><spring:message code="createSprint.planFinishDate"/></span>:${task.getPlanFinishDate()}
                             </p>
-                            <span class="font-bold"><spring:message code="taskDepended"/>: </span>
+                            <span class="font-bold">Depended task:</span>
                             <pre style="text-align: left"> <c:forEach items="${task.getTasks()}" var="dependedTask">${dependedTask.getName()} </c:forEach></pre>
+                            <p><span class="font-bold"><spring:message code="users"/>git:</span>
+                            <pre style="text-align: left"> <c:forEach items="${task.getUsers()}" var="user">${user.getFullName()} </c:forEach></pre>
+                            </p>
                             <span class="font-bold"><spring:message code="dashboard.description"/>:</span>
                             <pre class="pre-describe" style="text-align: left">${task.getDescription()} </pre>
-                            <label for = "employee-selector-id${task.getId()}"><spring:message code="assigneUsers"/></label>
-                            <select  class="employee-selector input-lg" id="employee-selector-id${task.getId()}"
-                                         multiple="multiple" style="width: 100%">
-                                <c:forEach items="${currentEmployees}" var="employee">
-                                    <option value="${employee.getId()}">${employee.getFullName()}</option>
-                                </c:forEach>
-                            </select>
                         </div>
                     </div>
                 </div>
             </c:forEach>
         </div>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/assignTask.js"></script>
     </jsp:attribute>
 </t:dashboardPageLayout>

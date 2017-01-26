@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type User service.
+ */
 @Service
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserService.class);
@@ -104,20 +107,27 @@ public class UserServiceImpl implements UserService {
         return userDao.getEmployeesForProject(projectId);
     }
 
+
+    /**
+     *
+     * @param email user email
+     * @param projectId project id
+     * @return id user with email if user have access to project, zero if does not have access
+     */
     @Override
-    public boolean checkAccessUserToProject(String email, int projectId) {
-        boolean containsFlag = false;
+    public int checkAccessUserToProject(String email, int projectId) {
+        int userId = 0;
         try {
             User user = getUserByEmail(email);
             List<Project> projectList = projectService.getProjectsForProjectManager(user.getId());
             for (Project i : projectList) {
                 if (i.getId() == projectId) {
-                    containsFlag = true;
+                    userId = user.getId();
                 }
             }
         } catch (EmptyResultException e) {
             LOGGER.info("User with email: " + email + " not found", e);
         }
-        return containsFlag;
+        return userId;
     }
 }

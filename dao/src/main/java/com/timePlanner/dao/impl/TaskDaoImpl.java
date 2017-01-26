@@ -69,6 +69,7 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
             "is_started=?, is_finished=?, plan_finish_date=?, description=?, priority=?,  estimate=? WHERE id = ?;";
     private final String UPDATE_TASK_PRIORITY = "UPDATE task SET priority=? WHERE id = ?;";
     private final String UPDATE_TASK_DEPENDENCY = "INSERT INTO task_dependency VALUES(?,?);";
+    private final String UPDATE_RESPONSINBE_USERS = "INSERT INTO user_task VALUES(?,?);";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -121,6 +122,15 @@ public class TaskDaoImpl implements TaskDao, InitializingBean {
     @Override
     public List<Task> getALlTasksWithDetails() {
         return jdbcTemplate.query(FIND_ALL_WITH_DETAILS, new TaskExtractor());
+    }
+
+    @Override
+    public boolean updateResponsibleUsers(Task task) {
+        if (task.getId()!=0 & (task.getUsers()!=null && task.getUsers().size()!=0)){
+            task.getUsers().forEach(user -> jdbcTemplate.update(UPDATE_RESPONSINBE_USERS, user.getId(), task.getId()));
+            return true;
+        }
+        return false;
     }
 
     @Override

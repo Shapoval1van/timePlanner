@@ -69,10 +69,10 @@
                             <label for = "task-selector"><spring:message code="createTask.dependetTask"/></label>
                             <form:select path="tasks" cssClass="task-selector input-lg" id="task-selector"
                                          multiple="multiple" cssStyle="width: 100%">
-                            <c:forEach items="${taskList}" var="task">
-                                <option value="${task.getId()}">${task.getName()}</option>
-                            </c:forEach>
-                        </form:select>
+                                <c:forEach items="${taskList}" var="task">
+                                    <option value="${task.getId()}">${task.getName()}</option>
+                                </c:forEach>
+                            </form:select>
                         </div>
 
                         <div class="row">

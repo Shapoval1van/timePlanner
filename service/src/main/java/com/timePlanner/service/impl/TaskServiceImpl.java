@@ -5,7 +5,6 @@ import com.timePlanner.dao.TaskDao;
 import com.timePlanner.dto.Project;
 import com.timePlanner.dto.Sprint;
 import com.timePlanner.dto.Task;
-import com.timePlanner.dto.User;
 import com.timePlanner.service.EmptyResultException;
 import com.timePlanner.service.ProjectService;
 import com.timePlanner.service.SprintService;
@@ -73,11 +72,23 @@ public class TaskServiceImpl implements TaskService {
         taskDao.updateTaskPriority(task.getId(), task.getPriority());
     }
 
-    public Set<Task> findTaskForPM(User user) {
+    public Set<Task> findTaskForProject(Project project) {
         Set<Task> tasks = Collections.synchronizedSet(new TreeSet<>(Comparator.comparing(Task::getId)));
-        Project project = projectService.getProjectsForProjectManager(user.getId()).get(0);
         List<Sprint> sprints = sprintService.getSprintsForProjectWithDetails(project.getId()) ;// sorted quickly
         sprints.parallelStream().filter(s->s.getTasks()!= null).forEach(s -> tasks.addAll(s.getTasks()));
         return tasks;
+    }
+
+    @Override
+    public Set<Task> findTaskForProject(int projectId) {
+        Set<Task> tasks = Collections.synchronizedSet(new TreeSet<>(Comparator.comparing(Task::getId)));
+        List<Sprint> sprints = sprintService.getSprintsForProjectWithDetails(projectId) ;// sorted quickly
+        sprints.parallelStream().filter(s->s.getTasks()!= null).forEach(s -> tasks.addAll(s.getTasks()));
+        return tasks;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateResponsibleUsers(Task task){
+        return taskDao.updateResponsibleUsers(task);
     }
 }

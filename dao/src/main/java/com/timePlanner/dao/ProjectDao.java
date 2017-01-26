@@ -11,6 +11,7 @@ public interface ProjectDao {
     public void setProjectFinished(int projectId);
     public void saveProject(Project project);
     public void updateProject(Project project);
+    public Project getProjectForTask(int taskId);
     public List<Project> getAllProject();
     public Project getProjectWithDetails(int id);
 }

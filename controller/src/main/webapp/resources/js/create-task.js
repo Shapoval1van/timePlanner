@@ -44,11 +44,8 @@ $('#sprint-selector').on('change',function () {
             $('.select2-selection__rendered li').remove();
             data.forEach(function(item, i){
                 var name = item.name;
-                console.log(name);
                 $('#task-selector').append($('<option></option>').val(item.id).html(name))
             });
-            console.log(data);
-
         }
     });
 })

@@ -14,4 +14,5 @@ public interface TaskDao {
     public Task getTaskWithDetailsById(int id);
     public List<Task> getAllTasks();
     public List<Task> getALlTasksWithDetails();
+    public boolean updateResponsibleUsers(Task task);
 }

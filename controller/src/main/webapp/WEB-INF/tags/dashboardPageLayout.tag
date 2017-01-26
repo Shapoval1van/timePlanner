@@ -21,8 +21,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 
 </head>
-<div id="wrapper">
-
+<div id="wrapper" >
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="navbar-header">
@@ -108,7 +107,7 @@
                                 </a>
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="/create-task/for-${currentProjectId}id""><i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
+                                <a href="/create-task/for-${currentProjectId}id"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
                                     <spring:message code="dashboard.createTask"/>
                                 </a>
                             </c:when>
@@ -122,14 +121,22 @@
                                 </a>
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="/assign-tasks"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                <a href="/assign-tasks/for-${currentProjectId}id"><i class="fa fa-fw fa-bar-chart-o"></i>
                                     <spring:message code="dashbord.assignTasks"/>
                                 </a>
                             </c:when>
                         </c:choose>
                     </li>
                     <li>
-                        <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Add customer</a>
+                        <c:choose>
+                        <c:when test="${userRole.ordinal() == 0}">
+                        </c:when>
+                        <c:when test="${userRole.ordinal() == 1}">
+                            <a href="/show-all-task/for-${currentProjectId}id"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                <spring:message code="dashbord.assignTasks"/>
+                            </a>
+                        </c:when>
+                    </c:choose>
                     </li>
                 </ul>
             </div>

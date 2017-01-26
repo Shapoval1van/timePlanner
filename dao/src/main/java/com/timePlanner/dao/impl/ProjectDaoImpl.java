@@ -57,6 +57,13 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
     private final String UPDATE_PROJECT= "UPDATE project SET name=?, description=?, company_id=?, start_date=?, finish_date=?, plan_finish_date=?, project_manager_id=?, is_started=?, is_finished=? WHERE id = ?;";
     private final String SET_STARTED = "UPDATE project SET start_date=?, is_started = TRUE WHERE id = ?;";
     private final String SET_FINISHED = "UPDATE project SET finish_date=?, is_finished = TRUE WHERE id = ?;";
+    private final String FIND_PROJECT_FOR_TASK ="SELECT\n" +
+            "       p.id  \"projectId\", p.name  \"projectName\", p.description  \"projectDescription\", p.start_date \"projectSDate\",\n" +
+            "       p.finish_date  \"projectFDate\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\", p.is_finished  \"projectIsFinished\"\n" +
+            "   FROM project AS p\n" +
+            "   JOIN sprint AS s ON s.projectid = p.id\n" +
+            "   JOIN task AS t ON s.id = t.sprint_id\n" +
+            "      WHERE t.id = ? ORDER BY  p.id;";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -97,6 +104,11 @@ public class ProjectDaoImpl implements ProjectDao, InitializingBean {
     public void updateProject(Project project) {
         final int UPDATE_STATEMENT = 1;
         jdbcTemplate.update(UPDATE_PROJECT, new ProjectDaoImpl.ProjectPreparedStatementSetter(project, UPDATE_STATEMENT));
+    }
+
+    @Override
+    public Project getProjectForTask(int taskId) {
+        return jdbcTemplate.queryForObject(FIND_PROJECT_FOR_TASK, new Object[]{taskId}, new ProjectMapper());
     }
 
     @Override

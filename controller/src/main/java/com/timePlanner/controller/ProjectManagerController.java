@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -41,7 +42,7 @@ public class ProjectManagerController {
         String remoteAddr = request.getRemoteAddr();
         Sprint previousSprint;
         User user;
-        if(!userService.checkAccessUserToProject(principal.getName(),id)){
+        if(userService.checkAccessUserToProject(principal.getName(),id)==0){
             return "redirect:/dashboard-pm";
         }
         List<Sprint> sprintList = sprintService.getSprintsForProjectWithDetails(id);
@@ -71,7 +72,7 @@ public class ProjectManagerController {
     public String createTask(ModelMap model, Principal principal, @PathVariable("id") int id, HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
         User user;
-        if(!userService.checkAccessUserToProject(principal.getName(),id)){
+        if(userService.checkAccessUserToProject(principal.getName(),id)==0){
             return "redirect:/dashboard-pm";
         }
         List<Sprint> sprintList = sprintService.getSprintsForProjectWithDetails(id);
@@ -102,12 +103,52 @@ public class ProjectManagerController {
     @RequestMapping(path = "/assign-tasks/for-{id}id", method = RequestMethod.GET)
     public String assignTaskToUser(ModelMap model, @PathVariable("id") int id, Principal principal,HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
-        //User user = projectService
-
+        int userId = userService.checkAccessUserToProject(principal.getName(),id);
+        if(userId==0){
+            return "redirect:/dashboard-pm";
+        }
+        Set<Task> taskWithDetailsSet =  new TreeSet<>(Comparator.comparing(Task::getId));
+        for (Task task: taskService.findTaskForProject(id)){
+            taskWithDetailsSet.add(taskService.getTaskWithDetailsById(task.getId()));
+        }
+        taskWithDetailsSet = taskWithDetailsSet.stream().filter(t->!(t.getUsers()!=null && t.getUsers().size()!=0)).collect(Collectors.toSet());
+        if(taskWithDetailsSet.size()==0){
+            return "/pm/taskNotFound";
+        }
+        List<User> currentEmployees = userService.getAllUsersForCompany(projectService.getProjectWithDetails(id)
+                .getCompany().getId());
+        model.addAttribute("taskWithDetailsSet", taskWithDetailsSet);
+        model.addAttribute("currentEmployees", currentEmployees);
         //mandatory for correct creation navigation bar
         model.addAttribute("currentProjectId", id);
         model.addAttribute("userRole", Role.PM);
         return "/pm/assignTasks";
+    }
+
+    @PreAuthorize("hasRole('PM')")
+    @RequestMapping(path = "/show-all-task/for-{id}id", method = RequestMethod.GET)
+    public String showAllTask(ModelMap model, @PathVariable("id") int id, Principal principal,HttpServletRequest request) {
+        String remoteAddr = request.getRemoteAddr();
+        int userId = userService.checkAccessUserToProject(principal.getName(),id);
+        if(userId==0){
+            return "redirect:/dashboard-pm";
+        }
+        Set<Task> taskWithDetailsSet =  new TreeSet<>(Comparator.comparing(Task::getId));
+        for (Task task: taskService.findTaskForProject(id)){
+            taskWithDetailsSet.add(taskService.getTaskWithDetailsById(task.getId()));
+        }
+        if(taskWithDetailsSet.size()==0){
+            return "/pm/taskNotFound";
+        }
+        List<User> currentEmployees = userService.getAllUsersForCompany(projectService.getProjectWithDetails(id)
+                .getCompany().getId());
+        model.addAttribute("taskWithDetailsSet", taskWithDetailsSet);
+        model.addAttribute("currentEmployees", currentEmployees);
+        //mandatory for correct creation navigation bar
+        model.addAttribute("currentProjectId", id);
+        model.addAttribute("userRole", Role.PM);
+        return "/pm/showAllTask";
+
     }
 
     @InitBinder

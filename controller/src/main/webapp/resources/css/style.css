@@ -82,3 +82,25 @@
 .font-primary {
     font-size: large;
 }
+
+.pre-users {
+    height: 50px;
+    width: 100px;
+    overflow-y: scroll;
+    margin-bottom: 3px;
+}
+
+.pre-describe {
+    height: 70px;
+    width: 100%;
+    margin-bottom: 3px;
+    overflow-y: scroll;
+}
+p{
+  margin-bottom: 3px;
+}
+body{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}

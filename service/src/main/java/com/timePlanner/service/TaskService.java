@@ -1,7 +1,7 @@
 package com.timePlanner.service;
 
+import com.timePlanner.dto.Project;
 import com.timePlanner.dto.Task;
-import com.timePlanner.dto.User;
 
 import java.util.List;
 import java.util.Set;
@@ -14,5 +14,7 @@ public interface TaskService {
     public List<Task> getAllTasks();
     public List<Task> getALlTasksWithDetails();
     public void updateTaskPriority(Task task);
-    public Set<Task> findTaskForPM(User user);
+    public Set<Task> findTaskForProject(Project project);
+    public Set<Task> findTaskForProject(int projectId);
+    public boolean  updateResponsibleUsers(Task task);
 }
