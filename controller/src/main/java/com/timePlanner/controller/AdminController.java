@@ -100,9 +100,10 @@ public class AdminController {
         String password = RandomStringUtils.randomAlphanumeric(8);
         user.setPassword(password);
         user.setCompany(company);
-        String emailBody = "Hello dear " + user.getFullName() + " you invited to company:"
-                + company.getName()+ " as " + user.getRole()+"<br>Your password:"+ user.getPassword()
-                +" <br><br> Regards, <br>Time Planer Admin";
+        String emailBody = "Hello dear " + user.getFullName() + " you invited as "+user.getRole()+" to company "+
+        company.getName()+" <br>Your password: <b>"+ user.getPassword()+"</b>"
+                +"<br> <a href=\"http://time-planner.herokuapp.com/\">Time Planer</a>" +
+                " <br><br> Regards, <br>Time Planer Admin";
         MailSender mailSender = MailSender.newBuilder()
                 .setRecipientEmail(user.getEmail())
                 .setSubject("Time Planer Greetings you")
@@ -151,8 +152,9 @@ public class AdminController {
         user.setCompany(company);
         customerForm.setUser(user);
         String emailBody = "Hello dear " + user.getFullName() + " you invited like customer to company "+
-                 company.getName()+" <br>Your password:"+ user.getPassword()
-                +" <br><br> Regards, <br>Time Planer Admin";
+                 company.getName()+" <br>Your password: <b>"+ user.getPassword()+"</b>"
+                +"<br> <a href=\"http://time-planner.herokuapp.com/\">Time Planer</a>" +
+                " <br><br> Regards, <br>Time Planer Admin";
         MailSender mailSender = MailSender.newBuilder()
                 .setRecipientEmail(user.getEmail())
                 .setSubject("Time Planer Greetings nwe customer")

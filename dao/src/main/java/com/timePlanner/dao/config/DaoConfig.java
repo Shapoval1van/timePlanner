@@ -31,7 +31,7 @@ public class DaoConfig {
         if("dev".equals(activeProfile)) {
             configFileName = "db_config.properties";
         }else {
-            configFileName = "db_amazon_config.properties";
+            configFileName = "db_heroku_config.properties";
         }
         try (InputStream fis = getClass().getClassLoader().getResourceAsStream(configFileName)) {
             if (fis == null) {
@@ -71,7 +71,7 @@ public class DaoConfig {
         Properties dbConfig = getDbConfig();
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://timeplanner.csaqgsfea9tq.us-west-2.rds.amazonaws.com:5432/timePlanner");
+        dataSource.setUrl("dbc:postgresql://ec2-54-247-189-141.eu-west-1.compute.amazonaws.com:5432/d6h7pc1fg6ssvb?sslmode=require&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory");
         dataSource.setUsername(dbConfig.getProperty("username"));
         dataSource.setPassword(dbConfig.getProperty("password"));
         dataSource.setInitialSize(20);

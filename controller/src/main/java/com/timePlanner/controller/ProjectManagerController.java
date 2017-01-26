@@ -41,24 +41,10 @@ public class ProjectManagerController {
         String remoteAddr = request.getRemoteAddr();
         Sprint previousSprint;
         User user;
-        try {
-            user = userService.getUserByEmail(principal.getName());
-
-        } catch (EmptyResultException e) {
-            LOGGER.info("request from address:" + remoteAddr + "\n User with email: " + principal.getName() + " not found", e);
+        if(!userService.checkAccessUserToProject(principal.getName(),id)){
             return "redirect:/dashboard-pm";
         }
-
-        List<Project> projectList = projectService.getProjectsForProjectManager(user.getId());
-        if (projectList.size() == 0) {
-            return "/dashboard/projectNotFound";
-        }
-        Project project = projectList.stream().filter(project1 -> project1.getId() == id).findFirst().orElse(null);
-        if (project == null) {
-            //if project with id not found that mean user don't have  access to this project
-            return "redirect:/dashboard-pm";
-        }
-        List<Sprint> sprintList = sprintService.getSprintsForProjectWithDetails(project.getId());
+        List<Sprint> sprintList = sprintService.getSprintsForProjectWithDetails(id);
         if(sprintList.size()==0){
             previousSprint = null;
         }else {
@@ -85,28 +71,18 @@ public class ProjectManagerController {
     public String createTask(ModelMap model, Principal principal, @PathVariable("id") int id, HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
         User user;
-        try {
-            user = userService.getUserByEmail(principal.getName());
-
-        } catch (EmptyResultException e) {
-            LOGGER.info("request from address:" + remoteAddr + "\n User with email: " + principal.getName() + " not found", e);
-            return "redirect:/dashboard-pm";
-        }
-        List<Project> projectList = projectService.getProjectsForProjectManager(user.getId());
-        if (projectList.size() == 0) {
-            return "/dashboard/projectNotFound";
-        }
-        Project project = projectList.stream().filter(project1 -> project1.getId() == id).findFirst().orElse(null);
-        if (project == null) {
+        if(!userService.checkAccessUserToProject(principal.getName(),id)){
             return "redirect:/dashboard-pm";
         }
         List<Sprint> sprintList = sprintService.getSprintsForProjectWithDetails(id);
-        Set<Task> taskList = sprintList.get(0).getTasks();
+        Set<Task> taskList = (sprintList!=null & sprintList.size()!=0)?sprintList.get(0).getTasks():null;
         model.addAttribute("taskList",taskList);
         model.addAttribute("sprintList",sprintList);
+        model.addAttribute("taskForm", new Task());
+
+        //mandatory for correct creation navigation bar
         model.addAttribute("userRole", Role.PM);
         model.addAttribute("currentProjectId", id);
-        model.addAttribute("taskForm", new Task());
         return "/pm/createTask";
     }
 
@@ -122,6 +98,17 @@ public class ProjectManagerController {
         }
     }
 
+    @PreAuthorize("hasRole('PM')")
+    @RequestMapping(path = "/assign-tasks/for-{id}id", method = RequestMethod.GET)
+    public String assignTaskToUser(ModelMap model, @PathVariable("id") int id, Principal principal,HttpServletRequest request) {
+        String remoteAddr = request.getRemoteAddr();
+        //User user = projectService
+
+        //mandatory for correct creation navigation bar
+        model.addAttribute("currentProjectId", id);
+        model.addAttribute("userRole", Role.PM);
+        return "/pm/assignTasks";
+    }
 
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {

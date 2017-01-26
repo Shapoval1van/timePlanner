@@ -122,8 +122,8 @@
                                 </a>
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i>
-                                    <spring:message code="dashboard.creteSprint"/>
+                                <a href="/assign-tasks"><i class="fa fa-fw fa-bar-chart-o"></i>
+                                    <spring:message code="dashbord.assignTasks"/>
                                 </a>
                             </c:when>
                         </c:choose>

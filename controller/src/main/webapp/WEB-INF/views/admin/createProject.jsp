@@ -50,7 +50,7 @@
                     <br>
                     <div class="row">
                         <div class="col-xs-1 col-sm-4 col-md-4">
-                            <p class="text-info"><spring:message code="createProj.projectName"/>*</p>
+                            <p class="text-info"><spring:message code="projectManager"/>*</p>
                         </div>
                         <div class="col-xs-12 col-sm-8 col-md-8">
                             <form:select path="projectManager.id" cssClass="input-lg" itemValue="id"
