@@ -131,5 +131,29 @@ public class DashboardController {
         return "/dashboard/employee";
     }
 
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @RequestMapping("/dashboard-cust")
+    public String dashboardCustomer(Model model, Principal principal){
+        Customer customer = customerService.getCustomerWithDetailsByUserEmail(principal.getName());
+        Project project = customer.getProject();
+        List<Sprint> sprints = sprintService.getSprintsForProjectWithDetails(project.getId());// sorted quickly
+        List<User> currentEmployees = userService.getEmployeesForProject(project.getId());
+        List<Task> tasks = new LinkedList<>();
+        sprints.parallelStream().filter(s -> s.getTasks() != null).forEach(s -> tasks.addAll(s.getTasks()));
+        Collections.sort(sprints, Comparator.comparing(Sprint::getId));
+        Collections.sort(currentEmployees, Comparator.comparing(User::getId));
 
+        model.addAttribute("projectStatus", project.getProjectStatus());
+        model.addAttribute("projectFinished", project.isFinished());
+        model.addAttribute("projectStarted", project.isStarted());
+        model.addAttribute("sprintCount", sprints.size());
+        model.addAttribute("taskCount", tasks.size());
+        model.addAttribute("employeeCount", currentEmployees.size());
+        model.addAttribute("finishTaskCount", tasks.stream().filter(Task::isFinished).collect(Collectors.toList()).size());
+        model.addAttribute("project", project);
+        model.addAttribute("sprints", sprints);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("currentEmployees", currentEmployees);
+        return "/dashboard/customer";
+    }
 }

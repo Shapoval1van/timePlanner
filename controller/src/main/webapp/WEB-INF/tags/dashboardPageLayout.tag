@@ -131,9 +131,12 @@
                     <li>
                         <c:choose>
                         <c:when test="${userRole.ordinal() == 0}">
+                            <a href="/report-download/comp-${currentProjectId}id"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                <spring:message code="downloadReport"/>
+                            </a>
                         </c:when>
                         <c:when test="${userRole.ordinal() == 1}">
-                            <a href="/show-all-task/for-${currentProjectId}id"><i class="fa fa-tasks" aria-hidden="true"></i>
+                            <a href="/show-all-task/proj-${currentProjectId}id"><i class="fa fa-tasks" aria-hidden="true"></i>
                                 <spring:message code="showAllTasks"/>
                             </a>
                         </c:when>
@@ -144,7 +147,7 @@
                             <c:when test="${userRole.ordinal() == 0}">
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="/report-download/for-${currentProjectId}id"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                <a href="/report-download/proj-${currentProjectId}id"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                     <spring:message code="downloadReport"/>
                                 </a>
                             </c:when>

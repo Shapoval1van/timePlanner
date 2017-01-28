@@ -1,6 +1,7 @@
 package com.timePlanner.controller;
 
 
+import com.timePlanner.dto.Project;
 import com.timePlanner.dto.Sprint;
 import com.timePlanner.dto.Task;
 import com.timePlanner.dto.User;
@@ -42,49 +43,16 @@ public class ExelWriter {
         while (i.hasNext()){
             Object object =  i.next();
             if(object instanceof Sprint){
-                Sprint sprint = (Sprint)object;
-                Row row = sheet.createRow(++rowCount);
-                int columnCount = 0;
-                row.createCell(++columnCount).setCellValue(sprint.getName());
-                row.createCell(++columnCount).setCellValue(sprint.getDescription());
-                Cell cell = row.createCell(++columnCount);
-                cell.setCellStyle(cellStyle);
-                cell.setCellValue(new Date(sprint.getPlanedFinishDate().getTime()));
-                row.createCell(++columnCount).setCellValue(sprint.getDependedOn()==null? "none": sprint.getDependedOn().getName());
-                row.createCell(++columnCount).setCellValue(sprint.getTasks()==null? 0: sprint.getTasks().size());
+                addSprint((Sprint)object);
             }
             if(object instanceof Task){
-                Task task = (Task)object;
-                Row row = sheet.createRow(++rowCount);
-                int columnCount = 0;
-                row.createCell(++columnCount).setCellValue(task.getName());
-                row.createCell(++columnCount).setCellValue(task.getDescription());
-                row.createCell(++columnCount).setCellValue(task.getPriority().toString());
-                Cell cell = row.createCell(++columnCount);
-                cell.setCellStyle(cellStyle);
-                cell.setCellValue(new Date(task.getPlanFinishDate().getTime()));
-                StringBuilder stringBuilder = new StringBuilder();
-                if(task.getTasks()!=null){
-                    for(Task t : task.getTasks()){
-                        stringBuilder.append(t.getName()+"; ");
-                    }
-                }
-                row.createCell(++columnCount).setCellValue(stringBuilder.toString());
-                stringBuilder = new StringBuilder();
-                if(task.getUsers()!=null){
-                    for(User u : task.getUsers()){
-                        stringBuilder.append(u.getFullName()+"; ");
-                    }
-                }
-                row.createCell(++columnCount).setCellValue(stringBuilder.toString());
+                addTask((Task)object);
             }
             if(object instanceof User){
-                User user =  (User)object;
-                Row row = sheet.createRow(++rowCount);
-                int columnCount = 0;
-                row.createCell(++columnCount).setCellValue(user.getFullName());
-                row.createCell(++columnCount).setCellValue(user.getEmail());
-                row.createCell(++columnCount).setCellValue(user.getSex());
+                addUser((User)object);
+            }
+            if(object instanceof Project){
+                addProject((Project)object);
             }
         }
     }
@@ -105,5 +73,63 @@ public class ExelWriter {
         }catch (IOException e){
             return null;
         }
+    }
+
+    private void addSprint(Sprint sprint){
+        Row row = sheet.createRow(++rowCount);
+        int columnCount = 0;
+        row.createCell(++columnCount).setCellValue(sprint.getName());
+        row.createCell(++columnCount).setCellValue(sprint.getDescription());
+        Cell cell = row.createCell(++columnCount);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(new Date(sprint.getPlanedFinishDate().getTime()));
+        row.createCell(++columnCount).setCellValue(sprint.getDependedOn()==null? "none": sprint.getDependedOn().getName());
+        row.createCell(++columnCount).setCellValue(sprint.getTasks()==null? 0: sprint.getTasks().size());
+    }
+
+    private void addTask(Task task){
+        Row row = sheet.createRow(++rowCount);
+        int columnCount = 0;
+        row.createCell(++columnCount).setCellValue(task.getName());
+        row.createCell(++columnCount).setCellValue(task.getDescription());
+        row.createCell(++columnCount).setCellValue(task.getPriority().toString());
+        Cell cell = row.createCell(++columnCount);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(new Date(task.getPlanFinishDate().getTime()));
+        StringBuilder stringBuilder = new StringBuilder();
+        if(task.getTasks()!=null){
+            for(Task t : task.getTasks()){
+                stringBuilder.append(t.getName()+"; ");
+            }
+        }
+        row.createCell(++columnCount).setCellValue(stringBuilder.toString());
+        stringBuilder = new StringBuilder();
+        if(task.getUsers()!=null){
+            for(User u : task.getUsers()){
+                stringBuilder.append(u.getFullName()+"; ");
+            }
+        }
+        row.createCell(++columnCount).setCellValue(stringBuilder.toString());
+    }
+
+    private void addUser(User user){
+        Row row = sheet.createRow(++rowCount);
+        int columnCount = 0;
+        row.createCell(++columnCount).setCellValue(user.getFullName());
+        row.createCell(++columnCount).setCellValue(user.getEmail());
+        row.createCell(++columnCount).setCellValue(user.getRole().toString());
+        row.createCell(++columnCount).setCellValue(user.getSex());
+    }
+
+    private void addProject(Project project){
+        Row row = sheet.createRow(++rowCount);
+        int columnCount = 0;
+        row.createCell(++columnCount).setCellValue(project.getName());
+        row.createCell(++columnCount).setCellValue(project.getDescription());
+        row.createCell(++columnCount).setCellValue(project.getProjectManager()!=null?project.getProjectManager().getFullName():"none");
+        Cell cell = row.createCell(++columnCount);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(new Date(project.getPlanFinishDate().getTime()));
+        row.createCell(++columnCount).setCellValue(project.isFinished());
     }
 }

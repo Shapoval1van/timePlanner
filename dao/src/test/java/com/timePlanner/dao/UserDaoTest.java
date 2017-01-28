@@ -107,7 +107,7 @@ public class UserDaoTest {
     @Test
     @Transactional(readOnly = true)
     public void findUsersForCompanyTest(){
-        assertEquals(3,userDao.getAllUsersForCompany(1).size());
+        assertEquals(4,userDao.getAllUsersForCompany(1).size());
     }
 
 }

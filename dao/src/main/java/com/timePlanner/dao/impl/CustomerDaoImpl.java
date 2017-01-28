@@ -41,6 +41,16 @@ public class CustomerDaoImpl implements CustomerDao, InitializingBean {
             "       JOIN project AS p ON p.id = c.project_id;";
     private String SAVE_CUSTOMER = "INSERT INTO  customer VALUES(DEFAULT, ?,?,?,?)";
 
+    private final String FIND_BY_USER_EMAIL = "SELECT " +
+            "   c.id \"customerId\", c.company_name \"customerCompanyName\", c.description \"customerDescription\",\n" +
+            "   u.id \"userId\", f_name, l_name, password, roleId, email, phone, birth_date, sex,\n" +
+            "   p.id \"projectId\", p.name \"projectName\", p.description \"projectDescription\", p.start_date \"projectSDate\"," +
+            "   p.finish_date \"projectFDate\", p.is_finished \"projectIsFinished\", p.plan_finish_date \"projectPFinish\", p.is_started  \"projectIsStarted\"\n" +
+            "   from customer as c\n" +
+            "       JOIN users AS u ON c.user_id = u.id\n" +
+            "       JOIN project AS p ON p.id = c.project_id\n" +
+            "   WHERE email = ?;";
+
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -68,6 +78,12 @@ public class CustomerDaoImpl implements CustomerDao, InitializingBean {
     @Override
     public List<Customer> getAllCustomerWithDetails() {
         return jdbcTemplate.query(FIND_ALL, new CustomerExtractor());
+    }
+
+    @Override
+    public Customer getCustomerWithDetailsByUserEmail(String email) {
+        List<Customer> customers = jdbcTemplate.query(FIND_BY_USER_EMAIL, new Object[]{email}, new CustomerExtractor());
+        return (customers!=null && customers.size()!=0)?customers.get(0):null;
     }
 
 

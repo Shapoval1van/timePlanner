@@ -85,6 +85,9 @@ public class AjaxController {
     public ResponseEntity<?> createTaskPost(@PathVariable int id, Principal principal, HttpServletRequest request) {
         Sprint sprint = sprintService.getSprintWithDetails(id);
         Set<Task> taskSet = sprint.getTasks();
+        if(taskSet==null){
+            return new ResponseEntity<>(new Message("empty result", MessageType.INFO),HttpStatus.OK);
+        }
         return new ResponseEntity<>(taskSet, HttpStatus.OK);
     }
 

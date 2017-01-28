@@ -19,8 +19,8 @@ INSERT INTO users VALUES
   (DEFAULT, 'Golum','Sudorenko', '$2a$12$3Br9vQoIaviqPAnkdkaUXuO6O/BF7uyJOiURjS1WAIakidrseY3TC', 2,1, 'moyaPrelist@gmai.com','0345342123','1985-06-30',1),
   (DEFAULT, 'Sergey','Brin', '$2a$12$GvkF6THOdwray/u0OdPyuOGjp4uY4GwyxIvoZh65H3YG1Zt.Sgz4.', 1,2, 'king@gmai.com','0345342123','1945-06-30',1),
   (DEFAULT, 'Stiv','Djops', '$2a$12$f3nuzjf0gZpgxVl4./45/eWzNzJdton7w5zW6gcYjDBC92lA9zKA.', 2,2, 'king1@gmai.com','0345342123','1945-06-30',1),
-  (DEFAULT, 'Petro','Petro', '$2a$12$f3nuzjf0gZpgxVl4./45/eWzNzJdton7w5zW6gcYjDBC92lA9zKA.', 4,null, 'petro@gmai.com','0345342123','1945-06-30',1),
-  (DEFAULT, 'Fedir','Fedir', '$2a$12$f3nuzjf0gZpgxVl4./45/eWzNzJdton7w5zW6gcYjDBC92lA9zKA.', 4,null, 'Fedir@gmai.com','0345342123','1945-06-30',1);
+  (DEFAULT, 'Petro','Petro', '$2a$12$f3nuzjf0gZpgxVl4./45/eWzNzJdton7w5zW6gcYjDBC92lA9zKA.', 4,1, 'petro@gmai.com','0345342123','1945-06-30',1),
+  (DEFAULT, 'Fedir','Fedir', '$2a$12$f3nuzjf0gZpgxVl4./45/eWzNzJdton7w5zW6gcYjDBC92lA9zKA.', 4,2, 'Fedir@gmai.com','0345342123','1945-06-30',1);
 
 INSERT INTO project VALUES
   (DEFAULT, 'destroy','destroy peaceful planet', 1, current_date, NULL, '2018-06-30',3 , DEFAULT),

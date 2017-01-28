@@ -16,19 +16,19 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -174,6 +174,27 @@ public class AdminController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(path = "/report-download", method = RequestMethod.GET)
+    public void download(Principal principal, HttpServletResponse response){
+        User user =  userService.getUserWithDetailsByEmail(principal.getName());
+        int companyId = user.getCompany().getId();
+        Set<Project> projectsSet = new HashSet<>();
+        companyService.getCompanyWithDetails(companyId).getProjects().forEach(p->projectsSet.add(projectService.getProjectWithDetails(p.getId())));
+        List<User> userList = userService.getAllUsersForCompany(companyId);
+        String  name = "report-company-"+companyId+"Id.xlsx";
+        ExelWriter exelWriter = new ExelWriter(name, "report");
+        exelWriter.addHeader("Name","Email","Role","Sex");
+        exelWriter.addData(userList);
+        exelWriter.addHeader("Name", "Description", "Project Manager", "Plan finish date", "Finished");
+        exelWriter.addData(projectsSet);
+        createResponse(response, exelWriter.write());
+        if (new File(name).exists()) {
+            new File(name).delete();
+            LOGGER.info("Deleted the previous file");
+        }
+    }
+
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -181,5 +202,23 @@ public class AdminController {
         webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
+    private void createResponse(HttpServletResponse response, String fileName){
+        File file = new File(fileName);
+        try(InputStream inputStream = new BufferedInputStream(new FileInputStream(file))){
+            String mimeType= URLConnection.guessContentTypeFromName(file.getName());
+            if(mimeType==null){
+                mimeType = "application/octet-stream";
+            }
+            response.setContentType(mimeType);
+            response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() +"\""));
+            response.setContentLength((int)file.length());
+            FileCopyUtils.copy(inputStream, response.getOutputStream());// Closes both streams when done
+        }catch (FileNotFoundException e){
+            LOGGER.error("file  with name \""+ file.getName()+"\" not found", e);
+        }
+        catch (IOException e) {
+            LOGGER.error(e);
+        }
+    }
 }
 

@@ -41,4 +41,9 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setUser(user);
         customerDao.saveCustomer(customer);
     }
+
+    @Override
+    public Customer getCustomerWithDetailsByUserEmail(String email) {
+        return customerDao.getCustomerWithDetailsByUserEmail(email);
+    }
 }

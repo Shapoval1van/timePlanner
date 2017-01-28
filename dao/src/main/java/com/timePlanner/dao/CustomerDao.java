@@ -9,4 +9,5 @@ public interface CustomerDao {
     public void saveCustomer(Customer customer);
     public void updateCustomer(Customer customer);
     public List<Customer> getAllCustomerWithDetails();
+    public Customer getCustomerWithDetailsByUserEmail(String email);
 }   

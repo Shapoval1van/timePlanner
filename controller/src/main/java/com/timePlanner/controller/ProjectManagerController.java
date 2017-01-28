@@ -136,7 +136,7 @@ public class ProjectManagerController {
     }
 
     @PreAuthorize("hasRole('PM')")
-    @RequestMapping(path = "/show-all-task/for-{id}id", method = RequestMethod.GET)
+    @RequestMapping(path = "/show-all-task/proj-{id}id", method = RequestMethod.GET)
     public String showAllTask(ModelMap model, @PathVariable("id") int id, Principal principal,HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
         int userId = userService.checkAccessUserToProject(principal.getName(),id);
@@ -162,7 +162,7 @@ public class ProjectManagerController {
     }
 
     @PreAuthorize("hasRole('PM')")
-    @RequestMapping(path = "/report-download/for-{id}id", method = RequestMethod.GET)
+    @RequestMapping(path = "/report-download/proj-{id}id", method = RequestMethod.GET)
     public void download(@PathVariable("id") int projectId, Principal principal,HttpServletResponse response){
         if(userService.checkAccessUserToProject(principal.getName(), projectId)==0){
             return;
@@ -184,7 +184,7 @@ public class ProjectManagerController {
         exelWriter.addData(sprintList);
         exelWriter.addHeader("Task name","Task description","Priority","Plan finish date","Dependent tasks", "Users");
         exelWriter.addData(taskList);
-        exelWriter.addHeader("Name","email","Sex");
+        exelWriter.addHeader("Name","Email","Role","Sex");
         exelWriter.addData(userList);
         createResponse(response, exelWriter.write());
         if (new File("report-"+projectId+"Id.xlsx").exists()) {
