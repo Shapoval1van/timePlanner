@@ -139,6 +139,17 @@
                         </c:when>
                     </c:choose>
                     </li>
+                    <li>
+                        <c:choose>
+                            <c:when test="${userRole.ordinal() == 0}">
+                            </c:when>
+                            <c:when test="${userRole.ordinal() == 1}">
+                                <a href="/report-download/for-${currentProjectId}id"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                    <spring:message code="downloadReport"/>
+                                </a>
+                            </c:when>
+                        </c:choose>
+                    </li>
                 </ul>
             </div>
         <!-- /.navbar-collapse -->

@@ -111,9 +111,11 @@ public class DashboardController {
         model.addAttribute("user", user);
         Set<Task> taskSet =  user.getTasks();
         if(taskSet==null || taskSet.size()==0){
-            model.addAttribute("newTaskCount",0);
-            model.addAttribute("taskInWorkCount", 0);
-            model.addAttribute("finishedTaskCount",0);
+            model.addAttribute("company", user.getCompany());
+            model.addAttribute("tasksNewCount",0);
+            model.addAttribute("tasksInWorksCount", 0);
+            model.addAttribute("tasksFinishedCount",0);
+            return "/dashboard/employee";
         }
         Set<Task> tasksNew = taskSet.stream().filter(t->t.getTaskStatus()==Status.CREATED).collect(Collectors.toSet());
         Set<Task> tasksInWork = taskSet.stream().filter(t->t.getTaskStatus()==Status.STARTED).collect(Collectors.toSet());

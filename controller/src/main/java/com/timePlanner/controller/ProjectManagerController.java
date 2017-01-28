@@ -1,7 +1,13 @@
 package com.timePlanner.controller;
 
-import com.timePlanner.dto.*;
-import com.timePlanner.service.*;
+import com.timePlanner.dto.Role;
+import com.timePlanner.dto.Sprint;
+import com.timePlanner.dto.Task;
+import com.timePlanner.dto.User;
+import com.timePlanner.service.ProjectService;
+import com.timePlanner.service.SprintService;
+import com.timePlanner.service.TaskService;
+import com.timePlanner.service.UserService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +16,14 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -151,6 +161,38 @@ public class ProjectManagerController {
 
     }
 
+    @PreAuthorize("hasRole('PM')")
+    @RequestMapping(path = "/report-download/for-{id}id", method = RequestMethod.GET)
+    public void download(@PathVariable("id") int projectId, Principal principal,HttpServletResponse response){
+        if(userService.checkAccessUserToProject(principal.getName(), projectId)==0){
+            return;
+        }
+        List<Sprint> sprintList = sprintService.getSprintsForProjectWithDetails(projectId);
+        List<User> userList = userService.getEmployeesForProject(projectId);
+        List<Task> taskList = new ArrayList<>();
+        sprintList.stream().forEach(s->{
+            Set<Task> tList = s.getTasks();
+            if(tList!=null){
+                for(Task t : tList){
+                    taskList.add(taskService.getTaskWithDetailsById(t.getId()));
+                }
+            }
+        });
+        String fileName = "report-"+projectId+"Id.xlsx";
+        ExelWriter exelWriter = new ExelWriter(fileName, "report");
+        exelWriter.addHeader("Sprint name","Sprint description","Plan finish date","Dependent sprint name", "Contain task(number)");
+        exelWriter.addData(sprintList);
+        exelWriter.addHeader("Task name","Task description","Priority","Plan finish date","Dependent tasks", "Users");
+        exelWriter.addData(taskList);
+        exelWriter.addHeader("Name","email","Sex");
+        exelWriter.addData(userList);
+        createResponse(response, exelWriter.write());
+        if (new File("report-"+projectId+"Id.xlsx").exists()) {
+            new File("report-"+projectId+"Id.xlsx").delete();
+            LOGGER.info("Deleted the previous file");
+        }
+    }
+
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -176,5 +218,24 @@ public class ProjectManagerController {
                 return task;
             }
         });
+    }
+
+    private void createResponse(HttpServletResponse response, String fileName){
+        File file = new File(fileName);
+        try(InputStream inputStream = new BufferedInputStream(new FileInputStream(file))){
+            String mimeType= URLConnection.guessContentTypeFromName(file.getName());
+            if(mimeType==null){
+                mimeType = "application/octet-stream";
+            }
+            response.setContentType(mimeType);
+            response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() +"\""));
+            response.setContentLength((int)file.length());
+            FileCopyUtils.copy(inputStream, response.getOutputStream());// Closes both streams when done
+        }catch (FileNotFoundException e){
+            LOGGER.error("file  with name \""+ file.getName()+"\" not found", e);
+        }
+        catch (IOException e) {
+            LOGGER.error(e);
+        }
     }
 }
