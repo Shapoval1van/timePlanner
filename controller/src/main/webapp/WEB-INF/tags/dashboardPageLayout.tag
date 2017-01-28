@@ -7,7 +7,7 @@
 
 <html>
 <csrf disabled="true"/>
-<title>title</title>
+<title>Time planner</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/full-width-pics.css"/>
@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/sb-admin.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/plugins/morris.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/font-awesome/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.min.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/select2.full.min.js"></script>
@@ -132,8 +133,8 @@
                         <c:when test="${userRole.ordinal() == 0}">
                         </c:when>
                         <c:when test="${userRole.ordinal() == 1}">
-                            <a href="/show-all-task/for-${currentProjectId}id"><i class="fa fa-fw fa-bar-chart-o"></i>
-                                <spring:message code="dashbord.assignTasks"/>
+                            <a href="/show-all-task/for-${currentProjectId}id"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                <spring:message code="showAllTasks"/>
                             </a>
                         </c:when>
                     </c:choose>

@@ -64,10 +64,10 @@ public class AjaxController {
                 return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
             }
             try {
-                ProjectStatus projectStatus = project.getProjectStatus();
-                if (projectStatus == ProjectStatus.CREATED) {
+                Status projectStatus = project.getProjectStatus();
+                if (projectStatus == Status.CREATED) {
                     projectService.setProjectStarted(project.getId());
-                } else if (projectStatus == ProjectStatus.STARTED) {
+                } else if (projectStatus == Status.STARTED) {
                     projectService.setProjectFinished(project.getId());
                 }
                 return new ResponseEntity<String>(HttpStatus.OK);
@@ -90,7 +90,7 @@ public class AjaxController {
 
     @PreAuthorize("hasRole('PM')")
     @RequestMapping(path = "/assign-tasks", method = RequestMethod.POST)
-    public ResponseEntity<?> assignTaskToUSer(@RequestBody Task task, Principal principal, HttpServletRequest request){
+    public ResponseEntity<?> assignTaskToUser(@RequestBody Task task, Principal principal, HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
         int projectId = projectService.getProjectForTask(task.getId()).getId();
         if (userService.checkAccessUserToProject(principal.getName(), projectId) == 0){
@@ -106,11 +106,45 @@ public class AjaxController {
             return new ResponseEntity<>(new Message("users must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
         }
         if(taskService.updateResponsibleUsers(task)){
-            Message message = new Message();
-            message.setMessage("OK");
-            message.setMessageType(MessageType.SUCCESS);
-            return new ResponseEntity<>(message,HttpStatus.OK);
+            return new ResponseEntity<>(new Message("Responsible updated", MessageType.SUCCESS),HttpStatus.OK);
         }
-        return new ResponseEntity<>(new Message("users must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Message("Users must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping(path = "/update-task-status", method = RequestMethod.POST)
+    public ResponseEntity<?> updateTaskStatus(@RequestBody Task task, Principal principal, HttpServletRequest request){
+        String remoteAddr = request.getRemoteAddr();
+        Status uptatedStatus;
+        User user = userService.getUserWithDetailsByEmail(principal.getName());
+        Task taskFromDB = user.getTasks().stream().filter(t->t.getId()==task.getId()).findFirst().orElse(null);
+        Status status = taskFromDB.getTaskStatus();
+        if(task.getId()==0){
+            LOGGER.info("request from user with address: " + remoteAddr + " was rejected \n task must have id");
+            return new ResponseEntity<>(new Message("Task is not valid", MessageType.ERROR),HttpStatus.BAD_REQUEST);
+        }
+        if(taskFromDB == null){
+            LOGGER.info("request from user with address: " + remoteAddr + " was rejected \n user "+ principal.getName()
+            +"dose not have access to this task");
+            return new ResponseEntity<>(new Message("Access denied", MessageType.ERROR),HttpStatus.FORBIDDEN);
+        }
+        if(status == Status.CREATED){
+            uptatedStatus = Status.STARTED;
+            taskService.setTaskStarted(task.getId());
+        }else if(status == Status.STARTED){
+            uptatedStatus = Status.FINISHED;
+            Task taskWithDetails = taskService.getTaskWithDetailsById(task.getId());
+            Set<Task> tasksDependentSet = taskWithDetails.getTasks();
+            if(tasksDependentSet!=null){
+                Task taskDependent = tasksDependentSet.stream().filter(t->!t.isFinished()).findAny().orElse(null);
+                if(taskDependent!=null){
+                    return new ResponseEntity<>(new Message("finish dependent task", MessageType.ERROR),HttpStatus.BAD_REQUEST);
+                }
+            }
+            taskService.setTaskFinished(task.getId());
+        }else{
+            uptatedStatus = Status.FINISHED;
+        }
+        return new ResponseEntity<>(new Message(uptatedStatus.toString(), MessageType.SUCCESS),HttpStatus.OK);
     }
 }

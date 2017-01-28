@@ -53,17 +53,17 @@
                                         <form:option cssClass="btn-info" value="MEDIUM">MEDIUM</form:option>
                                         <form:option cssClass="btn-warning" value="HIGH">HIGH</form:option>
                                         <form:option cssClass="btn-danger" value="CRITICAL">CRITICAL</form:option>
-                                    </form:select>
+                                </form:select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for = "sprint-selector"><spring:message code="createTask.chooseSprint"/></label>
                             <form:select path="sprint.id" id="sprint-selector" cssClass="input-lg" cssStyle="width: 100%">
-                            <c:forEach items="${sprintList}" var="sprint">
-                                <option value="${sprint.getId()}">${sprint.getName()}</option>
-                            </c:forEach>
-                        </form:select>
+                                <c:forEach items="${sprintList}" var="sprint">
+                                    <option data-date="${sprint.getPlanedFinishDate()}" value="${sprint.getId()}">${sprint.getName()}</option>
+                                </c:forEach>
+                            </form:select>
                         </div>
                         <div class="form-group">
                             <label for = "task-selector"><spring:message code="createTask.dependetTask"/></label>

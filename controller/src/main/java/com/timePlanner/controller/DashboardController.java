@@ -103,4 +103,31 @@ public class DashboardController {
         return "/dashboard/projectManager";
     }
 
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping("/dashboard-emp")
+    public String dashboardEmployee(Model model, Principal principal){
+        User user = userService.getUserWithDetailsByEmail(principal.getName());
+        model.addAttribute("user", user);
+        Set<Task> taskSet =  user.getTasks();
+        if(taskSet==null || taskSet.size()==0){
+            model.addAttribute("newTaskCount",0);
+            model.addAttribute("taskInWorkCount", 0);
+            model.addAttribute("finishedTaskCount",0);
+        }
+        Set<Task> tasksNew = taskSet.stream().filter(t->t.getTaskStatus()==Status.CREATED).collect(Collectors.toSet());
+        Set<Task> tasksInWork = taskSet.stream().filter(t->t.getTaskStatus()==Status.STARTED).collect(Collectors.toSet());
+        Set<Task> tasksFinished = taskSet.stream().filter(t->t.getTaskStatus()==Status.FINISHED).collect(Collectors.toSet());
+
+        model.addAttribute("company", user.getCompany());
+        model.addAttribute("tasksNewCount", tasksNew.size());
+        model.addAttribute("tasksInWorksCount", tasksInWork.size());
+        model.addAttribute("tasksFinishedCount", tasksFinished.size());
+        model.addAttribute("tasksNew",tasksNew);
+        model.addAttribute("tasksInWork",tasksInWork);
+        model.addAttribute("tasksFinished",tasksFinished);
+        return "/dashboard/employee";
+    }
+
+
 }

@@ -28,10 +28,12 @@ if ($('#sprint-selector option').length != 0) {
 
 $(document).ready(function() {
     $(".task-selector").select2();
+    var date = $(this).find(':selected').data('date');
 });
 
 $('#sprint-selector').on('change',function () {
     var val1 = $(this).find(':selected').val();
+    var date = $(this).find(':selected').data('date');
     var url = '/task-for-sprint-'+val1+'id';
     $.ajax({
         url: url,
@@ -46,6 +48,7 @@ $('#sprint-selector').on('change',function () {
                 var name = item.name;
                 $('#task-selector').append($('<option></option>').val(item.id).html(name))
             });
+            $('#planedFinishDate').attr('max', date);
         }
     });
 })

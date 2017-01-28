@@ -17,4 +17,6 @@ public interface TaskService {
     public Set<Task> findTaskForProject(Project project);
     public Set<Task> findTaskForProject(int projectId);
     public boolean  updateResponsibleUsers(Task task);
+    public void setTaskStarted(int taskId);
+    public void setTaskFinished(int taskId);
 }

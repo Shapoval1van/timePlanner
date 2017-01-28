@@ -91,4 +91,14 @@ public class TaskServiceImpl implements TaskService {
     public boolean updateResponsibleUsers(Task task){
         return taskDao.updateResponsibleUsers(task);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void setTaskStarted(int taskId) {
+        taskDao.setTaskStarted(taskId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void setTaskFinished(int taskId) {
+        taskDao.setTaskFinished(taskId);
+    }
 }

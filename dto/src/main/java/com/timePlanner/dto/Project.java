@@ -37,13 +37,13 @@ public @Data class Project {
                 '}';
     }
 
-    public  ProjectStatus getProjectStatus(){
+    public Status getProjectStatus(){
         if(!this.isStarted && !this.isFinished){
-            return ProjectStatus.CREATED;
+            return Status.CREATED;
         }else if(this.isStarted && !this.isFinished){
-            return ProjectStatus.STARTED;
+            return Status.STARTED;
         }else if(this.isStarted && this.isFinished){
-            return ProjectStatus.FINISHED;
+            return Status.FINISHED;
         }
         return null;
     }

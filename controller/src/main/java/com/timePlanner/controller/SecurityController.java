@@ -63,6 +63,8 @@ public class SecurityController {
                 return "redirect:/dashboard-adm";
             case "PM":
                 return "redirect:/dashboard-pm";
+            case "EMPLOYEE":
+                return "redirect:/dashboard-emp";
             default:
                 return "redirect:/";
             // TODO add redirect for another

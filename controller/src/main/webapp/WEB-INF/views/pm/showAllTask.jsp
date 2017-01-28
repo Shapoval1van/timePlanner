@@ -28,7 +28,7 @@
                             </p>
                             <span class="font-bold">Depended task:</span>
                             <pre style="text-align: left"> <c:forEach items="${task.getTasks()}" var="dependedTask">${dependedTask.getName()} </c:forEach></pre>
-                            <p><span class="font-bold"><spring:message code="users"/>git:</span>
+                            <p><span class="font-bold"><spring:message code="users"/>:</span>
                             <pre style="text-align: left"> <c:forEach items="${task.getUsers()}" var="user">${user.getFullName()} </c:forEach></pre>
                             </p>
                             <span class="font-bold"><spring:message code="dashboard.description"/>:</span>
