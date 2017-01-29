@@ -53,7 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .logout()
                     .logoutUrl("/j_spring_security_logout")
-                    .logoutSuccessUrl("/");
+                    .logoutSuccessUrl("/")
+                .and()
+                    .exceptionHandling().accessDeniedPage("/403");
         http.csrf().disable();
     }
 

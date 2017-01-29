@@ -118,7 +118,7 @@
                               <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped" id = "table-created">
                                          <thead>
-                                         <tr>
+                                         <tr class = "font-bold">
                                              <th><spring:message code="ceateTask.taskName"/></th>
                                              <th><spring:message code="dashboard.description"/></th>
                                              <th><spring:message code="createSprint.planFinishDate"/></th>
@@ -161,7 +161,7 @@
                               <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped" id = "table-started">
                                          <thead>
-                                         <tr>
+                                         <tr class = "font-bold">
                                              <th><spring:message code="ceateTask.taskName"/></th>
                                              <th><spring:message code="dashboard.description"/></th>
                                              <th><spring:message code="createSprint.planFinishDate"/></th>
@@ -203,8 +203,8 @@
                           <div class="panel-body">
                                  <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped" id = "table-finished">
-                                         <thead>
-                                         <tr>
+                                         <thead >
+                                         <tr class = "font-bold">
                                              <th><spring:message code="ceateTask.taskName"/></th>
                                              <th><spring:message code="dashboard.description"/></th>
                                              <th><spring:message code="createSprint.planFinishDate"/></th>

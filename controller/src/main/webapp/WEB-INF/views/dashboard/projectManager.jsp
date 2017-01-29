@@ -180,11 +180,12 @@
                                  <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
-                                         <tr>
+                                         <tr class = "font-bold">
                                              <th><spring:message code="dashboard.name"/></th>
                                              <th><spring:message code="dashboard.description"/></th>
                                              <th><spring:message code="dashboard.startDate"/></th>
                                              <th><spring:message code="dashboard.finishDate"/></th>
+                                             <th><spring:message code="createSprint.planFinishDate"/></th>
                                              <th><spring:message code="dashboard.dependetSprints"/></th>
                                          </tr>
                                          </thead>
@@ -194,10 +195,11 @@
                                                     <td>${sprint.getName()}</td>
                                                     <td>${sprint.getDescription()}</td>
                                                     <td>${sprint.getStartDate()}</td>
+                                                    <td>${sprint.getFinishDate()}</td>
                                                     <td>${sprint.getPlanedFinishDate()}</td>
                                                     <td><c:if test="${sprint.getDependedOn() != null}">
-                                                           <c:out value="${sprint.getDependedOn().getName()}"/><p>
-                                                        </c:if>
+                                                        <c:out value="${sprint.getDependedOn().getName()}"/><p>
+                                                            </c:if>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -229,7 +231,7 @@
                                       <div class="table-responsive">
                                           <table class="table table-bordered table-hover table-striped">
                                               <thead>
-                                              <tr>
+                                              <tr class = "font-bold">
                                                   <th><spring:message code="dashboard.name"/></th>
                                                   <th>Email</th>
                                                   <th><spring:message code="dashboard.phone"/></th>
@@ -271,9 +273,12 @@
                                  <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
-                                         <tr>
+                                         <tr class = "font-bold">
                                              <th><spring:message code="dashboard.name"/></th>
                                              <th><spring:message code="dashboard.estimate"/></th>
+                                             <th><spring:message code="dashboard.startDate"/></th>
+                                             <th><spring:message code="dashboard.finishDate"/></th>
+                                             <th><spring:message code="createSprint.planFinishDate"/></th>
                                              <th><spring:message code="dashboard.priority"/></th>
                                          </tr>
                                          </thead>
@@ -282,6 +287,9 @@
                                                 <tr>
                                                     <td>${task.getName()}</td>
                                                     <td>${task.getEstimate()}</td>
+                                                    <td>${task.getStartDate()}</td>
+                                                    <td>${task.getFinishDate()}</td>
+                                                    <td>${task.getPlanFinishDate()}</td>
                                                     <td>
                                                         <select class="input-sm priority priority-selector">
                                                             <c:choose>

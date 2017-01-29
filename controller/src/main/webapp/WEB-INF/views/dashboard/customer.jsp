@@ -144,7 +144,7 @@
                                  <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
-                                         <tr>
+                                         <tr class = "font-bold">
                                              <th><spring:message code="dashboard.name"/></th>
                                              <th><spring:message code="dashboard.description"/></th>
                                              <th><spring:message code="dashboard.startDate"/></th>
@@ -195,7 +195,7 @@
                                       <div class="table-responsive">
                                           <table class="table table-bordered table-hover table-striped">
                                               <thead>
-                                              <tr>
+                                              <tr class = "font-bold">
                                                   <th><spring:message code="dashboard.name"/></th>
                                                   <th>Email</th>
                                                   <th><spring:message code="dashboard.phone"/></th>
@@ -237,7 +237,7 @@
                                  <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped">
                                          <thead>
-                                         <tr>
+                                         <tr class = "font-bold">
                                              <th><spring:message code="dashboard.name"/></th>
                                              <th><spring:message code="dashboard.estimate"/></th>
                                              <th><spring:message code="dashboard.startDate"/></th>

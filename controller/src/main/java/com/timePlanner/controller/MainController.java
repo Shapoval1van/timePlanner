@@ -10,4 +10,9 @@ public class MainController {
     public String index(){
         return "index";
     }
+
+    @RequestMapping("/403")
+    public String accessDenied(){
+        return "403";
+    }
 }
