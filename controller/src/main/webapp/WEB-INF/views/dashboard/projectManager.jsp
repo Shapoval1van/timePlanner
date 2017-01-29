@@ -63,7 +63,7 @@
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-comments fa-5x"></i>
+                                      <i class="fa fa-pie-chart fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${sprintCount}</div>
@@ -71,7 +71,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#sprint">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -86,7 +86,7 @@
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-address-card fa-5x"></i>
+                                      <i class="fa fa-tasks fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${taskCount}</div>
@@ -94,7 +94,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#task">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -109,7 +109,7 @@
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-shopping-cart fa-5x"></i>
+                                      <i class="fa fa-users fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${employeeCount}</div>
@@ -117,7 +117,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#employees">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -126,12 +126,13 @@
                           </a>
                       </div>
                   </div>
+
                   <div class="col-lg-3 col-md-6">
                       <div class="panel panel-red">
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-support fa-5x"></i>
+                                      <i class="fa fa-flag-checkered fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${finishTaskCount}</div>
@@ -139,9 +140,9 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#task">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -157,13 +158,13 @@
                           <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i><spring:message code="dashboard.projectAbout"/></h3>
                       </div>
                       <div class="panel-body">
-                          <spring:message code="dashboard.projectName"/>: ${project.getName()}
+                          <span class="font-bold"><spring:message code="dashboard.projectName"/></span>: ${project.getName()}
                           <br>
-                          <spring:message code="dashboard.projectDescription"/>: ${project.getDescription()}
+                          <span class="font-bold"><spring:message code="dashboard.projectDescription"/></span>: ${project.getDescription()}
                           <br>
-                          <spring:message code="dashboard.startDate"/>: ${project.getStartDate()}
+                          <span class="font-bold"><spring:message code="dashboard.startDate"/></span>: ${project.getStartDate()}
                           <br>
-                          <spring:message code="createProj.planFinishDate"/>: ${project.getPlanFinishDate()}
+                          <span class="font-bold"><spring:message code="createProj.planFinishDate"/></span>: ${project.getPlanFinishDate()}
                       </div>
                   </div>
               </div>
@@ -171,6 +172,7 @@
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="sprint"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.sprints"/></h3>
                       </div>
@@ -187,6 +189,7 @@
                                              <th><spring:message code="dashboard.finishDate"/></th>
                                              <th><spring:message code="createSprint.planFinishDate"/></th>
                                              <th><spring:message code="dashboard.dependetSprints"/></th>
+                                             <th><spring:message code="status"/></th>
                                          </tr>
                                          </thead>
                                          <tbody>
@@ -201,6 +204,28 @@
                                                         <c:out value="${sprint.getDependedOn().getName()}"/><p>
                                                             </c:if>
                                                     </td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${sprint.getSprintStatus().ordinal()==0}">
+                                                                <button data-id="${sprint.getId()}" data-started="${sprint.isStarted()}" data-finished="${sprint.isFinished()}"
+                                                                        class="btn btn-success btn-space sprint-status-btn">
+                                                                    Start
+                                                                </button>
+                                                            </c:when>
+                                                            <c:when test="${sprint.getSprintStatus().ordinal()==1}">
+                                                                <button data-id="${sprint.getId()}" data-started="${sprint.isStarted()}" data-finished="${sprint.isFinished()}"
+                                                                        class="btn btn-danger btn-space sprint-status-btn">
+                                                                    Finish
+                                                                </button>
+                                                            </c:when>
+                                                            <c:when test="${sprint.getSprintStatus().ordinal()==2}">
+                                                                <button disabled data-id="${sprint.getId()}" data-started="${sprint.isStarted()}" data-finished="${sprint.isFinished()}"
+                                                                        class="btn btn-info btn-space sprint-status-btn">
+                                                                    Finished
+                                                                </button>
+                                                            </c:when>
+                                                        </c:choose>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
                                          </tbody>
@@ -211,9 +236,6 @@
                                     Sorry you don't have any sprints
                                 </c:when>
                              </c:choose>
-                          <div class="text-right">
-                              <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                          </div>
                       </div>
                   </div>
               </div>
@@ -221,6 +243,7 @@
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="employees"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><spring:message code="dashboard.workers"/></h3>
                       </div>
@@ -255,15 +278,13 @@
                               </c:choose>
                           </div>
                       </div>
-                      <div class="text-right">
-                          <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                      </div>
                   </div>
               </div>
               <!-- /.row -->
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="task"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.tasks"/></h3>
                       </div>
@@ -330,9 +351,6 @@
                                     Sorry you don't have any task
                                 </c:when>
                              </c:choose>
-                          <div class="text-right">
-                              <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                          </div>
                       </div>
                   </div>
               </div>

@@ -23,7 +23,7 @@ INSERT INTO users VALUES
   (DEFAULT, 'Fedir','Fedir', '$2a$12$f3nuzjf0gZpgxVl4./45/eWzNzJdton7w5zW6gcYjDBC92lA9zKA.', 4,2, 'Fedir@gmai.com','0345342123','1945-06-30',1);
 
 INSERT INTO project VALUES
-  (DEFAULT, 'destroy','destroy peaceful planet', 1, current_date, NULL, '2018-06-30',3 , DEFAULT),
+  (DEFAULT, 'destroy','destroy peaceful planet', 1, current_date, NULL,'2018-06-30',3 , DEFAULT),
   (DEFAULT, 'Project','Project',2,  '1995-06-30',NULL,'2017-06-30',5, TRUE),
   (DEFAULT, 'some','i dont know', 1, current_date,NULL ,'2018-06-30',NULL , DEFAULT);
 
@@ -36,11 +36,11 @@ INSERT INTO sprint VALUES
   (DEFAULT,'next',1,null,'2017-06-30',NULL,'2017-11-30', 1, FALSE , FALSE ),
   (DEFAULT,'start',2,null,'2017-06-30',NULL,'2017-11-30', null, FALSE , FALSE );
 
-INSERT INTO  task(id, name, sprint_id,description,priority, estimate) VALUES
-  (DEFAULT,'first Task',1,null, DEFAULT ,2),
-  (DEFAULT,'second Task',1,null,2,3),
-  (DEFAULT,'third Task',1,null,3,3),
-  (DEFAULT,'first Task',2,null,DEFAULT ,2);
+INSERT INTO  task(id, name, sprint_id,description,priority, plan_finish_date, estimate) VALUES
+  (DEFAULT,'first Task',1,null, DEFAULT ,'2017-06-30',2),
+  (DEFAULT,'second Task',1,null,2,'2017-06-30',3),
+  (DEFAULT,'third Task',1,null,3,'2017-06-30',3),
+  (DEFAULT,'first Task',2,null,DEFAULT ,'2017-06-30',2);
 
 INSERT INTO task_dependency VALUES
   (3,1),

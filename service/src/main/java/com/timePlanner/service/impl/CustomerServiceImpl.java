@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             user = userService.getUserByEmail(customer.getUser().getEmail());
         } catch (EmptyResultException e) {
-            LOGGER.info("User with email " + customer.getUser().getEmail() + "not found");
+            LOGGER.info("User with email " + customer.getUser().getEmail() + "not found",e);
         }
         customer.setUser(user);
         customerDao.saveCustomer(customer);

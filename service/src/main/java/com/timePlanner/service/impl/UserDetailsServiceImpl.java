@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), auths);
         } catch (EmptyResultException e) {
             LOGGER.info("User with email:" + s + "doesn't exist");
-            throw new UsernameNotFoundException("User with email:" + s + "doesn't exist");
+            throw new UsernameNotFoundException("User with email:" + s + "doesn't exist", e);
         }
     }
 }

@@ -108,7 +108,7 @@
                                 </a>
                             </c:when>
                             <c:when test="${userRole.ordinal() == 1}">
-                                <a href="/create-task/for-${currentProjectId}id"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
+                                <a href="/create-task/for-${currentProjectId}id"><i class="fa fa-th-list" aria-hidden="true"></i>
                                     <spring:message code="dashboard.createTask"/>
                                 </a>
                             </c:when>
@@ -131,7 +131,7 @@
                     <li>
                         <c:choose>
                         <c:when test="${userRole.ordinal() == 0}">
-                            <a href="/report-download/comp-${currentProjectId}id"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <a href="/report-download"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                 <spring:message code="downloadReport"/>
                             </a>
                         </c:when>

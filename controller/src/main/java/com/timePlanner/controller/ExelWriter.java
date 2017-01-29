@@ -5,6 +5,8 @@ import com.timePlanner.dto.Project;
 import com.timePlanner.dto.Sprint;
 import com.timePlanner.dto.Task;
 import com.timePlanner.dto.User;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -19,6 +21,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class ExelWriter {
+    private static final Logger LOGGER = LogManager.getLogger(ExelWriter.class);
     private String fileName;
     private String sheetName;
     private XSSFWorkbook workbook;
@@ -71,6 +74,7 @@ public class ExelWriter {
             workbook.write(outputStream);
             return fileName;
         }catch (IOException e){
+            LOGGER.info(e);
             return null;
         }
     }

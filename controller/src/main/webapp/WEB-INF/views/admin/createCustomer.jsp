@@ -19,7 +19,7 @@
                        <div class="row">
                            <div class="col-xs-10 col-sm-8 col-md-8">
                                <div class="row">
-                                   <h2 class="col-md-offset-2"><small>Create user</small></h2>
+                                   <h2 class="col-md-offset-2"><small><spring:message code="createUser"/></small></h2>
                                    <div class="col-xs-12 col-sm-6 col-md-6">
                                        <div class="form-group">
                                            <spring:message code="registration.firstName" var="FN"/>
@@ -62,7 +62,7 @@
                                        </div>
                                    </div>
                                    <div class = "col-xs-4 col-sm-4 col-md-4">
-                               <form:select cssClass="form-control input-lg" path="user.sex">
+                               <form:select cssClass="form-control input" path="user.sex">
                                    <form:option  value="1"><spring:message code="registration.male"/></form:option>
                                    <form:option  value="2"><spring:message code="registration.female"/></form:option>
                                 </form:select>
@@ -70,7 +70,7 @@
                                </div>
                            </div>
                            <div class="col-xs-6 col-sm-4 col-md-4">
-                               <h2><small>Customer company</small></h2>
+                               <h2><small><spring:message code="customerCompany"/></small></h2>
                                <div class="form-group">
                                    <spring:message code="registration.companyName" var="companyName"/>
                                    <form:input path="companyName" type="text" name="companyName" id="companyName"
@@ -95,8 +95,13 @@
                                        <form:errors path="message"  cssClass="error-text"/>
                                    </div>
                                </div>
+                               <div id="empty-pm"  class="row">
+                                   <div class="alert alert-danger empty-pm">
+                                       <spring:message code="createProj.error"/>
+                                   </div>
+                               </div>
                                <div class="row">
-                                   <input type="submit" value="${registB}" class="btn btn-primary btn-block btn-lg" tabindex="7">
+                                   <input type="submit" id="submit" value="${registB}" class="btn btn-primary btn-block btn-lg" tabindex="7">
                                </div>
                            </div>
                        </div>
@@ -113,10 +118,10 @@
             }
 
             if ($('#project-selector option').length != 0) {
-                $('.alert').css({"display": "none"});
+                $('#empty-pm').css({"display": "none"});
                 $('#submit').css({"display": "block"});
             } else {
-                $('.alert').css({"display": "block"});
+                $('#empty-pm').css({"display": "block"});
                 $('#submit').css({"display": "none"});
             }
         </script>

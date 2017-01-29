@@ -26,7 +26,7 @@
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-comments fa-5x"></i>
+                                      <i class="fa fa-pie-chart fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${sprintCount}</div>
@@ -34,7 +34,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#sprint">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -49,7 +49,7 @@
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-address-card fa-5x"></i>
+                                      <i class="fa fa-tasks fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${taskCount}</div>
@@ -57,7 +57,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#task">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -72,7 +72,7 @@
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-shopping-cart fa-5x"></i>
+                                      <i class="fa fa-users fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${employeeCount}</div>
@@ -80,7 +80,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#employees">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -95,7 +95,7 @@
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-support fa-5x"></i>
+                                      <i class="fa fa-flag-checkered fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${finishTaskCount}</div>
@@ -103,9 +103,9 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#task">
                               <div class="panel-footer">
-                                  <span class="pull-left">View Details</span>
+                                  <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                   <div class="clearfix"></div>
                               </div>
@@ -135,6 +135,7 @@
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="sprint"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.sprints"/></h3>
                       </div>
@@ -175,9 +176,6 @@
                                     Sorry you don't have any sprints
                                 </c:when>
                              </c:choose>
-                          <div class="text-right">
-                              <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                          </div>
                       </div>
                   </div>
               </div>
@@ -185,6 +183,7 @@
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="employees"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><spring:message code="dashboard.workers"/></h3>
                       </div>
@@ -219,15 +218,13 @@
                               </c:choose>
                           </div>
                       </div>
-                      <div class="text-right">
-                          <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                      </div>
                   </div>
               </div>
               <!-- /.row -->
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="task"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.tasks"/></h3>
                       </div>
@@ -265,9 +262,6 @@
                                     Sorry you don't have any task
                                 </c:when>
                              </c:choose>
-                          <div class="text-right">
-                              <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                          </div>
                       </div>
                   </div>
               </div>

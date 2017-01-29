@@ -56,7 +56,7 @@
                                    </div>
                                </div>
                                <div class = "col-xs-4 col-sm-4 col-md-4">
-                               <form:select cssClass="form-control input-lg" path="sex">
+                               <form:select cssClass="form-control input" path="sex">
                                    <form:option  value="1"><spring:message code="registration.male"/></form:option>
                                    <form:option  value="2"><spring:message code="registration.female"/></form:option>
                                 </form:select>

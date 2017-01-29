@@ -66,6 +66,8 @@ public class SprintDaoImpl implements SprintDao , InitializingBean{
     private final  String SAVE_SPRINT = "INSERT INTO sprint VALUES(DEFAULT ,?,?,?,?,?,?,?,?,?);";
     private final String UPDATE_SPRINT = "UPDATE sprint SET name=?, projectid=?, description=?,start_date=?, finish_date=?, " +
             "plan_finish_date=?, dependent_on=?,is_started=?,is_finished=? WHERE id = ?;";
+    private final String SET_SPRINT_STARTED = "UPDATE sprint SET start_date=?, is_started = TRUE WHERE id = ?";
+    private final String SET_SPRINT_FINISHED = "UPDATE sprint SET finish_date=?, is_finished = TRUE WHERE id = ?";
     @Autowired
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -97,6 +99,18 @@ public class SprintDaoImpl implements SprintDao , InitializingBean{
     public Sprint getSprintWithDetails(int id) {
         List<Sprint> sprints = jdbcTemplate.query(FIND_WITH_DETAILS, new Object[]{id}, new SprintExtractor());
         return sprints.size() == 0?null:sprints.get(0);
+    }
+
+    @Override
+    public void setSprintStarted(int sprintId) {
+        Date date = new Date(System.currentTimeMillis());
+        jdbcTemplate.update(SET_SPRINT_STARTED, date, sprintId);
+    }
+
+    @Override
+    public void setSprintFinished(int sprintId) {
+        Date date = new Date(System.currentTimeMillis());
+        jdbcTemplate.update(SET_SPRINT_FINISHED, date, sprintId);
     }
 
     @Override

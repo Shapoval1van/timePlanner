@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,6 +90,7 @@ public class TaskDaoTest {
         Task task = new Task();
         task.setName("test");
         task.setDescription("desc");
+        task.setPlanFinishDate(new Date(System.currentTimeMillis()));
         Sprint sprint = new Sprint();
         sprint.setId(1);
         task.setSprint(sprint);
@@ -110,6 +112,7 @@ public class TaskDaoTest {
         task.setId(1);
         task.setName("test");
         task.setDescription("desc");
+        task.setPlanFinishDate(new Date(System.currentTimeMillis()));
         Sprint sprint = new Sprint();
         sprint.setId(1);
         task.setSprint(sprint);

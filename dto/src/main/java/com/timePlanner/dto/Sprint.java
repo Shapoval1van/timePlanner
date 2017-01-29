@@ -33,4 +33,15 @@ public @Data class Sprint {
                 "| isFinished=" + isFinished +
                 '}';
     }
+
+    public Status getSprintStatus(){
+        if(!this.isStarted && !this.isFinished){
+            return Status.CREATED;
+        }else if(this.isStarted && !this.isFinished){
+            return Status.STARTED;
+        }else if(this.isStarted && this.isFinished){
+            return Status.FINISHED;
+        }
+        return null;
+    }
 }

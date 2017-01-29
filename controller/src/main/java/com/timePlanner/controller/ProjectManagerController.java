@@ -86,7 +86,7 @@ public class ProjectManagerController {
             return "redirect:/dashboard-pm";
         }
         List<Sprint> sprintList = sprintService.getSprintsForProjectWithDetails(id);
-        Set<Task> taskList = (sprintList!=null & sprintList.size()!=0)?sprintList.get(0).getTasks():null;
+        Set<Task> taskList = (sprintList!=null && sprintList.size()!=0)?sprintList.get(0).getTasks():null;
         model.addAttribute("taskList",taskList);
         model.addAttribute("sprintList",sprintList);
         model.addAttribute("taskForm", new Task());
@@ -125,8 +125,9 @@ public class ProjectManagerController {
         if(taskWithDetailsSet.size()==0){
             return "/pm/taskNotFound";
         }
-        List<User> currentEmployees = userService.getAllUsersForCompany(projectService.getProjectWithDetails(id)
-                .getCompany().getId());
+        List<User> currentEmployees = new LinkedList<>();
+        userService.getAllUsersForCompany(projectService.getProjectWithDetails(id).getCompany().getId())
+            .stream().filter(u->u.getRole()==Role.EMPLOYEE).forEach(u->currentEmployees.add(u));
         model.addAttribute("taskWithDetailsSet", taskWithDetailsSet);
         model.addAttribute("currentEmployees", currentEmployees);
         //mandatory for correct creation navigation bar
@@ -228,7 +229,7 @@ public class ProjectManagerController {
                 mimeType = "application/octet-stream";
             }
             response.setContentType(mimeType);
-            response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() +"\""));
+            response.setHeader("Content-Disposition", String.format("inline; filename=\"%s\"", fileName));
             response.setContentLength((int)file.length());
             FileCopyUtils.copy(inputStream, response.getOutputStream());// Closes both streams when done
         }catch (FileNotFoundException e){

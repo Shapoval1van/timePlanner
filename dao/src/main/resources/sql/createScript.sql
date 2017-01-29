@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS project(
   company_id INTEGER NOT NULL,
   start_date DATE,
   finish_date DATE,
-  plan_finish_date DATE,
+  plan_finish_date DATE NOT NULL,
   project_manager_id INTEGER,
   is_started BOOLEAN DEFAULT FALSE,
   is_finished BOOLEAN DEFAULT FALSE
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS sprint (
   description TEXT,
   start_date DATE,
   finish_date DATE,
-  plan_finish_date DATE,
+  plan_finish_date DATE NOT NULL,
   dependent_on INTEGER,
   is_started BOOLEAN DEFAULT FALSE,
   is_finished BOOLEAN DEFAULT FALSE
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS task(
   finish_date DATE,
   is_started BOOLEAN DEFAULT FALSE,
   is_finished BOOLEAN DEFAULT FALSE,
-  plan_finish_date DATE,
+  plan_finish_date DATE NOT NULL,
   description TEXT,
   priority INTEGER DEFAULT 1,
   estimate FLOAT

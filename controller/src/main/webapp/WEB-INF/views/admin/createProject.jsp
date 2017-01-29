@@ -13,7 +13,7 @@
                 <spring:url value="/create-project" var="createProject"/>
                 <form:form role="form" commandName="projectForm" action="${createProject}" method="POST">
                     <h2>Time planner
-                        <small><spring:message code="dashboard.createdProj"/></small>
+                        <small><spring:message code="dashboard.createProj"/></small>
                     </h2>
                     <hr class="colorgraph">
                     <div class="row">
@@ -21,7 +21,7 @@
                             <p class="text-info"><spring:message code="createProj.projectName"/>*</p>
                         </div>
                         <div class="col-xs-12 col-sm-8 col-md-8">
-                            <spring:message code="dashboard.project" var="project"/>
+                            <spring:message code="createProj.project" var="project"/>
                             <form:input path="name" type="text" name="projectName" id="projectName"
                                         cssClass="form-control input-lg" required="required"
                                         placeholder="${project}" tabindex="1"/>
@@ -53,7 +53,7 @@
                             <p class="text-info"><spring:message code="projectManager"/>*</p>
                         </div>
                         <div class="col-xs-12 col-sm-8 col-md-8">
-                            <form:select path="projectManager.id" cssClass="input-lg" itemValue="id"
+                            <form:select path="projectManager.id" cssClass="form-control input" itemValue="id"
                                          itemLabel="fullName" tabindex="4" items="${currentPM}"/>
                         </div>
                     </div>

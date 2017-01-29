@@ -116,6 +116,7 @@ public class AdminController {
         } catch (MessagingException e) {
             LOGGER.info("Request to creating worker from " + remoteAddr +" was failed, because\n" +
                     "Message sending with credential to address" + user.getEmail() + "was not successful", e);
+
             result.rejectValue("message", "createWorker.errorMailSending");
             model.addAttribute("userRole", Role.ADMIN);
             return "/admin/createWorker";
@@ -180,7 +181,11 @@ public class AdminController {
         User user =  userService.getUserWithDetailsByEmail(principal.getName());
         int companyId = user.getCompany().getId();
         Set<Project> projectsSet = new HashSet<>();
-        companyService.getCompanyWithDetails(companyId).getProjects().forEach(p->projectsSet.add(projectService.getProjectWithDetails(p.getId())));
+        Company company = companyService.getCompanyWithDetails(companyId);
+        if(company.getProjects()==null || company.getProjects().size()==0){
+            return;
+        }
+        company.getProjects().forEach(p->projectsSet.add(projectService.getProjectWithDetails(p.getId())));
         List<User> userList = userService.getAllUsersForCompany(companyId);
         String  name = "report-company-"+companyId+"Id.xlsx";
         ExelWriter exelWriter = new ExelWriter(name, "report");
@@ -210,7 +215,7 @@ public class AdminController {
                 mimeType = "application/octet-stream";
             }
             response.setContentType(mimeType);
-            response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() +"\""));
+            response.setHeader("Content-Disposition", String.format("inline; filename=\"%s\"", fileName));
             response.setContentLength((int)file.length());
             FileCopyUtils.copy(inputStream, response.getOutputStream());// Closes both streams when done
         }catch (FileNotFoundException e){

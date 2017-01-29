@@ -7,6 +7,8 @@ import com.timePlanner.dto.UserForm;
 import com.timePlanner.service.CompanyService;
 import com.timePlanner.service.EmptyResultException;
 import com.timePlanner.service.UserService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -17,6 +19,7 @@ import java.util.regex.Pattern;
 
 @Component
 public class CustomerFormValidator implements Validator {
+    private static final Logger LOGGER = LogManager.getLogger(CustomerFormValidator.class);
     @Autowired
     private UserService userService;
 
@@ -59,6 +62,7 @@ public class CustomerFormValidator implements Validator {
             userService.getUserByEmail(email);
             return true;
         } catch (EmptyResultException e) {
+            LOGGER.info(e);
             return  false;
         }
     }

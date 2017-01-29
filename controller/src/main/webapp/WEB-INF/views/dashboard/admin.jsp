@@ -26,13 +26,13 @@
               <!-- /.row -->
 
               <div class="row">
-                      <%--progect created--%>
+
                   <div class="col-lg-3 col-md-6">
                       <div class="panel panel-primary">
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-comments fa-5x"></i>
+                                      <i class="fa fa-briefcase fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${projectCount}</div>
@@ -40,7 +40,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#project">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -49,13 +49,13 @@
                           </a>
                       </div>
                   </div>
-                      <%--current workers--%>
+
                   <div class="col-lg-3 col-md-6">
                       <div class="panel panel-green">
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-address-card fa-5x"></i>
+                                      <i class="fa fa-users fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${currentWorkersCount}</div>
@@ -63,7 +63,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#workers">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -72,7 +72,7 @@
                           </a>
                       </div>
                   </div>
-                      <%--current customers--%>
+
                   <div class="col-lg-3 col-md-6">
                       <div class="panel panel-yellow">
                           <div class="panel-heading">
@@ -86,7 +86,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#customer">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -95,12 +95,13 @@
                           </a>
                       </div>
                   </div>
+
                   <div class="col-lg-3 col-md-6">
                       <div class="panel panel-red">
                           <div class="panel-heading">
                               <div class="row">
                                   <div class="col-xs-3">
-                                      <i class="fa fa-support fa-5x"></i>
+                                      <i class="fa fa-trophy fa-5x" aria-hidden="true"></i>
                                   </div>
                                   <div class="col-xs-9 text-right">
                                       <div class="huge">${finishProjectsCount}</div>
@@ -108,7 +109,7 @@
                                   </div>
                               </div>
                           </div>
-                          <a href="#">
+                          <a href="#project">
                               <div class="panel-footer">
                                   <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -136,6 +137,7 @@
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="project"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.project"/></h3>
                       </div>
@@ -150,6 +152,7 @@
                                              <th><spring:message code="dashboard.description"/></th>
                                              <th><spring:message code="dashboard.startDate"/></th>
                                              <th><spring:message code="dashboard.finishDate"/></th>
+                                             <th><spring:message code="createSprint.planFinishDate"/></th>
                                          </tr>
                                          </thead>
                                          <tbody>
@@ -159,6 +162,7 @@
                                                     <td>${project.getDescription()}</td>
                                                     <td>${project.getStartDate()}</td>
                                                     <td>${project.getFinishDate()}</td>
+                                                    <td>${project.getPlanFinishDate()}</td>
                                                 </tr>
                                             </c:forEach>
                                          </tbody>
@@ -169,9 +173,6 @@
                                     <spring:message code="dashboard.projectEmpty"/>
                                 </c:when>
                              </c:choose>
-                          <div class="text-right">
-                              <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
-                          </div>
                       </div>
                   </div>
               </div>
@@ -179,6 +180,7 @@
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="workers"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><spring:message code="dashboard.workers"/></h3>
                       </div>
@@ -200,15 +202,13 @@
                                 </c:when>
                           </c:choose>
                       </div>
-                      <div class="text-right">
-                          <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
-                      </div>
                   </div>
               </div>
               <!-- /.row -->
 
               <div class="row">
                   <div class="panel panel-default">
+                      <a name="customer"></a>
                       <div class="panel-heading">
                           <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="dashboard.customers"/></h3>
                       </div>
@@ -242,9 +242,6 @@
                                     <spring:message code="dashboard.customersEmpty"/>
                                 </c:when>
                              </c:choose>
-                          <div class="text-right">
-                              <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
-                          </div>
                       </div>
                   </div>
               </div>

@@ -35,15 +35,16 @@ public class AjaxController {
     public ResponseEntity<?> setPriority(@RequestBody Task task, Principal principal, HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
         int projectId = projectService.getProjectForTask(task.getId()).getId();
-        if (userService.checkAccessUserToProject(principal.getName(), projectId) == 0) {
-            return new ResponseEntity<>(new Message("this user haven't access to this task", MessageType.ERROR), HttpStatus.FORBIDDEN);
-        }
         if (task.getId() == 0) {
             LOGGER.info("request from address:" + remoteAddr + "\n request for update priority with empty id");
             return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
-        }if (task.getPriority() == null) {
+        }
+        if (task.getPriority() == null) {
             LOGGER.info("request from address:" + remoteAddr + "\nrequest for update priority with empty priority");
             return new ResponseEntity<>(new Message("priority must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
+        }
+        if (userService.checkAccessUserToProject(principal.getName(), projectId) == 0) {
+            return new ResponseEntity<>(new Message("this user haven't access to this task", MessageType.ERROR), HttpStatus.FORBIDDEN);
         }
         try {
             taskService.updateTaskPriority(task);
@@ -58,11 +59,11 @@ public class AjaxController {
     @RequestMapping(path = "/update-project-status", method = RequestMethod.POST)
     public ResponseEntity<?> setStatus(@RequestBody Project project, Principal principal, HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
+        if (project.getId() == 0) {
+            LOGGER.info("request from address:" + remoteAddr + "\n request for update  project state with empty id");
+            return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
+        }
         if (userService.checkAccessUserToProject(principal.getName(), project.getId()) != 0) {
-            if (project.getId() == 0) {
-                LOGGER.info("request from address:" + remoteAddr + "\n request for update  project state with empty id");
-                return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
-            }
             try {
                 Status projectStatus = project.getProjectStatus();
                 if (projectStatus == Status.CREATED) {
@@ -96,10 +97,6 @@ public class AjaxController {
     public ResponseEntity<?> assignTaskToUser(@RequestBody Task task, Principal principal, HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
         int projectId = projectService.getProjectForTask(task.getId()).getId();
-        if (userService.checkAccessUserToProject(principal.getName(), projectId) == 0){
-            LOGGER.info("request from address:" + remoteAddr + "\n cant update user");
-            return new ResponseEntity<>(new Message("this user haven't access to this task", MessageType.ERROR), HttpStatus.FORBIDDEN);
-        }
         if (task.getId() == 0) {
             LOGGER.info("request from address:" + remoteAddr + "\n request for update user with empty  task id");
             return new ResponseEntity<>(new Message("id must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
@@ -107,6 +104,10 @@ public class AjaxController {
         if(task.getUsers()==null && task.getUsers().size()==0){
             LOGGER.info("request from address:" + remoteAddr + "\n request for update user with empty  users");
             return new ResponseEntity<>(new Message("users must be not empty", MessageType.ERROR), HttpStatus.BAD_REQUEST);
+        }
+        if (userService.checkAccessUserToProject(principal.getName(), projectId) == 0){
+            LOGGER.info("request from address:" + remoteAddr + "\n cant update user");
+            return new ResponseEntity<>(new Message("this user haven't access to this task", MessageType.ERROR), HttpStatus.FORBIDDEN);
         }
         if(taskService.updateResponsibleUsers(task)){
             return new ResponseEntity<>(new Message("Responsible updated", MessageType.SUCCESS),HttpStatus.OK);
@@ -145,6 +146,31 @@ public class AjaxController {
                 }
             }
             taskService.setTaskFinished(task.getId());
+        }else{
+            uptatedStatus = Status.FINISHED;
+        }
+        return new ResponseEntity<>(new Message(uptatedStatus.toString(), MessageType.SUCCESS),HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('PM')")
+    @RequestMapping(path = "/update-sprint-status", method = RequestMethod.POST)
+    public ResponseEntity<?> updateSprintStatus(@RequestBody Sprint sprint, Principal principal){
+        Status status = sprint.getSprintStatus();
+        Status uptatedStatus;
+        if(status == Status.CREATED){
+            uptatedStatus = Status.STARTED;
+            sprintService.setSprintStarted(sprint.getId());
+        }else if(status == Status.STARTED){
+            uptatedStatus = Status.FINISHED;
+            Sprint sprintFromDB = sprintService.getSprintWithDetails(sprint.getId());
+            Set<Task> tasksSet = sprintFromDB.getTasks();
+            if(tasksSet!=null){
+                Task taskDependent = tasksSet.stream().filter(t->!t.isFinished()).findAny().orElse(null);
+                if(taskDependent!=null){
+                    return new ResponseEntity<>(new Message("finish dependent task", MessageType.ERROR),HttpStatus.BAD_REQUEST);
+                }
+            }
+            sprintService.setSprintFinished(sprint.getId());
         }else{
             uptatedStatus = Status.FINISHED;
         }

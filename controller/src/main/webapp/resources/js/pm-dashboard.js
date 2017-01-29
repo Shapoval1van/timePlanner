@@ -82,3 +82,46 @@ $('.project-select').on('change',function(){
     var projectId1 = $(this).find(':selected').val();
     window.location.href = '/dashboard-pm?id='+projectId1;
 });
+
+$('.sprint-status-btn').click(function () {
+    var sprintId = $(this).data("id");
+    var sprintIsStarted = $(this).data("started");
+    var sprintIsFinished = $(this).data("finished");
+    var sprintStatusButton = $(this);
+    var sprint = {
+        "id": sprintId,
+        "isStarted": sprintIsStarted,
+        "isFinished": sprintIsFinished
+    };
+    $.ajax({
+        url: '/update-sprint-status',
+        data:JSON.stringify(sprint),
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        mimeType: 'application/json',
+        success: function (data) {
+            switch(data.message){
+                case 'STARTED':
+                    $(sprintStatusButton).removeClass('btn-success');
+                    $(sprintStatusButton).addClass('btn-danger');
+                    $(sprintStatusButton).text('Finish');
+                    $(sprintStatusButton).data("started",true);
+                    break;
+                case 'FINISHED':
+                    $(sprintStatusButton).removeClass('btn-danger');
+                    $(sprintStatusButton).addClass('btn-info');
+                    $(sprintStatusButton).text('Finished');
+                    $(sprintStatusButton).attr('disabled', 'disabled');
+                    $(sprintStatusButton).data("finished",true);
+                    break;
+                default:
+                    alert('You cant finish sprint. At first finish employees must dependent finish task')
+                    break;
+            }
+        },
+        error: function (data) {
+            alert('You cant finish sprint. At first finish employees must dependent finish task');
+        }
+    })
+});

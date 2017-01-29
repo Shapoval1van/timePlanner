@@ -40,6 +40,16 @@ public class SprintServiceImpl implements SprintService {
         return sprintDao.getAllSprint();
     }
 
+    @Override
+    public void setSprintStarted(int sprintId) {
+        sprintDao.setSprintStarted(sprintId);
+    }
+
+    @Override
+    public void setSprintFinished(int sprintId) {
+        sprintDao.setSprintFinished(sprintId);
+    }
+
     public Sprint getSprintWithDetails(int id) {
         return sprintDao.getSprintWithDetails(id);
     }

@@ -48,7 +48,7 @@
                             <div class="col-xs-6 col-lg-4 col-md-4">
                                 <label for="priority"><spring:message code="dashboard.priority"/>:</label>
                                 <form:select path="priority" type="text" name="role" id="priority"
-                                             cssClass="form-control input-lg" tabindex="5">
+                                             cssClass="form-control input" tabindex="5">
                                         <form:option value="LOW">LOW</form:option>
                                         <form:option cssClass="btn-info" value="MEDIUM">MEDIUM</form:option>
                                         <form:option cssClass="btn-warning" value="HIGH">HIGH</form:option>

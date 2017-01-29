@@ -50,7 +50,7 @@
                        <div class="form-group">
                            <spring:message code="registration.phone" var="phone"/>
                            <form:select path="role" type="text" name="role" id="role"
-                                        cssClass="form-control input-lg" tabindex="5">
+                                        cssClass="form-control input" tabindex="5">
                                     <form:option value="PM">Project Manager</form:option>
                                     <form:option value="EMPLOYEE">Employee</form:option>
                                </form:select>
@@ -69,7 +69,7 @@
                                </div>
                            </div>
                            <div class="col-xs-4 col-sm-4 col-md-4">
-                               <form:select cssClass="form-control input-lg" path="sex">
+                               <form:select cssClass="form-control input" path="sex">
                                    <form:option value="1"><spring:message code="registration.male"/></form:option>
                                    <form:option value="2"><spring:message code="registration.female"/></form:option>
                                 </form:select>

@@ -31,15 +31,15 @@
                               <div class="panel-heading">
                                   <div class="row">
                                       <div class="col-xs-3">
-                                          <i class="fa fa-comments fa-5x"></i>
+                                          <i class="fa fa-pie-chart fa-5x" aria-hidden="true"></i>
                                       </div>
                                       <div class="col-xs-9 text-right">
                                           <div class="huge" id="tasksNewCount">${tasksNewCount}</div>
-                                          <div><spring:message code="dashboard.createdSprints"/></div>
+                                          <div><spring:message code="newTask"/></div>
                                       </div>
                                   </div>
                               </div>
-                              <a href="#">
+                              <a href="#created">
                                   <div class="panel-footer">
                                       <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                       <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -54,15 +54,15 @@
                               <div class="panel-heading">
                                   <div class="row">
                                       <div class="col-xs-3">
-                                          <i class="fa fa-address-card fa-5x"></i>
+                                          <i class="fa fa-tasks fa-5x" aria-hidden="true"></i>
                                       </div>
                                       <div class="col-xs-9 text-right">
                                           <div class="huge" id="tasksInWorksCount">${tasksInWorksCount}</div>
-                                          <div><spring:message code="dashboard.tasks"/></div>
+                                          <div><spring:message code="openTask"/></div>
                                       </div>
                                   </div>
                               </div>
-                              <a href="#">
+                              <a href="#started">
                                   <div class="panel-footer">
                                       <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                       <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -77,15 +77,15 @@
                               <div class="panel-heading">
                                   <div class="row">
                                       <div class="col-xs-3">
-                                          <i class="fa fa-support fa-5x"></i>
+                                          <i class="fa fa-flag-checkered fa-5x" aria-hidden="true"></i>
                                       </div>
                                       <div class="col-xs-9 text-right">
                                           <div class="huge" id="tasksFinishedCount">${tasksFinishedCount}</div>
-                                          <div><spring:message code="dashboard.finTastks"/></div>
+                                          <div><spring:message code="closingTasks"/></div>
                                       </div>
                                   </div>
                               </div>
-                              <a href="#">
+                              <a href="#finished">
                                   <div class="panel-footer">
                                       <span class="pull-left"><spring:message code="dashboard.viewDetails"/></span>
                                       <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -111,8 +111,9 @@
                   <!-- /.row -->
                   <div class="row">
                       <div class="panel panel-default">
+                          <a name="created"></a>
                           <div class="panel-heading">
-                              <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i>New tasks</h3>
+                              <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="newTask"/></h3>
                           </div>
                           <div class="panel-body">
                               <div class="table-responsive">
@@ -145,17 +146,15 @@
                                          </tbody>
                                      </table>
                                  </div>
-                              <div class="text-right">
-                                  <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
-                              </div>
                           </div>
                       </div>
                   </div>
                   <!-- /.row -->
                   <div class="row">
                       <div class="panel panel-default">
+                          <a name="started"></a>
                           <div class="panel-heading">
-                              <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i>Task in work</h3>
+                              <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="openTask"/></h3>
                           </div>
                           <div class="panel-body">
                               <div class="table-responsive">
@@ -188,17 +187,15 @@
                                          </tbody>
                                      </table>
                                  </div>
-                              <div class="text-right">
-                                  <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
-                              </div>
                           </div>
                       </div>
                   </div>
                   <!-- /.row -->
                   <div class="row">
                       <div class="panel panel-default">
+                          <a name="finished"></a>
                           <div class="panel-heading">
-                              <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i>Task Finished</h3>
+                              <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i><spring:message code="closingTasks"/></h3>
                           </div>
                           <div class="panel-body">
                                  <div class="table-responsive">
@@ -225,9 +222,6 @@
                                          </tbody>
                                      </table>
                                  </div>
-                              <div class="text-right">
-                                  <a href="#"><spring:message code="dashboard.viewDetails"/><i class="fa fa-arrow-circle-right"></i></a>
-                              </div>
                           </div>
                       </div>
                   </div>
