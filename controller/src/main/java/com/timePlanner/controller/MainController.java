@@ -15,4 +15,9 @@ public class MainController {
     public String accessDenied(){
         return "403";
     }
+
+    @RequestMapping("/contacts")
+    public String contacts(){
+        return "contacts";
+    }
 }

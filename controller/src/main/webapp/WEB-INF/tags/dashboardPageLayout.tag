@@ -39,10 +39,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#"><spring:message code="nav.about"/></a>
-                </li>
-                <li>
-                    <a href="#"><spring:message code="nav.contact"/></a>
+                    <a href="/contacts"><spring:message code="nav.contact"/></a>
                 </li>
             </ul>
             <ul class="nav navbar-nav  navbar-right top-nav" >

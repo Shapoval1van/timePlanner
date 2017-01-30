@@ -14,11 +14,15 @@
              <div class="container">
                  <div class="row">
                      <div class="col-lg-12">
-                         <h1 class="section-heading">Section Heading</h1>
-                         <p class="lead section-lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                         <p class="section-paragraph">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid,
-                             suscipit, rerum quos facilis repellat architecto commodi officia atque nemo facere eum non
-                             illo voluptatem quae delectus odit vel itaque amet.</p>
+                         <h1 class="section-heading">Time planner</h1>
+                         <p class="lead section-lead">Это онлай-сервис, который позволяет экономить время.</p>
+                         <p class="section-paragraph">Мы создали Time Planner для:
+                             <ul>
+                                <li>Клиента с возможностью контролировать сроки выполнения задач.</li>
+                                <li>Администратора с возможностью моздавать проект и распределять роли.</li>
+                                <li>Проджект менеджера с возможностью руководить проектом, подключать команду, оперировать задачами..</li>
+                            </ul>
+                          </p>
                      </div>
                  </div>
              </div>
@@ -31,12 +35,15 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="section-heading">Section Heading</h1>
-                        <p class="lead section-lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        <p class="section-paragraph">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid,
-                            suscipit, rerum quos facilis repellat architecto commodi officia atque nemo facere eum non
-                            illo
-                            voluptatem quae delectus odit vel itaque amet.</p>
+                        <h1 class="section-heading">Time planner</h1>
+                        <p class="lead section-lead">Зачем нужен этот сервис</p>
+                        <p class="section-paragraph">
+                        <ul>
+                            <li>Для делегирования.</li>
+                            <li>Для навыков делегированя.</li>
+                            <li>Для навыков планирования.</li>
+                        </ul>
+                        </p>
                     </div>
                 </div>
                 <!-- /.row -->
